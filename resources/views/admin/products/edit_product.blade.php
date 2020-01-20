@@ -3,8 +3,8 @@
 @section('content')
 <div id="content">
   <div id="content-header">
-    <div id="breadcrumb"> <a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#">Products</a> <a href="#" class="current">Add Product </a> </div>
-    <h1>Add Product Here</h1>
+    <div id="breadcrumb"> <a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#">Product</a> <a href="#" class="current">Edit Product </a> </div>
+    <h1>Edit Product Here</h1>
   </div>
   <div class="container-fluid"><hr>
     <div class="row-fluid">
@@ -14,7 +14,7 @@
             <h5>Product Details</h5>
           </div>
           <div class="widget-content nopadding">
-            <form enctype="multipart/form-data" class="form-horizontal" method="post" action="{{ url('/admin/add-product') }}" name="add_product" id="add_product" novalidate="novalidate">
+            <form enctype="multipart/form-data" class="form-horizontal" method="post" action="{{ url('/admin/edit-product', $product->id) }}" name="edit_product" id="edit_product" novalidate="novalidate">
               {{ csrf_field() }}
               <div class="control-group">
                 <label class="control-label">Category Name</label>
@@ -27,41 +27,45 @@
               <div class="control-group">
                 <label class="control-label">Product Name</label>
                 <div class="controls">
-                  <input type="text" name="product_name" id="product_name">
+                  <input type="text" name="product_name" id="product_name" value="{{ $product->product_name }}">
                 </div>
               </div>
               <div class="control-group">
                 <label class="control-label">Product Code</label>
                 <div class="controls">
-                  <input type="text" name="product_code" id="product_code">
+                  <input type="text" name="product_code" id="product_code" value="{{ $product->product_code }}">
                 </div>
               </div>
               <div class="control-group">
                 <label class="control-label">Product Color</label>
                 <div class="controls">
-                  <input type="text" name="product_color" id="product_color">
+                  <input type="text" name="product_color" id="product_color" value="{{ $product->product_color }}">
                 </div>
               </div>
               <div class="control-group">
                 <label class="control-label">Price</label>
                 <div class="controls">
-                  <input type="text" name="price" id="price">
+                  <input type="text" name="price" id="price" value="{{ $product->price }}">
                 </div>
               </div>
               <div class="control-group">
                 <label class="control-label">Description</label>
                 <div class="controls">
-                  <textarea name="description" id="description"></textarea>
+                  <textarea name="description" id="description">{{ $product->description }}</textarea>
                 </div>
               </div>
               <div class="control-group">
                 <label class="control-label">Image</label>
                 <div class="controls">
                   <input type="file" name="image" id="image">
+                  @if(!empty($product->image))
+                  <input type="hidden" name="current_image" value="{{ $product->image }}">
+                  <img src="{{ asset('/images/backend_images/products/small/'.$product->image) }}" style="width: 40px;"> | <a href="{{ url('/admin/delete-product-image', $product->id) }}">Delete</a>
+                  @endif
                 </div>
               </div>
               <div class="form-actions">
-                <input type="submit" value="Add" class="btn btn-success">
+                <input type="submit" value="Edit" class="btn btn-success">
               </div>
             </form>
           </div>
