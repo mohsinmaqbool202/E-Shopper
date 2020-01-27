@@ -139,6 +139,7 @@ class ProductsController extends Controller
     //Delete Product Function
     public function deleteProduct($id)
     {
-
+        Product::where('id', $id)->delete();
+        return redirect('/admin/view-products')->with('flash_message_success', 'Product Has Been Deleted Successfully.');
     }
 }

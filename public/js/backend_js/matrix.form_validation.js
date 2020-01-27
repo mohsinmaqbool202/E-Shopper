@@ -1,5 +1,6 @@
 $(document).ready(function(){
 	
+	//Password Reset Related Code
 	$('#new_pwd').click(function(){
 		var current_pwd = $('#current_pwd').val();
 		
@@ -20,14 +21,50 @@ $(document).ready(function(){
 		});
 	});
 
-	$("#delCat").click(function(){
+	//Alert Code For Deleting Category
+	// $("#delCat").click(function(){
 
-		if(confirm("Are you really want to delete it?"))
-		{
-			return true;
-		}else{
-			return false;
-		}
+	// 	if(confirm("Are you really want to delete it?"))
+	// 	{
+	// 		return true;
+	// 	}else{
+	// 		return false;
+	// 	}
+	// });
+
+	// //Alert Code For Deleting Product
+	// $("#delProduct").click(function(){
+
+	// 	if(confirm("Are you really want to delete itt?"))
+	// 	{
+	// 		return true;
+	// 	}else{
+	// 		return false;
+	// 	}
+	// });
+
+	//Sweet Alert Code for Delting Proiduct
+	$(document).on('click', '.deleteRecord', function(e){
+		var id = $(this).attr('rel');
+		var deleteFunction = $(this).attr('rel1');
+		swal({
+			  title: 'Are you sure?',
+			  text: "You won't be able to revert this!",
+			  type: "warning",
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: 'Yes, delete it!',
+			  cancelButtonText:  'Cancel',
+			  confirmButtonClass: 'btn btn-danger',
+			  cancelButtonClass:  'btn btn-danger',
+			  buttonsStyling: false,
+			  reverseButtons:true
+
+		},
+		function(){
+			window.location.href= "/admin/"+deleteFunction+"/"+id;
+		});
 	});
 
 	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
