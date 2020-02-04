@@ -142,4 +142,12 @@ class ProductsController extends Controller
         Product::where('id', $id)->delete();
         return redirect('/admin/view-products')->with('flash_message_success', 'Product Has Been Deleted Successfully.');
     }
+
+
+    //Product Attributes Related Functions
+
+    public function addAttributes($id)
+    {
+        return view('admin.products.add_attributes');
+    }
 }
