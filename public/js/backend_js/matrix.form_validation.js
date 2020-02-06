@@ -21,29 +21,7 @@ $(document).ready(function(){
 		});
 	});
 
-	//Alert Code For Deleting Category
-	// $("#delCat").click(function(){
-
-	// 	if(confirm("Are you really want to delete it?"))
-	// 	{
-	// 		return true;
-	// 	}else{
-	// 		return false;
-	// 	}
-	// });
-
-	// //Alert Code For Deleting Product
-	// $("#delProduct").click(function(){
-
-	// 	if(confirm("Are you really want to delete itt?"))
-	// 	{
-	// 		return true;
-	// 	}else{
-	// 		return false;
-	// 	}
-	// });
-
-	//Sweet Alert Code for Delting Proiduct
+	//Sweet Alert Code for Delting Proiduct/Category
 	$(document).on('click', '.deleteRecord', function(e){
 		var id = $(this).attr('rel');
 		var deleteFunction = $(this).attr('rel1');

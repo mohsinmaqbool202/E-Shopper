@@ -173,4 +173,11 @@ class ProductsController extends Controller
         $productDetails = Product::with('attributes')->where('id', $id)->get();
         return view('admin.products.add_attributes', compact('productDetails'));
     }
+
+    public function deleteAttribute($id)
+    {
+        ProductAttribute::where('id', $id)->delete();
+        return back()->with('flash_message_success', 'Product Attributes Deleted.');
+
+    }
 }
