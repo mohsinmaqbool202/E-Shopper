@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Input;
 use Image;
 use App\Category;
 use App\Product;
+use App\ProductAttribute;
+
 class ProductsController extends Controller
 {
     public function addProduct(Request $request)
@@ -146,8 +148,29 @@ class ProductsController extends Controller
 
     //Product Attributes Related Functions
 
-    public function addAttributes($id)
+    public function addAttributes(Request $request, $id)
     {
-        return view('admin.products.add_attributes');
+        if($request->isMethod('post'))
+        {
+
+            $data = $request->all();
+            foreach($data['sku'] as $key=> $val)
+            {
+                if(!empty($val)){
+                    $attribute = new ProductAttribute;
+                    $attribute->product_id  = $data['product_id'];
+                    $attribute->sku   = $val;
+                    $attribute->size  = $data['size'][$key];
+                    $attribute->price  = $data['price'][$key];
+                    $attribute->stock  = $data['stock'][$key];
+                    $attribute->save();
+                }
+            }
+        return redirect('/admin/view-products')->with('flash_message_success', 'Product Attributes Added.');
+        }
+
+
+        $productDetails = Product::with('attributes')->where('id', $id)->get();
+        return view('admin.products.add_attributes', compact('productDetails'));
     }
 }
