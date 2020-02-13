@@ -15,11 +15,19 @@
 //     return view('welcome');
 // });
 
-//User Routes
-Route::get('/', 'IndexController@index');
-
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+
+
+
+//Home Page Routes
+Route::get('/', 'IndexController@index');
+
+//Listing Products on category base Routes
+Route::get('/products/{url}', 'ProductsController@products');
+
 
 Route::group(['middleware' => ['auth']], function(){
 

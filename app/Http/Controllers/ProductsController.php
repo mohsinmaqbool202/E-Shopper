@@ -178,6 +178,15 @@ class ProductsController extends Controller
     {
         ProductAttribute::where('id', $id)->delete();
         return back()->with('flash_message_success', 'Product Attributes Deleted.');
+    }
 
+    public function products($url)
+    {
+        //Get CAtegoried and sun-categories
+        $categories = Category::with('categories')->where('parent_id', 0)->get();
+
+        $category = Category::where('url', $url)->first();
+
+        return view('products.listing', compact('category', 'categories'));
     }
 }
