@@ -182,11 +182,26 @@ class ProductsController extends Controller
 
     public function products($url)
     {
-        //Get CAtegoried and sun-categories
+        //Get Categories and sub-categories
         $categories = Category::with('categories')->where('parent_id', 0)->get();
 
-        $category = Category::where('url', $url)->first();
+        $categoryDetails = Category::where('url', $url)->first();
+        if($categoryDetails->parent_id == 0)
+        {
+            //if url is of main cat
+            $subCategories = Category::where('parent_id', $categoryDetails->id)->get();
+            $cat_ids = [];
+            foreach($subCategories as $subcat){
+                $cat_ids[] .= $subcat->id;
+            }
+            $productsAll = Product::whereIn('category_id', $cat_ids)->get();
+        }
+        else
+        {
+            //if url is of sub cat
+            $productsAll = Product::where('category_id', $categoryDetails->id)->get();
+        }
 
-        return view('products.listing', compact('category', 'categories'));
+        return view('products.listing', compact('categoryDetails', 'categories', 'productsAll'));
     }
 }
