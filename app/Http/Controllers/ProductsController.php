@@ -189,9 +189,9 @@ class ProductsController extends Controller
           abort(404);
         }
         //Get Categories and sub-categories
-        $categories = Category::with('categories')->where('parent_id', 0)->where('status', 1)->get();
+        $categories = Category::with('categories')->where('parent_id', 0)->get();
 
-        $categoryDetails = Category::where('url', $url)->where('status', 1)->first();
+        $categoryDetails = Category::where('url', $url)->first();
             if($categoryDetails->parent_id == 0)
             {
                 //if url is of main cat
