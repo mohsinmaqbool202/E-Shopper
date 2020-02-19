@@ -14,7 +14,7 @@ class Controller extends BaseController
 
     public static function mainCategories()
     {
-    	$mainCategories = Category::where('parent_id', 0)->get();
+    	$mainCategories = Category::where('parent_id', 0)->where('status', 1)->get();
     	return $mainCategories;
     }
 }

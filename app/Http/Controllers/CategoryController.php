@@ -13,11 +13,20 @@ class CategoryController extends Controller
     	{
     		$data = $request->all();
 
+            if(empty($data["status"])){
+                $status = 0;
+            }
+            else
+            {
+                $status = 1;
+            }
+
     		$category = new Category;
     		$category->name = $data['name'];
             $category->parent_id = $data['parent_id'];
     		$category->description = $data['description'];
     		$category->url = $data['url'];
+            $category->status = $status;
     		$category->save();
 
     		return redirect('/admin/view-category')->with('flash_message_success', "Category Added.");
@@ -37,11 +46,19 @@ class CategoryController extends Controller
     {
         if($request->isMethod('post'))
         {
-            $category = Category::findOrFail($id);
-            $category->name = $request->name;
-            $category->parent_id = $request->parent_id;
+            if(empty($request["status"])){
+                $status = 0;
+            }
+            else{
+                $status = 1;
+            }
+            
+            $category              = Category::findOrFail($id);
+            $category->name        = $request->name;
+            $category->parent_id   = $request->parent_id;
             $category->description = $request->description;
-            $category->url = $request->url;
+            $category->url         = $request->url;
+            $category->status      = $status;
             
             $category->save();
             return redirect('/admin/view-category')->with('flash_message_success', "Category Updated.");
