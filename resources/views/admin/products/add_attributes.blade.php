@@ -4,6 +4,18 @@
 <div id="content">
   <div id="content-header">
     <div id="breadcrumb"> <a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#">Products</a> <a href="#" class="current">Add Product Attributes </a> </div>
+    @if(Session::has('flash_message_error'))  
+        <div class="alert alert-error alert-block">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong>{{ session::get('flash_message_error') }}</strong>
+        </div>
+      @endif 
+      @if(Session::has('flash_message_success'))  
+        <div class="alert alert-success alert-block">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong>{{ session::get('flash_message_success') }}</strong>
+        </div>
+      @endif
     <h1>Product Attributes</h1>
   </div>
   <div class="container-fluid"><hr>

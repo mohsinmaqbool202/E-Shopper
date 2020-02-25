@@ -28,3 +28,26 @@ $(document).ready(function(){
 		});
 	});
 });
+
+//  Display product price according to product size in product detail page
+$(document).ready(function(){
+	$('#selSize').change(function(){
+		var idSize = $(this).val();
+		if(idSize == ''){
+			return false;
+		}
+
+		$.ajax({
+			type:'get',
+			url:'/get-product-price',
+			data:{idSize:idSize},
+			success:function(resp){
+				$('#getPrice').html("PKR" +resp);
+			},
+			error:function(){
+				alert("Error Occured");
+			}
+		});
+
+	});
+});

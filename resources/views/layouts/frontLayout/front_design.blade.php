@@ -13,6 +13,9 @@
     <link href="{{ asset( 'css/frontend_css/animate.css') }}" rel="stylesheet">
 	<link href="{{ asset( 'css/frontend_css/main.css') }}" rel="stylesheet">
 	<link href="{{ asset( 'css/frontend_css/responsive.css') }}" rel="stylesheet">
+
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
@@ -23,7 +26,6 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.price-range">
 </head><!--/head-->
-
 <body>
 
 	@include('layouts.frontLayout.front_header')

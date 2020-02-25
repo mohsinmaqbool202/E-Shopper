@@ -55,6 +55,12 @@
                 </div>
               </div>
               <div class="control-group">
+                <label class="control-label">Material & Care</label>
+                <div class="controls">
+                  <textarea name="care" id="care">{{ $product->care }}</textarea>
+                </div>
+              </div>
+              <div class="control-group">
                 <label class="control-label">Image</label>
                 <div class="controls">
                   <input type="file" name="image" id="image">

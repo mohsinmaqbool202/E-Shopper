@@ -28,6 +28,11 @@ Route::get('/', 'IndexController@index');
 //Listing Products on category base Routes
 Route::get('/products/{url}', 'ProductsController@products');
 
+//Product detail page
+Route::get('product/{id}', 'ProductsController@product');
+//get product attribute price
+Route::get('/get-product-price', 'ProductsController@getProductPrice');
+
 
 Route::group(['middleware' => ['auth']], function(){
 
@@ -52,6 +57,7 @@ Route::group(['middleware' => ['auth']], function(){
 
    //Product Attributes Routes
    Route::match(['get', 'post'], '/admin/add-attributes/{id}', 'ProductsController@addAttributes');
+   Route::match(['get', 'post'], '/admin/add-images/{id}', 'ProductsController@addImages');
    Route::get('/admin/delete-attribute/{id}', 'ProductsController@deleteAttribute');
 });
    Route::match(['get', 'post'], '/admin', 'AdminController@login');

@@ -8,6 +8,7 @@ use Image;
 use App\Category;
 use App\Product;
 use App\ProductAttribute;
+use App\ProductImage;
 
 class ProductsController extends Controller
 {
@@ -20,9 +21,10 @@ class ProductsController extends Controller
     		$product->category_id    = $request->category_id;
     		$product->product_name   = $request->product_name; 
     		$product->product_code   = $request->product_code; 
-    		$product->product_color   = $request->product_color; 
-    		$product->price   = $request->price; 
-    		$product->description   = $request->description; 
+    		$product->product_color  = $request->product_color; 
+    		$product->price          = $request->price; 
+    		$product->description    = $request->description; 
+            $product->care           =  $request->care;
 
     		//Storing Product Image
     		if($request->hasFile('image'))
@@ -66,7 +68,8 @@ class ProductsController extends Controller
     }
     public function viewProducts()
     {
-    	$products = Product::all();
+    	$products = Product::orderBy('id','desc')->get();
+        
     	return view('admin.products.view_products', compact('products'));
     }
 
@@ -99,7 +102,7 @@ class ProductsController extends Controller
                 $filename = $request->current_image;
             }
 
-            Product::where('id', $id)->update(['category_id'=> $data['category_id'],'product_name'=> $data['product_name'],'product_code'=> $data['product_code'],'product_color'=> $data['product_color'],'description'=> $data['description'],'price'=> $data['price'], 'image'=> $filename ]);
+            Product::where('id', $id)->update(['category_id'=> $data['category_id'],'product_name'=> $data['product_name'],'product_code'=> $data['product_code'],'product_color'=> $data['product_color'],'description'=> $data['description'],'care'=> $data['care'],'price'=> $data['price'], 'image'=> $filename ]);
            return redirect('/admin/view-products')->with('flash_message_success', 'Product Updated Successfully.');
         }
 
@@ -185,7 +188,6 @@ class ProductsController extends Controller
 
 
     //Product Attributes Related Functions
-
     public function addAttributes(Request $request, $id)
     {
         if($request->isMethod('post'))
@@ -195,6 +197,20 @@ class ProductsController extends Controller
             foreach($data['sku'] as $key=> $val)
             {
                 if(!empty($val)){
+
+                    //prevent duplicate sku
+                    $attrCountSku = ProductAttribute::where('sku', $val)->count();
+                    if($attrCountSku > 0){
+                        return redirect('/admin/add-attributes/'.$id)->with('flash_message_error', 'SKU already exist. Please add other SKU');
+                    }
+
+                    //prevent duplicate size for same product
+                    $attrCountSize = ProductAttribute::where('product_id', $id)->where('size',$data['size'][$key])->count();
+                    if($attrCountSize > 0){
+                        return redirect('/admin/add-attributes/'.$id)->with('flash_message_error', $data['size'][$key].' size already exists for this product. Please add other size.');
+                    }
+
+
                     $attribute = new ProductAttribute;
                     $attribute->product_id  = $data['product_id'];
                     $attribute->sku   = $val;
@@ -204,7 +220,7 @@ class ProductsController extends Controller
                     $attribute->save();
                 }
             }
-        return redirect('/admin/view-products')->with('flash_message_success', 'Product Attributes Added.');
+        return redirect('/admin/add-attributes/'.$id)->with('flash_message_success', 'Product Attributes Added.');
         }
 
 
@@ -212,6 +228,45 @@ class ProductsController extends Controller
         return view('admin.products.add_attributes', compact('productDetails'));
     }
 
+    //Add Alternate Images for product
+    public function addImages(Request $request, $id)
+    {
+        $productDetails = Product::where('id', $id)->get();
+
+        if($request->isMethod('post'))
+        {
+            $data = $request->all();
+            if($request->hasFile('image')){
+                $files = Input::file('image');
+                foreach($files as $file)
+                {
+                    //Upload Image After Resizing
+                    $image = new ProductImage;
+                    $extension = $file->getClientOriginalExtension();
+                    $fileName = rand(111,99999).'.'.$extension;
+
+                    $large_image_path = 'images/backend_images/products/large/'.$fileName;
+                    $medium_image_path = 'images/backend_images/products/medium/'.$fileName;
+                    $small_image_path = 'images/backend_images/products/small/'.$fileName;
+
+                    //Resize Image
+                    Image::make($file)->resize(1200,1200)->save($large_image_path);
+                    Image::make($file)->resize(600,600)->save($medium_image_path);
+                    Image::make($file)->resize(300,300)->save($small_image_path);
+
+                    //Saving to DB
+                    $image->product_id = $data['product_id'];
+                    $image->image = $fileName;
+                    $image->save();
+                }
+            }
+
+            return redirect('admin/add-images/'.$request->product_id)->with('flash_message_success', 'Images Have Been Added !.');
+        }
+        return view('admin.products.add_images', compact('productDetails'));
+    }
+
+    //Delete product Attribute
     public function deleteAttribute($id)
     {
         ProductAttribute::where('id', $id)->delete();
@@ -247,5 +302,22 @@ class ProductsController extends Controller
             }
 
         return view('products.listing', compact('categoryDetails', 'categories', 'productsAll'));
+    }
+
+    public function product($id)
+    {
+        $productDetail = Product::with('attributes')->where('id', $id)->first();
+         //Get Categories and sub-categories
+        $categories = Category::with('categories')->where('parent_id', 0)->get();
+        return view('products.detail', compact('productDetail', 'categories'));
+    }
+
+    public function getProductPrice(Request $request)//getting product price using ajax
+    {
+        $data = $request->all();
+        $proArr = explode("-", $data["idSize"]);
+        
+        $proAttr = ProductAttribute::where('product_id', $proArr[0])->where('size', $proArr[1])->first();
+        echo $proAttr->price; die;
     }
 }
