@@ -18,4 +18,9 @@ class Product extends Model
     {
     	return $this->hasMany('App\ProductAttribute', 'product_id');
     }
+
+     public function alternateImages()
+    {
+    	return $this->hasMany('App\ProductImage');
+    }
 }

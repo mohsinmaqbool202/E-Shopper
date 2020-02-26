@@ -50,4 +50,12 @@ $(document).ready(function(){
 		});
 
 	});
+
+
+	//Replace main img with alternate img
+	$('.changeImage').click(function(){
+		
+		var image = $(this).attr('src');
+		$('.mainImage').attr('src', image);
+	});
 });

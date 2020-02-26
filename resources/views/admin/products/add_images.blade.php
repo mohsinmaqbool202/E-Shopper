@@ -69,7 +69,14 @@
                 </tr>
               </thead>
               <tbody>
-                
+                @foreach($productDetails[0]->alternateImages as $image)
+                <tr>
+                 <td>{{ $image->image }}</td>
+                 <td>{{ $image->product->product_name }}}</td>
+                 <td><img src="{{ asset('images/backend_images/products/small/'.$image->image) }}" style="width: 35px;"></td>
+                 <td><a rel="{{ $image->id }}" rel1="delete-alt-image" href="javascript:" class="btn btn-danger btn-mini deleteRecord" title="Delete Image">Delete</a></td>
+                </tr> 
+                @endforeach
               </tbody>
             </table>
           </div>
