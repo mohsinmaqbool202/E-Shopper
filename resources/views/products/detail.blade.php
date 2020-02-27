@@ -12,15 +12,24 @@
 					<div class="product-details"><!--product-details-->
 						<div class="col-sm-5">
 							<div class="view-product">
-								<img class="mainImage" src="{{ asset( 'images/backend_images/products/medium/'.$productDetail->image)}}" alt="" />
+	                <div class="easyzoom easyzoom--overlay easyzoom--with-thumbnails">
+			              <a href="{{ asset( 'images/backend_images/products/large/'.$productDetail->image)}}">
+								      <img style="width:300px;" class="mainImage" src="{{ asset( 'images/backend_images/products/medium/'.$productDetail->image)}}" alt="" />
+								    </a>  
+								  </div>   
 							</div>
 							<div id="similar-product" class="carousel slide" data-ride="carousel">
 								
 								  <!-- Wrapper for slides -->
 								    <div class="carousel-inner">
-										<div class="item active">
+										<div class="item active thumbnails">
+											<a href="{{ asset( 'images/backend_images/products/large/'.$productDetail->image)}}" data-standard="{{ asset( 'images/backend_images/products/small/'.$productDetail->image)}}">
+								        <img style="width:90px;" class="changeImage" src="{{ asset( 'images/backend_images/products/small/'.$productDetail->image)}}" alt="" />
+								      </a>  
 										@foreach($productAltImages as $image)
-										   <img class="changeImage" src="{{ asset('images/backend_images/products/small/'.$image->image) }}" style="width: 90px; cursor: pointer;">
+			                <a href="{{ asset('images/backend_images/products/large/'.$image->image) }}" data-standard="{{ asset('images/backend_images/products/small/'.$image->image) }}">
+										    <img class="changeImage" src="{{ asset('images/backend_images/products/small/'.$image->image) }}" style="width: 90px; cursor: pointer;">
+										  </a>  
 										  @endforeach  
 										</div>
 									</div>

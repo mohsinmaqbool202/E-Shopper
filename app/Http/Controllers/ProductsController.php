@@ -186,7 +186,6 @@ class ProductsController extends Controller
         return redirect('/admin/view-products')->with('flash_message_success', 'Product Has Been Deleted Successfully.');
     }
 
-
     //Product Attributes Related Functions
     public function addAttributes(Request $request, $id)
     {
@@ -226,6 +225,20 @@ class ProductsController extends Controller
 
         $productDetails = Product::with('attributes')->where('id', $id)->get();
         return view('admin.products.add_attributes', compact('productDetails'));
+    }
+
+    //Edit product attributes function
+    public function editAttributes(Request $request, $id)
+    {
+        if($request->isMethod('post'))
+        {
+           $data = $request->all();
+           foreach ($data['idAttr'] as $key => $attr) {
+               ProductAttribute::where('product_id', $id)->where('id', $data['idAttr'][$key])->update([ 'price'=>$data['price'][$key], 'stock'=>$data['stock'][$key] ]);
+           }
+
+           return back()->with('flash_message_success', 'Product Attributes has been updated successfully!');
+        }
     }
 
     //Add Alternate Images for product
