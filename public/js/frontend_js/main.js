@@ -29,7 +29,7 @@ $(document).ready(function(){
 	});
 });
 
-//  Display product price according to product size in product detail page
+//  Display product price and Stock according to product size in product detail page
 $(document).ready(function(){
 	$('#selSize').change(function(){
 		var idSize = $(this).val();
@@ -42,7 +42,15 @@ $(document).ready(function(){
 			url:'/get-product-price',
 			data:{idSize:idSize},
 			success:function(resp){
-				$('#getPrice').html("PKR" +resp);
+				var arr = resp.split('#');
+				$('#getPrice').html("PKR" +arr[0]);
+				if(arr[1] == 0){
+					$('#cartButton').hide();
+					$('#Availability').text('Out Of Stock');
+				}else{
+					$('#cartButton').show();
+					$('#Availability').text('In Stock '+arr[1]+ ' 	Items');
+				}
 			},
 			error:function(){
 				alert("Error Occured");

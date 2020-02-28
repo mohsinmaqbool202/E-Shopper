@@ -346,12 +346,16 @@ class ProductsController extends Controller
     public function product($id)
     {
         $productDetail = Product::with('attributes')->where('id', $id)->first();
+        $relatedProducts = Product::where('id', '!=', $id)->where('category_id', $productDetail->category_id)->get();
+
         $productAltImages = $productDetail->alternateImages;
+        $product_stock = ProductAttribute::where('product_id', $id)->sum('stock');
+
 
          //Get Categories and sub-categories
         $categories = Category::with('categories')->where('parent_id', 0)->get();
 
-        return view('products.detail', compact('productDetail', 'categories','productAltImages'));
+        return view('products.detail', compact('productDetail', 'categories','productAltImages', 'product_stock', 'relatedProducts'));
     }
 
     public function getProductPrice(Request $request)//getting product price using ajax
@@ -360,6 +364,8 @@ class ProductsController extends Controller
         $proArr = explode("-", $data["idSize"]);
         
         $proAttr = ProductAttribute::where('product_id', $proArr[0])->where('size', $proArr[1])->first();
-        echo $proAttr->price; die;
+        echo $proAttr->price;
+        echo "#";
+        echo $proAttr->stock; die;
     }
 }
