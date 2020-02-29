@@ -70,8 +70,14 @@
                   @endif
                 </div>
               </div>
+              <div class="control-group">
+                <label class="control-label">Enable Product</label>
+                <div class="controls">
+                  <input type="checkbox" name="status" id="status" @if($product->status ===1 )checked value = "1" @endif >
+                </div>
+              </div>
               <div class="form-actions">
-                <input type="submit" value="Edit" class="btn btn-success">
+                <input type="submit" value="Save Changes" class="btn btn-success">
               </div>
             </form>
           </div>

@@ -66,6 +66,12 @@
                   <input type="file" name="image" id="image">
                 </div>
               </div>
+              <div class="control-group">
+                <label class="control-label">Enable Product</label>
+                <div class="controls">
+                  <input type="checkbox" name="status" id="status" value="1">
+                </div>
+              </div>
               <div class="form-actions">
                 <input type="submit" value="Add" class="btn btn-success">
               </div>

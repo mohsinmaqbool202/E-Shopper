@@ -16,6 +16,15 @@ class ProductsController extends Controller
     {
     	if($request->isMethod('post'))
     	{
+            $data = $request->all();
+            if(empty($data["status"])){
+                $status = 0;
+            }
+            else
+            {
+                $status = 1;
+            }
+
     		$product = new Product;
 
     		$product->category_id    = $request->category_id;
@@ -24,7 +33,8 @@ class ProductsController extends Controller
     		$product->product_color  = $request->product_color; 
     		$product->price          = $request->price; 
     		$product->description    = $request->description; 
-            $product->care           =  $request->care;
+            $product->care           = $request->care;
+            $product->status         = $status;
 
     		//Storing Product Image
     		if($request->hasFile('image'))
@@ -102,7 +112,14 @@ class ProductsController extends Controller
                 $filename = $request->current_image;
             }
 
-            Product::where('id', $id)->update(['category_id'=> $data['category_id'],'product_name'=> $data['product_name'],'product_code'=> $data['product_code'],'product_color'=> $data['product_color'],'description'=> $data['description'],'care'=> $data['care'],'price'=> $data['price'], 'image'=> $filename ]);
+            if(empty($data["status"])){
+                $status = 0;
+            }
+            else{
+                $status = 1;
+            }
+
+            Product::where('id', $id)->update(['category_id'=> $data['category_id'],'product_name'=> $data['product_name'],'product_code'=> $data['product_code'],'product_color'=> $data['product_color'],'description'=> $data['description'],'care'=> $data['care'],'price'=> $data['price'], 'image'=> $filename, 'status'=> $status]);
            return redirect('/admin/view-products')->with('flash_message_success', 'Product Updated Successfully.');
         }
 
@@ -332,12 +349,12 @@ class ProductsController extends Controller
                 foreach($subCategories as $subcat){
                     $cat_ids[] .= $subcat->id;
                 }
-                $productsAll = Product::whereIn('category_id', $cat_ids)->get();
+                $productsAll = Product::where('status', 1)->whereIn('category_id', $cat_ids)->get();
             }
             else
             {
                 //if url is of sub cat
-                $productsAll = Product::where('category_id', $categoryDetails->id)->get();
+                $productsAll = Product::where('status', 1)->where('category_id', $categoryDetails->id)->get();
             }
 
         return view('products.listing', compact('categoryDetails', 'categories', 'productsAll'));
@@ -346,6 +363,13 @@ class ProductsController extends Controller
     public function product($id)
     {
         $productDetail = Product::with('attributes')->where('id', $id)->first();
+
+        //check if product is enable or not
+        if($productDetail->status == 0)
+        {
+         abort(404);
+        }
+
         $relatedProducts = Product::where('id', '!=', $id)->where('category_id', $productDetail->category_id)->get();
 
         $productAltImages = $productDetail->alternateImages;
