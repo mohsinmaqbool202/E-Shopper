@@ -44,6 +44,8 @@ $(document).ready(function(){
 			success:function(resp){
 				var arr = resp.split('#');
 				$('#getPrice').html("PKR" +arr[0]);
+				$('#product_price').val(arr[0]);
+				
 				if(arr[1] == 0){
 					$('#cartButton').hide();
 					$('#Availability').text('Out Of Stock');

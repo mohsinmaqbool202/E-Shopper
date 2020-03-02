@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Session;
 use Image;
 use App\Category;
 use App\Product;
 use App\ProductAttribute;
 use App\ProductImage;
+use App\Cart;
 
 class ProductsController extends Controller
 {
@@ -391,5 +393,40 @@ class ProductsController extends Controller
         echo $proAttr->price;
         echo "#";
         echo $proAttr->stock; die;
+    }
+
+    public function addtocart(Request $request)
+    {
+        $sizeArr = explode("-", $request->size);
+        $request["size"]        = $sizeArr[1];
+        
+
+        //Saving session_id to Session
+        $session_id = Session::get('session_id');
+
+        if(empty($session_id)){
+          $request["session_id"]  = str_random(40);    
+          Session::put('session_id', $request["session_id"]);
+        }
+        else{
+          $request["session_id"] = $session_id;
+          Session::put('session_id', $request["session_id"]);
+        }
+
+        Cart::create($request->all());
+        return redirect('/cart')->with('flash_message_success', 'Product added to cart.');
+    }
+
+    public function cart()
+    {
+        $userCart = Cart::where('session_id', Session::get('session_id'))->get();
+
+        return view('products.cart', compact('userCart'));
+    }
+
+    public function deleteCartProduct($id)
+    {
+        Cart::where('id', $id)->delete();
+        return back()->with('flash_message_success', 'Product deleted from cart.');;
     }
 }

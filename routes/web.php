@@ -20,7 +20,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 
-
+//Admin Login page Route
+Route::match(['get', 'post'], '/admin', 'AdminController@login');
 
 //Home Page Routes
 Route::get('/', 'IndexController@index');
@@ -32,6 +33,17 @@ Route::get('/products/{url}', 'ProductsController@products');
 Route::get('product/{id}', 'ProductsController@product');
 //get product attribute price
 Route::get('/get-product-price', 'ProductsController@getProductPrice');
+
+//Add-to-cart routes
+Route::post('/add-cart', 'ProductsController@addtocart');
+
+//cart page route
+Route::match(['get', 'post'], '/cart', 'ProductsController@cart');
+
+//Delete cart items route
+Route::get('/cart/delete-product/{id}', 'ProductsController@deleteCartProduct');
+
+
 
 
 Route::group(['middleware' => ['auth']], function(){
@@ -63,6 +75,5 @@ Route::group(['middleware' => ['auth']], function(){
    Route::get('/admin/delete-alt-image/{id}', 'ProductsController@deleteAltImage');
 });
 
-   Route::match(['get', 'post'], '/admin', 'AdminController@login');
 
 

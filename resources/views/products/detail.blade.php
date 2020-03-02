@@ -37,34 +37,42 @@
 
 						</div>
 						<div class="col-sm-7">
-							<div class="product-information"><!--/product-information-->
-								<img src="images/product-details/new.jpg" class="newarrival" alt="" />
-								<h2>{{ $productDetail->product_name }}</h2>
-								<p>Code: {{ $productDetail->product_code }}</p>
-								<p>
-									<select id="selSize" name="size" style="width: 150px;" required>
-										<option value="">Select Size</option>
-										@foreach($productDetail->attributes as $sizes)
-										<option value="{{ $productDetail->id }}-{{ $sizes->size }}">{{$sizes->size}}</option>
-										@endforeach
-									</select>
-								</p>
-								<img src="images/product-details/rating.png" alt="" />
-								<span>
-									<span id="getPrice">PKR {{ $productDetail->price  }}</span>
-									<label>Quantity:</label>
-									<input type="text" value="1" />
-									@if($product_stock)
-									<button type="button" class="btn btn-fefault cart" id="cartButton">
-										<i class="fa fa-shopping-cart"></i>
-										Add to cart
-									</button>
-									@endif
-								</span>
-								<p><b>Availability:</b><span id="Availability">@if($product_stock) In Stock @else Out Of Stock @endif</span></p>
-								<p><b>Condition:</b> New</p>
-								<a href=""><img src="images/product-details/share.png" class="share img-responsive"  alt="" /></a>
-							</div><!--/product-information-->
+							<form name="addtocartForm" id="addtocartForm" action="{{ url('add-cart') }}" method="post">
+								{{ csrf_field() }}
+								<input type="hidden" name="product_id"    value="{{ $productDetail->id }}">
+								<input type="hidden" name="product_name"  value="{{ $productDetail->product_name }}">
+								<input type="hidden" name="product_code"  value="{{ $productDetail->product_code }}">
+								<input type="hidden" name="product_color" value="{{ $productDetail->product_color }}">
+								<input type="hidden" name="product_price" id="product_price" value="{{ $productDetail->price }}">
+								<div class="product-information"><!--/product-information-->
+									<img src="images/product-details/new.jpg" class="newarrival" alt="" />
+									<h2>{{ $productDetail->product_name }}</h2>
+									<p>Code: {{ $productDetail->product_code }}</p>
+									<p>
+										<select id="selSize" name="size" style="width: 150px;" required>
+											<option value="">Select Size</option>
+											@foreach($productDetail->attributes as $sizes)
+											<option value="{{ $productDetail->id }}-{{ $sizes->size }}">{{$sizes->size}}</option>
+											@endforeach
+										</select>
+									</p>
+									<img src="images/product-details/rating.png" alt="" />
+									<span>
+										<span id="getPrice">PKR {{ $productDetail->price  }}</span>
+										<label>Quantity:</label>
+										<input type="text" name="quantity" value="1" />
+										@if($product_stock)
+										<button type="submit" class="btn btn-fefault cart" id="cartButton">
+											<i class="fa fa-shopping-cart"></i>
+											Add to cart
+										</button>
+										@endif
+									</span>
+									<p><b>Availability:</b><span id="Availability">@if($product_stock) In Stock @else Out Of Stock @endif</span></p>
+									<p><b>Condition:</b> New</p>
+									<a href=""><img src="images/product-details/share.png" class="share img-responsive"  alt="" /></a>
+								</div><!--/product-information-->
+							</form>  
 						</div>
 					</div><!--/product-details-->
 					
