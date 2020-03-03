@@ -413,7 +413,18 @@ class ProductsController extends Controller
           Session::put('session_id', $request["session_id"]);
         }
 
-        Cart::create($request->all());
+        //Check if same product is already present in cart with same size and same session _id
+        $checkCart = Cart::where('product_id', $request->product_id)->where('product_color', $request->product_color)->where('size', $sizeArr[1])->where('session_id',$session_id)->get();
+
+        if(count($checkCart) > 0){
+          return back()->with('flash_message_error', 'Product already exist in cart.');
+        }
+        else{
+            $getSKU = ProductAttribute::select('sku')->where([['product_id', $request->product_id], ['size',$request["size"]])->first();
+            dd($getSKU);
+           Cart::create($request->all());
+        }
+
         return redirect('/cart')->with('flash_message_success', 'Product added to cart.');
     }
 
@@ -428,5 +439,11 @@ class ProductsController extends Controller
     {
         Cart::where('id', $id)->delete();
         return back()->with('flash_message_success', 'Product deleted from cart.');;
+    }
+
+    public function updateCartQuantity($id, $quantity)
+    {
+        Cart::where('id', $id)->increment('quantity', $quantity);
+        return back();
     }
 }
