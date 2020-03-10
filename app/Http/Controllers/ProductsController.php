@@ -397,9 +397,16 @@ class ProductsController extends Controller
 
     public function addtocart(Request $request)
     {
+
         $sizeArr = explode("-", $request->size);
         $request["size"]        = $sizeArr[1];
         
+        //Check if Requested Quuantity is available in stock or not
+        $checkStock = ProductAttribute::where('product_id',$sizeArr[0])->where('size',$sizeArr[1])->first();
+        if($request->quantity > $checkStock->stock){
+          return back()->with('flash_message_error', 'Sorry! Requested product quantity is not available.');
+        }
+
 
         //Saving session_id to Session
         $session_id = Session::get('session_id');
@@ -420,8 +427,8 @@ class ProductsController extends Controller
           return back()->with('flash_message_error', 'Product already exist in cart.');
         }
         else{
-            $getSKU = ProductAttribute::select('sku')->where([['product_id', $request->product_id], ['size',$request["size"]])->first();
-            dd($getSKU);
+            $getSKU = ProductAttribute::select('sku')->where([['product_id', $request->product_id], ['size',$sizeArr[1]]])->first();
+            $request["product_code"] = $getSKU->sku;
            Cart::create($request->all());
         }
 
@@ -443,7 +450,19 @@ class ProductsController extends Controller
 
     public function updateCartQuantity($id, $quantity)
     {
+      $getCartDetails = Cart::find($id);
+      $getProductStock = ProductAttribute::where('sku', $getCartDetails->product_code)->first();
+
+      $updated_quantity = $getCartDetails->quantity + $quantity;
+      if($getProductStock->stock >= $updated_quantity)
+      {
         Cart::where('id', $id)->increment('quantity', $quantity);
         return back();
+      }
+      else
+      {
+        return redirect('cart')->with('flash_message_error', 'Required product quantity is not available');
+      }
+
     }
 }

@@ -16,6 +16,12 @@
 			            <strong>{{ session::get('flash_message_success') }}</strong>
 			        </div>
 			      @endif 
+			      @if(Session::has('flash_message_error'))  
+			        <div class="alert alert-danger alert-block">
+			            <button type="button" class="close" data-dismiss="alert">x</button>
+			            <strong>{{ session::get('flash_message_error') }}</strong>
+			        </div>
+			      @endif 
 				<table class="table table-condensed">
 					<thead>
 						<tr class="cart_menu">
@@ -28,6 +34,7 @@
 						</tr>
 					</thead>
 					<tbody>
+						@php $total_amount = 0; @endphp
 						@foreach($userCart as $cart)
 						<tr>
 							<td class="cart_product">
@@ -56,6 +63,7 @@
 								<a class="cart_quantity_delete" href="{{ url('/cart/delete-product/'.$cart->id) }}"><i class="fa fa-times"></i></a>
 							</td>
 						</tr>
+						@php $total_amount += ($cart->product_price * $cart->quantity); @endphp
 						@endforeach
 					</tbody>
 				</table>
@@ -127,12 +135,9 @@
 				<div class="col-sm-6">
 					<div class="total_area">
 						<ul>
-							<li>Cart Sub Total <span>$59</span></li>
-							<li>Eco Tax <span>$2</span></li>
-							<li>Shipping Cost <span>Free</span></li>
-							<li>Total <span>$61</span></li>
+							<li>Total Amount <span>PKR {{$total_amount}}</span></li>
 						</ul>
-							<a class="btn btn-default update" href="">Update</a>
+							<a class="btn btn-default update" href="{{url('/')}}">Update</a>
 							<a class="btn btn-default check_out" href="">Check Out</a>
 					</div>
 				</div>
