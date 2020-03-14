@@ -46,6 +46,9 @@ Route::get('/cart/delete-product/{id}', 'ProductsController@deleteCartProduct');
 //update product quantity in cart
 Route::get('/cart/upadte-quantity/{id}/{quantity}', 'ProductsController@updateCartQuantity');
 
+//Apply Coupon
+Route::post('/cart/apply-coupon', 'ProductsController@applyCoupon');
+
 
 
 
@@ -79,6 +82,9 @@ Route::group(['middleware' => ['auth']], function(){
 
    //Coupon Code Routed
    Route::match(['get', 'post'], '/admin/add-coupon', 'CouponsController@addCoupon');
+   Route::get('/admin/view-coupons', 'CouponsController@viewCoupons');
+   Route::match(['get', 'post'], '/admin/edit-coupon/{id}', 'CouponsController@editCoupon');
+   Route::get('/admin/delete-coupon/{id}', 'CouponsController@deleteCoupon');
 
 });
 

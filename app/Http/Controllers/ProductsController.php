@@ -11,6 +11,7 @@ use App\Product;
 use App\ProductAttribute;
 use App\ProductImage;
 use App\Cart;
+use App\Coupon;
 
 class ProductsController extends Controller
 {
@@ -436,8 +437,9 @@ class ProductsController extends Controller
     }
 
     public function cart()
-    {
-        $userCart = Cart::where('session_id', Session::get('session_id'))->get();
+    {   
+        $session_id = Session::get('session_id');
+        $userCart = Cart::where('session_id', $session_id)->get();
 
         return view('products.cart', compact('userCart'));
     }
@@ -464,5 +466,56 @@ class ProductsController extends Controller
         return redirect('cart')->with('flash_message_error', 'Required product quantity is not available');
       }
 
+    }
+
+    //Check Coupon
+    public function applyCoupon(Request $request)
+    {
+        //Removing Old values from sessions
+        Session::put('CouponAmount');
+        Session::put('CouponCode');
+
+        $couponCount = Coupon::where('coupon_code', $request->coupon_code)->count();
+        if($couponCount == 0)
+        {
+            return back()->with('flash_message_error', 'Coupon is invalid.');
+        }
+        else{
+           
+           $coupon = Coupon::where('coupon_code', $request->coupon_code)->first();
+
+           //check if coupon is inActive
+           if($coupon->status == 0){
+            return back()->with('flash_message_error', 'Coupon is In-Active.');
+           }
+
+           //check expiry date
+           $curr_date = date('Y-m-d');
+           if($coupon->expiry_date < $curr_date){
+             return back()->with('flash_message_error', 'Coupon is Expired.');
+           }
+
+           //Coupon is Valid for discount
+           //Get cart total amount
+           $total_amount = 0;
+           $session_id = Session::get('session_id');
+           $userCart = Cart::where('session_id', $session_id)->get();
+           foreach($userCart as $item){
+            $total_amount = $total_amount + ($item->product_price*$item->quantity);
+           }
+           
+           //check coupon amount_type is fixed or in %
+           if($coupon->amount_type == "fixed"){
+             $couponAmount = $coupon->amount;
+           }
+           else{
+            $couponAmount = $total_amount * ($coupon->amount/100);
+           }
+
+           //Save couponAmount and coupon code in session
+           Session::put('CouponAmount', $couponAmount);
+           Session::put('CouponCode', $coupon->coupon_code);
+            return redirect()->back()->with('flash_message_success', 'Coupon code successfully applied.You are availing discount');
+        }
     }
 }

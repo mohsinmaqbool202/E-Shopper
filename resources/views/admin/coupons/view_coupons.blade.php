@@ -1,9 +1,10 @@
 @extends('layouts.adminLayout.admin_design')
 
 @section('content')
+
 <div id="content">
   <div id="content-header">
-    <div id="breadcrumb"> <a href="{{ url('admin/dashboard') }}" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#">Categories</a> <a href="#" class="current">View Categories</a> </div>
+    <div id="breadcrumb"> <a href="{{ url('admin/dashboard') }}" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#">Coupons</a> <a href="#" class="current">Coupons List</a> </div>
      @if(Session::has('flash_message_error'))  
         <div class="alert alert-error alert-block">
             <button type="button" class="close" data-dismiss="alert">x</button>
@@ -30,22 +31,31 @@
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Category Name</th>
-                  <th>Level</th>
-                  <th>Category URL</th>
-                  <th>Actions</th>
+                  <th>Coupon Code</th>
+                  <th>Amount</th>
+                  <th>Amount Type</th>
+                  <th>Expiry Date</th>
+                  <th>Created Date</th>
+                  <th>Status</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
-              	@foreach($categories as $category)
+                @foreach($coupons as $coupon)
                 <tr class="gradeX">
-                  <td>{{ $category->id }}</td>
-                  <td>{{ $category->name }}</td>
-                  <td>{{ $category->parent_id }}</td>
-                  <td>{{ $category->url }}</td>
+                  <td>{{ $coupon->id }}</td>
+                  <td>{{ $coupon->coupon_code }}</td>
+                  <td>
+                    {{ $coupon->amount }}
+                    @if($coupon->amount_type === "percentage") % @else PKR @endif
+                  </td>
+                  <td>{{ $coupon->amount_type }}</td>
+                  <td>{{ $coupon->expiry_date }}</td>
+                  <td>{{ $coupon->created_at->format('Y-m-d') }}</td>
+                  <td>@if($coupon->status == 1) Active @else In-Active @endif</td>
                   <td class="center">
-                    <a href="{{ url('/admin/edit-category', $category->id) }}" class="btn btn-primary btn-mini">Edit</a> 
-                    <a rel="{{ $category->id }}" rel1="delete-category" href="javascript:" class="btn btn-danger btn-mini deleteRecord">Delete</a>
+                    <a href="{{ url('/admin/edit-coupon/'.$coupon->id) }}" class="btn btn-primary btn-mini">Edit</a> 
+                    <a rel="{{$coupon->id}}" rel1="delete-coupon" href="javascript:" class="btn btn-danger btn-mini deleteRecord">Delete</a>
                   </td>
                 </tr>
                 @endforeach
@@ -57,4 +67,5 @@
     </div>
   </div>
 </div>
+
 @endsection

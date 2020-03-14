@@ -31,7 +31,7 @@
 
 
 <script src="{{ asset( 'js/backend_js/jquery.min.js') }}"></script> 
-<!-- <script src="{{ asset( 'js/backend_js/jquery.ui.custom.js') }}"></script>  -->
+<script src="{{ asset( 'js/backend_js/jquery.ui.custom.js') }}"></script> 
 <script src="{{ asset( 'js/backend_js/bootstrap.min.js') }}"></script> 
 <script src="{{ asset( 'js/backend_js/jquery.uniform.js') }}"></script> 
 <script src="{{ asset( 'js/backend_js/select2.min.js') }}"></script> 
@@ -42,16 +42,16 @@
 <script src="{{ asset( 'js/backend_js/matrix.tables.js') }}"></script>
 <script src="{{ asset( 'js/backend_js/matrix.popover.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert-dev.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
-	$(function(){
-		$("#expiry_date").datepicker({
-			minDate: 0,
-			dateFormat:'yy-mm-dd'
-		});
-	});
-</script>
+  $(function(){
+    $("#expiry_date").datepicker({
+      minDate: 0,
+      dateFormat:'yy-mm-dd'
+    });
+  });
+</script> -->
 </body>
 </html>
 
