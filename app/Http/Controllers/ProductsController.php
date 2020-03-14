@@ -398,6 +398,9 @@ class ProductsController extends Controller
 
     public function addtocart(Request $request)
     {
+        //Removing Old values from sessions on updating cart
+        Session::put('CouponAmount');
+        Session::put('CouponCode');
 
         $sizeArr = explode("-", $request->size);
         $request["size"]        = $sizeArr[1];
@@ -446,12 +449,20 @@ class ProductsController extends Controller
 
     public function deleteCartProduct($id)
     {
+        //Removing Old values from sessions on updating cart
+        Session::put('CouponAmount');
+        Session::put('CouponCode');
+        
         Cart::where('id', $id)->delete();
         return back()->with('flash_message_success', 'Product deleted from cart.');;
     }
 
     public function updateCartQuantity($id, $quantity)
     {
+      //Removing Old values from sessions on updating cart
+      Session::put('CouponAmount');
+      Session::put('CouponCode');
+
       $getCartDetails = Cart::find($id);
       $getProductStock = ProductAttribute::where('sku', $getCartDetails->product_code)->first();
 

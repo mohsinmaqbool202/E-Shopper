@@ -13,43 +13,14 @@
 						
 						<div class="carousel-inner">
 							<div class="item active">
-								<div class="col-sm-6">
-									<h1><span>E</span>-SHOPPER</h1>
-									<h2>Free E-Commerce Template</h2>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-									<button type="button" class="btn btn-default get">Get it now</button>
-								</div>
-								<div class="col-sm-6">
-									<img src="{{ asset( 'images/frontend_images/home/girl1.jpg ')}}" class="girl img-responsive" alt="" />
-									<img src="{{ asset( 'images/frontend_images/home/pricing.png')}}"  class="pricing" alt="" />
-								</div>
+								<img src="images/frontend_images/banners/ban1.png">
 							</div>
 							<div class="item">
-								<div class="col-sm-6">
-									<h1><span>E</span>-SHOPPER</h1>
-									<h2>100% Responsive Design</h2>
-									<p>consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-									<button type="button" class="btn btn-default get">Get it now</button>
-								</div>
-								<div class="col-sm-6">
-									<img src="{{ asset( 'images/frontend_images/home/girl2.jpg')}}" class="girl img-responsive" alt="" />
-									<img src="{{ asset( 'images/frontend_images/home/pricing.png')}}"  class="pricing" alt="" />
-								</div>
+								<img src="images/frontend_images/banners/ban2.png">
 							</div>
-							
 							<div class="item">
-								<div class="col-sm-6">
-									<h1><span>E</span>-SHOPPER</h1>
-									<h2>Free Ecommerce Template</h2>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-									<button type="button" class="btn btn-default get">Get it now</button>
-								</div>
-								<div class="col-sm-6">
-									<img src="{{ asset( 'images/frontend_images/home/girl3.jpg')}}" class="girl img-responsive" alt="" />
-									<img src="{{ asset( 'images/frontend_images/home/pricing.png')}}" class="pricing" alt="" />
-								</div>
+								<img src="images/frontend_images/banners/ban3.png">
 							</div>
-							
 						</div>
 						
 						<a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
