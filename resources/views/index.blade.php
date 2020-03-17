@@ -6,19 +6,20 @@
 				<div class="col-sm-12">
 					<div id="slider-carousel" class="carousel slide" data-ride="carousel">
 						<ol class="carousel-indicators">
-							<li data-target="#slider-carousel" data-slide-to="0" class="active"></li>
-							<li data-target="#slider-carousel" data-slide-to="1"></li>
-							<li data-target="#slider-carousel" data-slide-to="2"></li>
+							<?php $i = 0; ?>
+							@foreach($banners as $banner)
+							<li data-target="#slider-carousel" data-slide-to="{{ $i }}" @if($i == 0) class="active" @endif></li>
+							<?php $i = $i+1; ?>
+							@endforeach
 						</ol>
 						
 						<div class="carousel-inner">
-							{{dd($banners)}}
-							@php $k = 0; @endphp
+							<?php $i = 0; ?>
 							@foreach($banners as $banner)
-							<div class="item @if($k = 0)active @endif">
-								<a href="#"><img src="images/frontend_images/banners/{{$banner->image}}"></a>
+							<div class="item @if($i == 0)active @endif">
+								<a href="{{url('/'.$banner->link)}}"><img src="{{ asset('/images/frontend_images/banners/'.$banner->image) }}"></a>
 							</div>
-							@php $k++; @endphp
+							<?php $i = $i+1; ?>
 							@endforeach
 						</div>
 						

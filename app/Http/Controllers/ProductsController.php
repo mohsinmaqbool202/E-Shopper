@@ -12,6 +12,7 @@ use App\ProductAttribute;
 use App\ProductImage;
 use App\Cart;
 use App\Coupon;
+use App\Banner;
 
 class ProductsController extends Controller
 {
@@ -342,6 +343,8 @@ class ProductsController extends Controller
         }
         //Get Categories and sub-categories
         $categories = Category::with('categories')->where('parent_id', 0)->get();
+        //get banners
+        $banners = Banner::where('status', 1)->get();
 
         $categoryDetails = Category::where('url', $url)->first();
             if($categoryDetails->parent_id == 0)
@@ -360,7 +363,7 @@ class ProductsController extends Controller
                 $productsAll = Product::where('status', 1)->where('category_id', $categoryDetails->id)->get();
             }
 
-        return view('products.listing', compact('categoryDetails', 'categories', 'productsAll'));
+        return view('products.listing', compact('categoryDetails', 'categories', 'productsAll', 'banners'));
     }
 
     public function product($id)

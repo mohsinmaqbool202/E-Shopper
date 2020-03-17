@@ -6,21 +6,21 @@
 				<div class="col-sm-12">
 					<div id="slider-carousel" class="carousel slide" data-ride="carousel">
 						<ol class="carousel-indicators">
-							<li data-target="#slider-carousel" data-slide-to="0" class="active"></li>
-							<li data-target="#slider-carousel" data-slide-to="1"></li>
-							<li data-target="#slider-carousel" data-slide-to="2"></li>
+							<?php $i = 0; ?>
+							@foreach($banners as $banner)
+							<li data-target="#slider-carousel" data-slide-to="{{ $i }}" @if($i == 0) class="active" @endif></li>
+							<?php $i = $i+1; ?>
+							@endforeach
 						</ol>
 						
 						<div class="carousel-inner">
-							<div class="item active">
-								<img src="images/frontend_images/banners/ban1.png">
+							<?php $i = 0; ?>
+							@foreach($banners as $banner)
+							<div class="item @if($i == 0)active @endif">
+								<a href="{{url('/'.$banner->link)}}"><img src="{{ asset('/images/frontend_images/banners/'.$banner->image) }}"></a>
 							</div>
-							<div class="item">
-								<img src="images/frontend_images/banners/ban2.png">
-							</div>
-							<div class="item">
-								<img src="images/frontend_images/banners/ban3.png">
-							</div>
+							<?php $i = $i+1; ?>
+							@endforeach
 							
 						</div>
 						
