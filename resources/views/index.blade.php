@@ -12,15 +12,14 @@
 						</ol>
 						
 						<div class="carousel-inner">
-							<div class="item active">
-								<img src="images/frontend_images/banners/ban1.png">
+							{{dd($banners)}}
+							@php $k = 0; @endphp
+							@foreach($banners as $banner)
+							<div class="item @if($k = 0)active @endif">
+								<a href="#"><img src="images/frontend_images/banners/{{$banner->image}}"></a>
 							</div>
-							<div class="item">
-								<img src="images/frontend_images/banners/ban2.png">
-							</div>
-							<div class="item">
-								<img src="images/frontend_images/banners/ban3.png">
-							</div>
+							@php $k++; @endphp
+							@endforeach
 						</div>
 						
 						<a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
