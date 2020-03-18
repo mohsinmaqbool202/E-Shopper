@@ -69,46 +69,46 @@
 				</table>
 			</div>
 		</div>
-	</section> <!--/#cart_items-->
+</section> <!--/#cart_items-->
 
-	<section id="do_action">
-		<div class="container">
-			<div class="heading">
-				<h3>What would you like to do next?</h3>
-				<p>Choose if you have a Coupon code you want to use.</p>
-			</div>
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="chose_area">
-						<ul class="user_option">
-							<li>
-								<form action="{{ url('/cart/apply-coupon') }}" method="post">
-									{{csrf_field()}}
-									<label>Coupon Code</label>
-									<input type="text" name="coupon_code">
-									<input type="submit" value="Apply" class="btn btn-default">
-							    </form>  
-							</li>
-						</ul>
-					</div>
+<section id="do_action">
+	<div class="container">
+		<div class="heading">
+			<h3>What would you like to do next?</h3>
+			<p>Choose if you have a Coupon code you want to use.</p>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="chose_area">
+					<ul class="user_option">
+						<li>
+							<form action="{{ url('/cart/apply-coupon') }}" method="post">
+								{{csrf_field()}}
+								<label>Coupon Code</label>
+								<input type="text" name="coupon_code">
+								<input type="submit" value="Apply" class="btn btn-default">
+						    </form>  
+						</li>
+					</ul>
 				</div>
-				<div class="col-sm-6">
-					<div class="total_area">
-						<ul>
-							@if(!empty(Session::get('CouponAmount')))
-							<li>Sub Total <span>PKR {{$total_amount}}</span></li>
-							<li>Coupon Discount<span>PKR {{Session::get('CouponAmount')}}</span></li>
-							<li>Grand Total <span>PKR {{$total_amount - Session::get('CouponAmount')}}</span></li>
-							@else
-							<li>Grand Total <span>PKR {{$total_amount}}</span></li>
-							@endif
-						</ul>
-							<a class="btn btn-default update" href="{{url('/')}}">Update</a>
-							<a class="btn btn-default check_out" href="">Check Out</a>
-					</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="total_area">
+					<ul>
+						@if(!empty(Session::get('CouponAmount')))
+						<li>Sub Total <span>PKR {{$total_amount}}</span></li>
+						<li>Coupon Discount<span>PKR {{Session::get('CouponAmount')}}</span></li>
+						<li>Grand Total <span>PKR {{$total_amount - Session::get('CouponAmount')}}</span></li>
+						@else
+						<li>Grand Total <span>PKR {{$total_amount}}</span></li>
+						@endif
+					</ul>
+						<a class="btn btn-default update" href="{{url('/')}}">Update</a>
+						<a class="btn btn-default check_out" href="">Check Out</a>
 				</div>
 			</div>
 		</div>
-	</section><!--/#do_action-->
+	</div>
+</section><!--/#do_action-->
 
 @endsection

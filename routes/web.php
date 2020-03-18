@@ -49,6 +49,10 @@ Route::get('/cart/upadte-quantity/{id}/{quantity}', 'ProductsController@updateCa
 //Apply Coupon
 Route::post('/cart/apply-coupon', 'ProductsController@applyCoupon');
 
+//user register /login routes
+Route::match(['get', 'post'],'/login-register', 'UsersController@register');
+//check email if user already exist or not
+Route::get('/check-email', 'UsersController@checkEmail');
 
 
 

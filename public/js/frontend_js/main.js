@@ -29,8 +29,8 @@ $(document).ready(function(){
 	});
 });
 
-//  Display product price and Stock according to product size in product detail page
 $(document).ready(function(){
+   //  Display product price and Stock according to product size in product detail page
 	$('#selSize').change(function(){
 		var idSize = $(this).val();
 		if(idSize == ''){
@@ -94,4 +94,49 @@ $(document).ready(function(){
 		}
 	});
 
+});
+
+
+$(document).ready(function(){
+	//validate register form on key up and submit
+	$("#registerForm").validate({
+		rules:{
+			name:{
+			    required:true,
+			    minlength:2,
+			    accept:"[a-zA-Z]+"
+			},
+			password:{
+				required:true,
+				minlength:6
+			},
+			email:{
+				required:true,
+				email:true,
+				remote:"/check-email"
+			}
+		},
+		messages:{
+			name: {
+				required:"Please enter your name.",
+				minlength:"Your name must be atleast 2 character long.",
+			    accept:"Your name must contain lettesrs only"
+		    },		
+			password:{
+				required:"Please provide your password",
+				minlength:"Your password must be atleast 6 character long."
+			},
+			email:{
+				required:"Please provide your email",
+				email:"Please enter valid email",
+				remote: "Email already exists" 
+			}
+		}, 
+		highlight: function (element) {
+                $(element).parent().addClass('error')
+            },
+        unhighlight: function (element) {
+            $(element).parent().removeClass('error')
+        }
+	});
 });
