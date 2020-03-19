@@ -139,4 +139,12 @@ $(document).ready(function(){
             $(element).parent().removeClass('error')
         }
 	});
+
+	//password strength indicator script
+	$('#password').passtrength({
+          minChars: 6,
+          passwordToggle: true,
+          tooltip: true,
+          eyeImg :"/images/frontend_images/eye.svg"
+        });
 });
