@@ -147,4 +147,33 @@ $(document).ready(function(){
           tooltip: true,
           eyeImg :"/images/frontend_images/eye.svg"
         });
+
+	//validate login form
+	$("#loginForm").validate({
+		rules:{
+			email:{
+				required:true,
+				email:true,
+			},
+			password:{
+				required:true,
+			}
+		},
+		messages:{
+			email:{
+				required:"Please provide your email",
+				email:"Please enter valid email",
+			},		
+			password:{
+				required:"Please provide your password",
+			}
+		}, 
+		highlight: function (element) {
+                $(element).parent().addClass('error')
+            },
+        unhighlight: function (element) {
+            $(element).parent().removeClass('error')
+        }
+	});
+
 });

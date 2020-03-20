@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Auth;
+use Session;
 
 class UsersController extends Controller
 {
@@ -17,7 +18,7 @@ class UsersController extends Controller
     public function register(Request $request)
     {
       $data = $request->all();
-    	if($request->isMEthod('post'))
+    	if($request->isMethod('post'))
     	{
     		$userCount = User::where('email', $request->email)->count();
     		if($userCount > 0){
@@ -32,10 +33,29 @@ class UsersController extends Controller
             //redirect the user to cart page after registering
             if(Auth::attempt(['email'=>$data['email'],'password' => $data['password'], 'admin' => '0']))
             {
+              Session::put('frontSession', $data["email"]); 
               return redirect('/cart');
             }
         }
     	}
+    }
+
+    //User login function
+    public function login(Request $request)
+    {
+        if($request->isMethod('post'))
+        {
+            $data = $request->all();
+             if(Auth::attempt(['email'=>$data['email'],'password' => $data['password'], 'admin' => '0'])){
+
+               Session::put('frontSession', $data["email"]); 
+               return redirect('/cart');
+            }
+            else{
+                return back()->with('flash_message_error', 'Invalid Username or Password!');
+            }
+
+        }
     }
 
     //check if user already exist or not
@@ -50,10 +70,17 @@ class UsersController extends Controller
         }
     }
 
+    //user account function
+    public function account(Request $request)
+    {
+        return view('users.account');
+    }
+
     //User Logout function
     public function userlogout()
     {
       Auth::logout();
+      Session::forget('frontSession');
       return redirect('/');
     }
 }
