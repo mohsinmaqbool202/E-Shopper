@@ -60,16 +60,16 @@ class AdminController extends Controller
        {
         $data = $request->all();
         $check_pwd = User::where('email', Auth::user()->email)->pluck('password');
-        $current_pwd = $data['current_pwd'];
-            if(Hash::check($current_pwd , $check_pwd[0]))
-            {
+        
+            if(Hash::check($data['current_pwd'] , $check_pwd[0]))
+           {
                 $password = bcrypt($data['new_pwd']);
                 User::where('email', Auth::user()->email)->update(['password' => $password]);
                 return redirect('/admin/settings')->with('flash_message_success', "Password Updated Successfully.");
             }
             else{
                 
-                return redirect('/admin/settings')->with('flash_message_error', "Incorrect Current Password.");
+                return redirect('/admin/settings')->with('flash_message_error', "Current Password is not Correct.");
             }
 
        }

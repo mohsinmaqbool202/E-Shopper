@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	
 	//Password Reset Related Code
-	$('#new_pwd').click(function(){
+	$('#current_pwd').keyup(function(){
 		var current_pwd = $('#current_pwd').val();
 		
 		$.ajax({

@@ -69,6 +69,9 @@ Route::group(['middleware' => ['frontlogin']], function(){
 
    //user account page
    Route::match(['get', 'post'], '/account', 'UsersController@account');
+   //update user pwd
+   Route::get('/check-user-pwd', 'UsersController@checkUserPwd');
+   Route::post('/update_user_pwd', 'UsersController@updatePassword');
 
 });
 

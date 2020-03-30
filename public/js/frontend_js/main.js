@@ -176,4 +176,119 @@ $(document).ready(function(){
         }
 	});
 
+
+	//validate update  account info form
+	$("#accountForm").validate({
+		rules:{
+			name:{
+			    required:true,
+			    minlength:2,
+			    accept:"[a-zA-Z]+"
+			},
+			address:{
+				required:true,
+			},
+			city:{
+				required:true,
+			},
+			state:{
+				required:true,
+			},
+			country_id:{
+				required:true,
+			},
+			pincode:{
+				required:true,
+			},
+			mobile:{
+				required:true,
+			}
+		},
+		messages:{
+			name: {
+				required:"Please enter your name.",
+				minlength:"Your name must be atleast 2 character long.",
+			    accept:"Your name must contain lettesrs only"
+		    },		
+			address:{
+				required:"Please provide your address",
+			},
+			city:{
+				required:"Please provide your city name",
+			},
+			state:{
+				required:"Please provide your state name",
+			},
+			country_id:{
+				required:"Please select country",
+			},
+			pincode:{
+				required:"Please provide pincode",
+			},
+			mobile:{
+				required:"Please provide your mobile#",
+			},
+		}, 
+		highlight: function (element) {
+                $(element).parent().addClass('error')
+            },
+        unhighlight: function (element) {
+            $(element).parent().removeClass('error')
+        }
+	});
+
+	//check user current pwd
+	$('#current_pwd').keyup(function(){
+		var current_pwd = $('#current_pwd').val();
+		$.ajax({
+			type:'get',
+			url:'/check-user-pwd',
+			data:{current_pwd:current_pwd},
+			success:function(resp){
+				if(resp == "false"){
+					$('#chkPwd').html("<font color='red'>Current Password is Incorrect.</font>");
+				}else if(resp == "true"){
+					$('#chkPwd').html("<font color='green'>Current Password is Correct.</font>");
+				}
+			},error:function()
+			{
+				alert("error");
+			}
+		});
+	});
+
+
+});
+
+$(function(){
+//password validations for updatinf
+	$("#account_Form").validate({
+		rules:{
+			current_pwd:{
+				required: true,
+				minlength:6,
+				maxlength:20
+			},
+            new_pwd:{
+				required: true,
+				minlength:6,
+				maxlength:20
+			},
+			confirm_pwd:{
+				required:true,
+				minlength:6,
+				maxlength:20,
+				equalTo:"#new_pwd"
+			}
+		},
+		errorClass: "help-inline",
+		errorElement: "span",
+		highlight:function(element, errorClass, validClass) {
+			$(element).parents('.control-group').addClass('error');
+		},
+		unhighlight: function(element, errorClass, validClass) {
+			$(element).parents('.control-group').removeClass('error');
+			$(element).parents('.control-group').addClass('success');
+		}
+	});
 });

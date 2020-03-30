@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\User;
 use Auth;
 use Session;
+use App\Country;
+use Illuminate\Support\Facades\Hash;
+
 
 class UsersController extends Controller
 {
@@ -73,7 +76,58 @@ class UsersController extends Controller
     //user account function
     public function account(Request $request)
     {
-        return view('users.account');
+        if($request->isMethod('post'))
+        {
+            $user = User::find(Auth::user()->id);
+            $user->name = $request->name;
+            $user->address = $request->address;
+            $user->city = $request->city;
+            $user->state = $request->state;
+            $user->country_id = $request->country_id;
+            $user->pincode = $request->pincode;
+            $user->mobile = $request->mobile;
+
+            $user->save();
+            return back()->with('flash_message_success', 'Account Info Updated.');
+        }
+
+        //for get request
+        $user = Auth::user();
+        $countries = Country::all();
+        return view('users.account', compact('countries', 'user'));
+    }
+
+    //for checking user current pwd
+    public function checkUserPwd(Request $request)
+    {
+        $data = $request->all();
+        $current_password = $data['current_pwd'];
+
+        $user = Auth::user();
+        if(Hash::check($current_password , $user->password))
+        {
+            echo "true"; die;
+        }else{
+            echo "false"; die;
+        }
+    }
+
+    //update user pwd
+    public function updatePassword(Request $request)
+    {
+        $data = $request->all();
+        $user = Auth::user();
+    
+        if(Hash::check($data['current_pwd'] , $user->password))
+        {
+            $password = bcrypt($data['new_pwd']);
+            $user->password = $password;
+            $user->save();
+            return redirect('/account')->with('flash_message_success', 'Password has been updated.');
+        }
+        else{
+            return redirect('/account')->with('flash_message_error', 'Current Password is Incorrect.');
+        }
     }
 
     //User Logout function
