@@ -291,4 +291,28 @@ $(function(){
 			$(element).parents('.control-group').addClass('success');
 		}
 	});
+
+
+	//copy billing address to shipping address
+	$('#copyAddress').click(function(){
+		if(this.checked){
+		    $('#shipping_country_id').val($("#country_id").val());
+			$('#shipping_name').val($('#billing_name').val());
+			$('#shipping_address').val($('#billing_address').val());
+			$('#shipping_city').val($('#billing_city').val());
+			$('#shipping_state').val($('#billing_state').val());
+			$('#shipping_pincode').val($('#billing_pincode').val());
+			$('#shipping_mobile').val($('#billing_mobile').val());
+		}
+		else
+		{
+			$('#shipping_country_id').val('');
+			$('#shipping_name').val('');
+			$('#shipping_address').val('');
+			$('#shipping_city').val('');
+			$('#shipping_state').val('');
+			$('#shipping_pincode').val('');
+			$('#shipping_mobile').val('');
+		}
+	});
 });

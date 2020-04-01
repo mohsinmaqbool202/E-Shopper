@@ -13,6 +13,8 @@ use App\ProductImage;
 use App\Cart;
 use App\Coupon;
 use App\Banner;
+use App\Country;
+use Auth;
 
 class ProductsController extends Controller
 {
@@ -531,5 +533,13 @@ class ProductsController extends Controller
            Session::put('CouponCode', $coupon->coupon_code);
             return redirect()->back()->with('flash_message_success', 'Coupon code successfully applied.You are availing discount');
         }
+    }
+
+    //checkout page function
+    public function checkout(Request $request)
+    {
+        $user = Auth::user();
+        $countries = Country::all();
+        return view('products.checkout', compact('user', 'countries'));
     }
 }
