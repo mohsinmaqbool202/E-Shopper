@@ -15,6 +15,8 @@ use App\Coupon;
 use App\Banner;
 use App\Country;
 use Auth;
+use App\User;
+use App\DeliveryAddress;
 
 class ProductsController extends Controller
 {
@@ -540,6 +542,62 @@ class ProductsController extends Controller
     {
         $user = Auth::user();
         $countries = Country::all();
-        return view('products.checkout', compact('user', 'countries'));
+
+        //check if shipping address already exist
+        $shipping_address = DeliveryAddress::where('user_id', $user->id)->first();
+         
+        //For post Request
+        if($request->isMethod('post'))
+        {
+            $this->validate($request, [
+
+                'billing_name'        => 'required',
+                'billing_address'     => 'required',
+                'billing_city'        => 'required',
+                'billing_state'       => 'required',
+                'country_id'          => 'required',
+                'billing_pincode'     => 'required',
+                'billing_mobile'      => 'required',
+                'shipping_name'       => 'required',
+                'shipping_address'    => 'required',
+                'shipping_city'       => 'required',
+                'shipping_state'      => 'required',
+                'shipping_country_id' => 'required',
+                'shipping_pincode'    => 'required',
+                'shipping_mobile'     => 'required',
+
+            ]);
+
+            //update users table with billing address data
+            User::where('id', $user->id)->update(['name'=> $request->billing_name, 'address'=>$request->billing_address, 'city'=> $request->billing_city, 'state'=> $request->billing_state, 'country_id'=> $request->country_id, 'pincode'=>$request->billing_pincode, 'mobile'=>$request->billing_mobile]);
+            
+            //Now Insert Shipping data to delivery_address table
+            if($shipping_address !=''){
+              //update record
+              DeliveryAddress::where('user_id', $user->id)->update(['name'=> $request->shipping_name, 'address'=>$request->shipping_address, 'city'=> $request->shipping_city, 'state'=> $request->shipping_state, 'country_id'=> $request->shipping_country_id, 'pincode'=>$request->shipping_pincode, 'mobile'=>$request->shipping_mobile]);
+            }
+            else{
+
+                $new_address = new DeliveryAddress;
+                $new_address->user_id     = $user->id;
+                $new_address->user_email  = $user->email;
+                $new_address->name        = $request->shipping_name;
+                $new_address->address     = $request->shipping_address;
+                $new_address->city        = $request->shipping_city;
+                $new_address->state       = $request->shipping_state;
+                $new_address->country_id  = $request->shipping_country_id;
+                $new_address->pincode     = $request->shipping_pincode;
+                $new_address->mobile      = $request->shipping_mobile;
+
+                $new_address->save();
+                
+                
+            }
+
+            dd('done');   
+
+        }
+
+        return view('products.checkout', compact('user', 'countries', 'shipping_address'));
     }
 }
