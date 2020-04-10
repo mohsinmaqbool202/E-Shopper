@@ -31,4 +31,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Country');
     }
+
+    public function deliveryAddress()
+    {
+        return $this->hasOne('App\DeliveryAddress');
+    }
 }

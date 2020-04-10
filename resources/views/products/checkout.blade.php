@@ -3,13 +3,13 @@
 
 <section id="form" style="margin-top: 20px;"><!--form-->
 	<div class="container">
-			@if ($errors->any())
+		@if ($errors->any())
 	    <div class="alert alert-danger">
-	        <ul>
-	          <li>Please fill all the fields.</li>
-	        </ul>
+        <ul>
+          <li>Please fill all the fields.</li>
+        </ul>
 	    </div>
-	    @endif
+	  @endif
 	  	<form action="{{ url('/checkout') }}" method="post">
 	  		{{csrf_field()}}
 				<div class="row">

@@ -316,3 +316,17 @@ $(function(){
 		}
 	});
 });
+
+function selectPaymentMethod()
+{
+	if($('#Paypal').is(':checked') || $('#COD').is(':checked'))
+	{
+		// alert('checked');
+	}
+	else
+	{
+		alert('Please select payment method.');
+		return false;
+	}
+	
+}

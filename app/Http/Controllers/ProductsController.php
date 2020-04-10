@@ -17,6 +17,8 @@ use App\Country;
 use Auth;
 use App\User;
 use App\DeliveryAddress;
+use App\Order;
+use App\OrderProduct;
 
 class ProductsController extends Controller
 {
@@ -406,8 +408,8 @@ class ProductsController extends Controller
     public function addtocart(Request $request)
     {
         //Removing Old values from sessions on updating cart
-        Session::put('CouponAmount');
-        Session::put('CouponCode');
+        Session::forget('CouponAmount');
+        Session::forget('CouponCode');
 
         $sizeArr = explode("-", $request->size);
         $request["size"]        = $sizeArr[1];
@@ -457,8 +459,8 @@ class ProductsController extends Controller
     public function deleteCartProduct($id)
     {
         //Removing Old values from sessions on updating cart
-        Session::put('CouponAmount');
-        Session::put('CouponCode');
+        Session::forget('CouponAmount');
+        Session::forget('CouponCode');
         
         Cart::where('id', $id)->delete();
         return back()->with('flash_message_success', 'Product deleted from cart.');;
@@ -467,8 +469,8 @@ class ProductsController extends Controller
     public function updateCartQuantity($id, $quantity)
     {
       //Removing Old values from sessions on updating cart
-      Session::put('CouponAmount');
-      Session::put('CouponCode');
+      Session::forget('CouponAmount');
+      Session::forget('CouponCode');
 
       $getCartDetails = Cart::find($id);
       $getProductStock = ProductAttribute::where('sku', $getCartDetails->product_code)->first();
@@ -490,8 +492,8 @@ class ProductsController extends Controller
     public function applyCoupon(Request $request)
     {
         //Removing Old values from sessions
-        Session::put('CouponAmount');
-        Session::put('CouponCode');
+        Session::forget('CouponAmount');
+        Session::forget('CouponCode');
 
         $couponCount = Coupon::where('coupon_code', $request->coupon_code)->count();
         if($couponCount == 0)
@@ -545,6 +547,10 @@ class ProductsController extends Controller
 
         //check if shipping address already exist
         $shipping_address = DeliveryAddress::where('user_id', $user->id)->first();
+
+        //update cart table in user email
+        $session_id = Session::get('session_id');
+        Cart::where('session_id', $session_id)->update(['user_email'=> $user->email]);
          
         //For post Request
         if($request->isMethod('post'))
@@ -589,15 +595,61 @@ class ProductsController extends Controller
                 $new_address->pincode     = $request->shipping_pincode;
                 $new_address->mobile      = $request->shipping_mobile;
 
-                $new_address->save();
-                
-                
+                $new_address->save();  
             }
-
-            dd('done');   
-
+            return redirect('/order-review');
         }
 
         return view('products.checkout', compact('user', 'countries', 'shipping_address'));
+    }
+
+    public function orderReview(Request $request)
+    {
+        $user = Auth::user();
+        $countries = Country::all();
+
+        //check if shipping address already exist
+        $shipping_address = DeliveryAddress::where('user_id', $user->id)->first();
+
+        //cart items
+        $session_id = Session::get('session_id');
+        $userCart = Cart::where('session_id', $session_id)->get();
+
+        return view('products.order_review', compact('user', 'countries', 'shipping_address', 'userCart'));
+    }
+
+    public function placeOrder(Request $request)
+    {
+        if($request->isMethod('post'))
+        {
+           $user = Auth::user();
+
+           //saving order detail
+           $order = new Order;
+           $order->user_id = $user->id;
+           $order->shipping_charges = '';
+           $order->coupon_code = $request->coupon_code;
+           $order->coupon_amount = $request->coupon_amount;
+           $order->payment_method = $request->payment_method;
+           $order->grand_total = $request->grand_total;
+           $order->save();
+
+           //saving order_product data
+           $cart_data = Cart::where('session_id', Session::get('session_id'))->get();
+           
+           foreach($cart_data as $cart){
+               $order_product = new OrderProduct;
+               $order_product->order_id = $order->id;
+               $order_product->user_id = $user->id;
+               $order_product->cart_id = $cart->id;
+               $order_product->save();
+           }
+
+           //removin session values
+           Session::forget('session_id');
+           Session::forget('CouponAmount');
+           Session::forget('CouponCode');
+
+        }
     }
 }
