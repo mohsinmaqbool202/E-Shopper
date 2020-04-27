@@ -627,7 +627,7 @@ class ProductsController extends Controller
            //saving order detail
            $order = new Order;
            $order->user_id = $user->id;
-           $order->shipping_charges = '';
+           $order->shipping_charges = 0;
            $order->coupon_code = $request->coupon_code;
            $order->coupon_amount = $request->coupon_amount;
            $order->payment_method = $request->payment_method;
@@ -646,10 +646,37 @@ class ProductsController extends Controller
            }
 
            //removin session values
+           $old_session = Session::get('session_id');
+           Session::put('old_session_id', $old_session);
+
            Session::forget('session_id');
            Session::forget('CouponAmount');
            Session::forget('CouponCode');
 
+           Session::put('order_id', $order->id);
+           Session::put('grand_total', $request->grand_total);
+           return redirect('/thanks');
+
         }
+    }
+
+    //thanks page
+    public function thanks()
+    { 
+      return view('products.thanks_page');
+    }
+
+    //view user orders
+    public function userOrders()
+    {
+      $orders = Order::with('orders')->where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
+      return view('orders.user_orders', compact('orders'));
+    }
+
+    public function userOrderDetail($order_id)
+    {
+      $orderDetail = Order::with('orders')->where('id', $order_id)->first();
+      return view('orders.order_detail', compact('orderDetail'));
+
     }
 }
