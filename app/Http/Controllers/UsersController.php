@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Cart;
 use Auth;
 use Session;
 use App\Country;
@@ -24,21 +25,30 @@ class UsersController extends Controller
     	if($request->isMethod('post'))
     	{
     		$userCount = User::where('email', $request->email)->count();
-    		if($userCount > 0){
+    		if($userCount > 0)
+        {
     			return redirect()->back()->with('flash_message_error', 'Email Already Exists.');
     		}
-        else{
-            //create new user
-            $request["password"] = bcrypt($request->password);
-            $request["admin"]    = '0';
-            User::create($request->all());
-            
-            //redirect the user to cart page after registering
-            if(Auth::attempt(['email'=>$data['email'],'password' => $data['password'], 'admin' => '0']))
-            {
-              Session::put('frontSession', $data["email"]); 
-              return redirect('/cart');
-            }
+        else
+        {
+          //create new user
+          $request["password"] = bcrypt($request->password);
+          $request["admin"]    = '0';
+          User::create($request->all());
+        
+          //redirect the user to cart page after registering
+          if(Auth::attempt(['email'=>$data['email'],'password' => $data['password'], 'admin' => '0']))
+          {
+            Session::put('frontSession', $data["email"]); 
+
+             if(!empty(Session::get('session_id')))
+             {
+               $session_id = Session::get('session_id');
+               Cart::where('session_id', $session_id)->update(['user_email'=>$data['email']]);
+             }
+
+            return redirect('/cart');
+          }
         }
     	}
     }
@@ -48,15 +58,23 @@ class UsersController extends Controller
     {
         if($request->isMethod('post'))
         {
-            $data = $request->all();
-             if(Auth::attempt(['email'=>$data['email'],'password' => $data['password'], 'admin' => '0'])){
+          $data = $request->all();
+           if(Auth::attempt(['email'=>$data['email'],'password' => $data['password'], 'admin' => '0'])){
 
-               Session::put('frontSession', $data["email"]); 
-               return redirect('/cart');
+             Session::put('frontSession', $data["email"]); 
+
+             if(!empty(Session::get('session_id')))
+             {
+               $session_id = Session::get('session_id');
+               Cart::where('session_id', $session_id)->update(['user_email'=>$data['email']]);
+             }
+
+             return redirect('/cart');
             }
-            else{
-                return back()->with('flash_message_error', 'Invalid Username or Password!');
-            }
+           else
+           {
+              return back()->with('flash_message_error', 'Invalid Username or Password!');
+           }
 
         }
     }

@@ -663,7 +663,12 @@ class ProductsController extends Controller
     //thanks page
     public function thanks()
     { 
-      return view('products.thanks_page');
+      return view('orders.thanks_page');
+    }
+
+    public function paypal()
+    {
+      return view('orders.paypal');
     }
 
     //view user orders
