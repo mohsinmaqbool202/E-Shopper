@@ -36,7 +36,7 @@
 						</td>
 						<td>{{$order->payment_method}}</td>
 						<td>{{$order->grand_total}}</td>
-						<td>{{$order->created_at}}</td>
+						<td>{{ $order->created_at->format('Y-m-d') }}</td>
 					</tr>
 					@endforeach
 				</tbody>

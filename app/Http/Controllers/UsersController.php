@@ -153,6 +153,7 @@ class UsersController extends Controller
     {
       Auth::logout();
       Session::forget('frontSession');
+      Session::forget('session_id');
       return redirect('/');
     }
 }

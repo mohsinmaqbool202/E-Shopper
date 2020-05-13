@@ -684,4 +684,52 @@ class ProductsController extends Controller
       return view('orders.order_detail', compact('orderDetail'));
 
     }
+
+    public function viewOrders()
+    {
+        $orders = Order::with('orders')->orderBy('id', 'desc')->get();
+        return view('admin.orders.view_orders', compact('orders'));
+    }
+
+    public function viewOrderDetail($order_id)
+    {
+        $orderDetail = Order::with('orders')->where('id', $order_id)->first();
+        return view('admin.orders.order_detail', compact('orderDetail'));
+    }
+
+    public function updateOrderStatus(Request $request)
+    {
+       if($request->isMethod('post')){
+        Order::where('id', $request->order_id)->update(['order_status'=> $request->order_status]);
+
+        return back()->with('flash_message_success', 'Order status has been updated.');
+       }
+    }
+
+    static public function orderStatus($id)
+    {
+        $status = Order::find($id)->order_status;
+        
+        switch ($status) {
+            case 0:
+                return "New";
+                break;
+            case 1:
+                return "Pendng";
+                break;
+            case 2:
+                return "Cancelled";
+                break;
+            case 3:
+                return "Shipped";
+                break;
+            case 4:
+                return "Delivered";
+                break;                
+            
+            default:
+                return "New";
+                break;
+        }
+    }
 }
