@@ -90,7 +90,7 @@ Route::group(['middleware' => ['frontlogin']], function(){
 });
 
 
-Route::group(['middleware' => ['auth']], function(){
+Route::group(['middleware' => ['adminlogin']], function(){
 
    Route::get('/admin/dashboard', 'AdminController@dashboard')->name('admin.dashboard');
    Route::get('/logout', 'AdminController@logout');
