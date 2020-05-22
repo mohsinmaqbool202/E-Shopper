@@ -9,6 +9,7 @@ use Auth;
 use Session;
 use App\Country;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 
 class UsersController extends Controller
@@ -35,7 +36,16 @@ class UsersController extends Controller
           $request["password"] = bcrypt($request->password);
           $request["admin"]    = '0';
           User::create($request->all());
-        
+
+          //Send Confirmation Email
+          $email = $data['email'];
+          $messageData = ['email'=>$data['email'], 'name'=>$data['name'], 'code'=>base64_encode($data['email'])];
+          Mail::send('emails.confirmation',$messageData,function($message) use($email){
+             $message->to($email)->subject('Confirm your E-Shop account');
+          });
+
+          return redirect()->back()->with('flash_message_error', 'An Email is sent to your account, please confirm your email to activate your account');
+          
           //redirect the user to cart page after registering
           if(Auth::attempt(['email'=>$data['email'],'password' => $data['password'], 'admin' => '0']))
           {
@@ -53,13 +63,50 @@ class UsersController extends Controller
     	}
     }
 
+    //activate account
+    public function confirmAccount($email)
+    {
+      $email = base64_decode($email);
+      $userCount = User::where('email', $email)->count();
+
+      if($userCount > 0){
+           $user = User::where('email', $email)->first();
+           if($user->status == 0){
+            User::where('email',$email)->update(['status'=>1]);
+
+            //send welcome email
+            $messageData = ['email'=>$email, 'name'=>$user->name];
+            Mail::send('emails.wellcome',$messageData,function($message) use($email){
+               $message->to($email)->subject('Wellcome E-Shop Website');
+            });
+
+            return redirect('/login-register')->with('flash_message_success', 'Your account has been activated. You can login now.');
+           }
+           else{
+            return redirect('/login-register')->with('flash_message_success', 'Your account is already active. You can login.');
+           }
+      }
+      else{
+        abort(404);
+      }
+
+    }
+
     //User login function
     public function login(Request $request)
     {
         if($request->isMethod('post'))
         {
           $data = $request->all();
-           if(Auth::attempt(['email'=>$data['email'],'password' => $data['password'], 'admin' => '0'])){
+
+           //check if user account is active or not
+            $user_status = User::where('email', $data['email'])->first();
+
+            if($user_status->status == 0){
+              return back()->with('flash_message_error', 'Your account is not active ! please confirm your email to activate your account.');
+             }
+
+           if(Auth::attempt(['email'=>$data['email'],'password' => $data['password'], 'admin' => '0',  'status' => '1'])){
 
              Session::put('frontSession', $data["email"]); 
 

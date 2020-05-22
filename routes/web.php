@@ -55,6 +55,9 @@ Route::get('/login-register', 'UsersController@userLoginRegister');
 //User register form submit
 Route::post('/user-register', 'UsersController@register');
 
+//activate account 
+Route::get('/confirm/{code}', 'UsersController@confirmAccount');
+
 //check email if user already exist or not
 Route::get('/check-email', 'UsersController@checkEmail');
 
