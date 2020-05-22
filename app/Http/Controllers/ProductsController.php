@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Image;
 use App\Category;
@@ -622,27 +623,28 @@ class ProductsController extends Controller
     {
         if($request->isMethod('post'))
         {
-           $user = Auth::user();
+          $data = $request->all();
+          $user = Auth::user();
 
-           //saving order detail
-           $order = new Order;
-           $order->user_id = $user->id;
-           $order->shipping_charges = 0;
-           $order->coupon_code = $request->coupon_code;
-           $order->coupon_amount = $request->coupon_amount;
-           $order->payment_method = $request->payment_method;
-           $order->grand_total = $request->grand_total;
-           $order->save();
+          //saving order detail
+          $order = new Order;
+          $order->user_id = $user->id;
+          $order->shipping_charges = 0;
+          $order->coupon_code = $request->coupon_code;
+          $order->coupon_amount = $request->coupon_amount;
+          $order->payment_method = $request->payment_method;
+          $order->grand_total = $request->grand_total;
+          $order->save();
 
-           //saving order_product data
-           $cart_data = Cart::where('session_id', Session::get('session_id'))->get();
+          //saving order_product data
+          $cart_data = Cart::where('session_id', Session::get('session_id'))->get();
            
            foreach($cart_data as $cart){
-               $order_product = new OrderProduct;
-               $order_product->order_id = $order->id;
-               $order_product->user_id = $user->id;
-               $order_product->cart_id = $cart->id;
-               $order_product->save();
+            $order_product = new OrderProduct;
+            $order_product->order_id = $order->id;
+            $order_product->user_id = $user->id;
+            $order_product->cart_id = $cart->id;
+            $order_product->save();
            }
 
            //removin session values
@@ -655,7 +657,35 @@ class ProductsController extends Controller
 
            Session::put('order_id', $order->id);
            Session::put('grand_total', $request->grand_total);
-           return redirect('/thanks');
+
+           if($data['payment_method'] == 'COD'){
+
+            /* code for order email start */
+             $orderDetail = Order::with('orders')->where('id', $order->id)->first();
+
+             $email = $user->email;
+             $messageData = [
+                'email'          => $user->email,
+                'name'           => $user->name,
+                'order_id'       => $order->id,
+                'user'           => $user,
+                'orderDetail'    => $orderDetail,
+             ];
+
+             Mail::send('emails.order', $messageData, function($message) use($email){
+              $message->to($email)->subject('Order Placed - E-Shop Website');
+             });
+            /* code for order email ends */
+
+
+            //redirect user to thanks page after saving order
+            return redirect('/thanks');
+           }
+           else{
+            //redirect user to paypal page after saving order -remains to do
+            return redirect('/paypal');
+           }
+
 
         }
     }
