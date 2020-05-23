@@ -6,7 +6,6 @@
 <div id="content">
   <div id="content-header">
     <div id="breadcrumb"> <a href="{{ url('/admin/dashboard') }}" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#">Admin</a> <a href="#" class="current">Change Password</a> </div>
-    <h1>Form validation</h1>
       @if(Session::has('flash_message_error'))  
         <div class="alert alert-error alert-block">
             <button type="button" class="close" data-dismiss="alert">x</button>

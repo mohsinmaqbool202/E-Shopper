@@ -67,6 +67,8 @@ Route::post('/user-login', 'UsersController@login');
 //user logout route
 Route::get('/user-logout', 'UsersController@userlogout');
 
+//search products
+Route::post('/search-pruducts', 'ProductsController@searchProduct');
 
 Route::group(['middleware' => ['frontlogin']], function(){
 
@@ -139,6 +141,9 @@ Route::group(['middleware' => ['adminlogin']], function(){
 
    //update order status
    Route::post('/admin/update-order-status', 'ProductsController@updateOrderStatus');
+
+   //View all users
+   Route::get('/admin/view-users','UsersController@viewUsers');
 
 });
 

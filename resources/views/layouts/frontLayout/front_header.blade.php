@@ -116,9 +116,13 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
-						<div class="search_box pull-right">
-							<input type="text" placeholder="Search"/>
-						</div>
+						<form method="post" action="{{ url('/search-pruducts') }}">
+							{{ csrf_field() }}
+							<div class="search_box pull-right">
+								<input type="text" placeholder="Search Product" name="product" autofocus />
+								<button type="submit" title="Search" class="btn btn-warning" style="margin-left: -4px; height: 35px; border-radius: 0px;"><i class="fa fa-search"></i></button>
+							</div>
+					  </form>
 					</div>
 				</div>
 			</div>
