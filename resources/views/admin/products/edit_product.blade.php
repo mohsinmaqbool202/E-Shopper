@@ -76,6 +76,12 @@
                   <input type="checkbox" name="status" id="status" @if($product->status ===1 )checked value = "1" @endif >
                 </div>
               </div>
+               <div class="control-group">
+                <label class="control-label">Feature Item</label>
+                <div class="controls">
+                  <input type="checkbox" name="feature_item" id="feature_item" @if($product->feature_item ===1 )checked value = "1" @endif >
+                </div>
+              </div>
               <div class="form-actions">
                 <input type="submit" value="Save Changes" class="btn btn-success">
               </div>

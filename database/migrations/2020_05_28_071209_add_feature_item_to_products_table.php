@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddStatusToProductsTable extends Migration
+class AddFeatureItemToProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddStatusToProductsTable extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->tinyInteger('status')->after('image')->default(0);
+            $table->tinyInteger('feature_item')->after('status')->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ class AddStatusToProductsTable extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-              $table->dropColumn('status');
+            $table->dropColumn('feature_item');
         });
     }
 }

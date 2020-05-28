@@ -36,6 +36,8 @@
                   <th>Product Code</th>
                   <th>Product Color</th>
                   <th>Price</th>
+                  <th>status</th>
+                  <th>Feature Item</th>
                   <th></th>
                 </tr>
               </thead>
@@ -51,6 +53,8 @@
                   <td>{{ $product->product_code }}</td>
                   <td>{{ $product->product_color }}</td>
                   <td>{{ $product->price }}</td>
+                  <td>@if($product->status == 1) Active @else Inactive @endif</td>
+                  <td>@if($product->feature_item == 1) Yes @else No @endif</td>
                   <td class="center">
                     <a href="#myModal{{ $product->id }}" data-toggle="modal" class="btn btn-success btn-mini" title="View Product">View </a> 
                     <a href="{{ url('/admin/edit-product', $product->id) }}" class="btn btn-primary btn-mini" title="Edit Product">Edit</a> 

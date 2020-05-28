@@ -36,6 +36,14 @@ class ProductsController extends Controller
             $status = 1;
         }
 
+        if(empty($data["feature_item"])){
+            $feature_item = 0;
+        }
+        else
+        {
+            $feature_item = 1;
+        }
+
     		$product = new Product;
 
     		$product->category_id    = $request->category_id;
@@ -44,8 +52,10 @@ class ProductsController extends Controller
     		$product->product_color  = $request->product_color; 
     		$product->price          = $request->price; 
     		$product->description    = $request->description; 
-            $product->care           = $request->care;
-            $product->status         = $status;
+        $product->care           = $request->care;
+        $product->status         = $status;
+        $product->feature_item   = $feature_item;
+
 
     		//Storing Product Image
     		if($request->hasFile('image'))
@@ -68,6 +78,7 @@ class ProductsController extends Controller
     				$product->image = $filename;
     			}
     		}
+
     		$product->save();
     		return redirect('/admin/view-products')->with('flash_message_success', 'Product Added.');
     	}
@@ -130,7 +141,14 @@ class ProductsController extends Controller
               $status = 1;
           }
 
-          Product::where('id', $id)->update(['category_id'=> $data['category_id'],'product_name'=> $data['product_name'],'product_code'=> $data['product_code'],'product_color'=> $data['product_color'],'description'=> $data['description'],'care'=> $data['care'],'price'=> $data['price'], 'image'=> $filename, 'status'=> $status]);
+          if(empty($data["feature_item"])){
+              $feature_item = 0;
+          }
+          else{
+              $feature_item = 1;
+          }
+
+          Product::where('id', $id)->update(['category_id'=> $data['category_id'],'product_name'=> $data['product_name'],'product_code'=> $data['product_code'],'product_color'=> $data['product_color'],'description'=> $data['description'],'care'=> $data['care'],'price'=> $data['price'], 'image'=> $filename, 'status'=> $status, 'feature_item'=> $feature_item ]);
          return redirect('/admin/view-products')->with('flash_message_success', 'Product Updated Successfully.');
       }
 
