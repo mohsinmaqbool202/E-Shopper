@@ -433,12 +433,12 @@ class ProductsController extends Controller
       Session::forget('CouponCode');
 
       $sizeArr = explode("-", $request->size);
-      $request["size"]        = $sizeArr[1];
+      $request["size"]  = $sizeArr[1];
       
       //Check if Requested Quuantity is available in stock or not
       $checkStock = ProductAttribute::where('product_id',$sizeArr[0])->where('size',$sizeArr[1])->first();
       if($request->quantity > $checkStock->stock){
-        return back()->with('flash_message_error', 'Sorry! Requested product quantity is not available.');
+        return back()->with('flash_message_error', 'Sorry! Required quantity is not available.');
       }
 
 
@@ -504,7 +504,7 @@ class ProductsController extends Controller
       }
       else
       {
-        return redirect('cart')->with('flash_message_error', 'Required product quantity is not available');
+        return redirect('cart')->with('flash_message_error', 'Required quantity is not available');
       }
 
     }
@@ -782,4 +782,10 @@ class ProductsController extends Controller
         }
     }
 
+    //order invoice
+    public function viewOrderInvoice($order_id)
+    {
+      $orderDetail = Order::with('orders')->where('id', $order_id)->first();
+      return view('admin.orders.order_invoice', compact('orderDetail'));
+    }
 }

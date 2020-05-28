@@ -150,7 +150,7 @@ use \App\Http\Controllers\ProductsController;
         </div>
         <div class="widget-box">
           <div class="widget-title">
-            <h5>Billing Address</h5>
+            <h5>Shipping Address</h5>
           </div>
           <div class="widget-content nopadding">
             <table class="table table-striped table-bordered">
