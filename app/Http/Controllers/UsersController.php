@@ -125,6 +125,44 @@ class UsersController extends Controller
       }
   }
 
+  //forgot password
+  public function forgotPassword(Request $request)
+  {
+    if($request->isMethod('post')){
+       $data = $request->all();
+
+       $userCount = User::where('email', $data['email'])->count();
+       if($userCount == 0){
+        return redirect()->back()->with('flash_message_error', 'Email does not exist');
+       }
+
+       //user info
+       $userInfo = User::where('email', $data['email'])->first();
+
+       //generate random password
+       $random_pwd = str_random(8);
+
+       //encode pwd
+       $new_pwd = bcrypt($random_pwd);
+
+       //update user pwd
+       User::where('email', $data['email'])->update(['password'=>$new_pwd]);
+
+       //Send email to user
+       $email = $data['email'];
+       $name  = $userInfo->name;
+       $messageData = ['email'=> $email, 'password'=>$random_pwd, 'name'=>$name];
+
+        Mail::send('emails.forgot_password',$messageData, function($message) use($email){
+         $message->to($email)->subject('New Password - E-Shop Website');
+
+        return redirect('/login-register')->with('flash_message_success', 'Please check your email for new password.');
+
+       });
+    }
+    return view('users.forgot_password');
+  }
+
   //check if user already exist or not
   public function checkEmail(Request $request)
   {

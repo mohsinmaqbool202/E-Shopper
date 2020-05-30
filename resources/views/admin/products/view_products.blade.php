@@ -31,14 +31,14 @@
                 <tr>
                   <th>ID</th>
                   <th>Product Name</th>
-                  <th>Image</th>
+                  <th width="7%">Image</th>
                   <th>Category Name</th>
                   <th>Product Code</th>
                   <th>Product Color</th>
                   <th>Price</th>
                   <th>status</th>
                   <th>Feature Item</th>
-                  <th></th>
+                  <th width="23%"></th>
                 </tr>
               </thead>
               <tbody>
@@ -52,7 +52,7 @@
                   <td> {{$product->category->name}}</td>
                   <td>{{ $product->product_code }}</td>
                   <td>{{ $product->product_color }}</td>
-                  <td>{{ $product->price }}</td>
+                  <td>PKR:{{ $product->price }}</td>
                   <td>@if($product->status == 1) Active @else Inactive @endif</td>
                   <td>@if($product->feature_item == 1) Yes @else No @endif</td>
                   <td class="center">

@@ -18,17 +18,11 @@
         @endif    
 				<div class="col-sm-4 col-sm-offset-1">
 					<div class="login-form"><!--login form-->
-						<h2>Login to your account</h2>
-						<form name="loginForm" id="loginForm" action="{{ url('/user-login') }}" method="post">
+						<h2>Forgot Password?</h2>
+						<form name="forgotPasswordForm" id="forgotPasswordForm" action="{{ url('/forgot-password') }}" method="post">
 							{{ csrf_field() }}
 							<input type="email" name="email" placeholder="Email Address" />
-							<input type="password" name="password" placeholder="Password" />
-							<!-- <span>
-								<input type="checkbox" class="checkbox"> 
-								Keep me signed in
-							</span> -->
-							<button type="submit" class="btn btn-default">Login</button><br>
-							<a href="{{ url('forgot-password') }}">Forgot Password?</a>
+							<button type="submit" class="btn btn-default">Submit</button><br>
 						</form>
 					</div><!--/login form-->
 				</div>

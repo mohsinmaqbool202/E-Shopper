@@ -73,6 +73,7 @@
 						</div>
 					@endforeach
 				</div><!--features_items-->
+				<div align="center">{{$products->links()}}</div>
 			</div>
 		</div>
 	</div>

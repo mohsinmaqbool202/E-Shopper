@@ -55,6 +55,9 @@ Route::get('/login-register', 'UsersController@userLoginRegister');
 //User register form submit
 Route::post('/user-register', 'UsersController@register');
 
+//forgot password
+Route::match(['get', 'post'], '/forgot-password', 'UsersController@forgotPassword');
+
 //activate account 
 Route::get('/confirm/{code}', 'UsersController@confirmAccount');
 

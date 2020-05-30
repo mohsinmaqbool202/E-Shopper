@@ -380,12 +380,12 @@ class ProductsController extends Controller
             foreach($subCategories as $subcat){
                 $cat_ids[] .= $subcat->id;
             }
-            $productsAll = Product::where('status', 1)->whereIn('category_id', $cat_ids)->get();
+            $productsAll = Product::where('status', 1)->whereIn('category_id', $cat_ids)->paginate(15);
           }
           else
           {
             //if url is of sub cat
-            $productsAll = Product::where('status', 1)->where('category_id', $categoryDetails->id)->get();
+            $productsAll = Product::where('status', 1)->where('category_id', $categoryDetails->id)->paginate(15);
           }
 
       return view('products.listing', compact('categoryDetails', 'categories', 'productsAll', 'banners'));
