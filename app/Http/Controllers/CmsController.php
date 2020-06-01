@@ -102,6 +102,13 @@ class CmsController extends Controller
       {
         $data = $request->all();
 
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'subject' => 'required',
+            'message' => 'required',
+        ]);
+
         //send contact email
         $email = "mohsinmaqbool451@gmail.com";
         $messageData = [
