@@ -66,9 +66,9 @@
 
                <!-- PopUp Modal -->
                   <div id="myModal{{ $product->id }}" class="modal hide">
-                     <div class="modal-header " style="background: grey;">
+                     <div class="modal-header " style="background: #6495ED;;">
                         <button data-dismiss="modal" class="close" type="button">×</button>
-                        <h3>{{ $product->product_name }} Full Details</h3>
+                        <h3 style="color: white;">{{ $product->product_name }} Full Details</h3>
                      </div>
                      <div class="modal-body">
                         <img src="{{ asset('/images/backend_images/products/small/'.$product->image) }}" style="width: 60px;">

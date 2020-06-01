@@ -73,6 +73,12 @@ Route::get('/user-logout', 'UsersController@userlogout');
 //search products
 Route::post('/search-pruducts', 'ProductsController@searchProduct');
 
+//display cms page on user side
+Route::get('/page/{url}', 'CmsController@cmsPage');
+
+//contact us
+Route::match(['get', 'post'], '/contact-us', 'CmsController@contact');
+
 Route::group(['middleware' => ['frontlogin']], function(){
 
    //user account page
@@ -150,6 +156,12 @@ Route::group(['middleware' => ['adminlogin']], function(){
 
    //View all users
    Route::get('/admin/view-users','UsersController@viewUsers');
+
+   //cms pages
+   Route::match(['get','post'],'/admin/add-cms-page', 'CmsController@addCmsPage');
+   Route::get('/admin/view-cms-pages', 'CmsController@viewCmsPages');
+   Route::get('/admin/delete-cms-page/{id}', 'CmsController@deleteCmsPages');
+   Route::match(['get','post'],'/admin/edit-cms-page/{id}', 'CmsController@editCmsPage');
 
 });
 
