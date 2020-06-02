@@ -26,6 +26,9 @@ class CategoryController extends Controller
             $category->parent_id = $data['parent_id'];
     		$category->description = $data['description'];
     		$category->url = $data['url'];
+            $category->meta_title  = $data['meta_title'];
+            $category->meta_description  = $data['meta_description'];
+            $category->meta_keywords  = $data['meta_keywords'];
             $category->status = $status;
     		$category->save();
 
@@ -46,6 +49,7 @@ class CategoryController extends Controller
     {
         if($request->isMethod('post'))
         {
+            $data = $request->all();
             if(empty($request["status"])){
                 $status = 0;
             }
@@ -58,6 +62,9 @@ class CategoryController extends Controller
             $category->parent_id   = $request->parent_id;
             $category->description = $request->description;
             $category->url         = $request->url;
+            $category->meta_title      = $data['meta_title'];
+            $category->meta_description  = $data['meta_description'];
+            $category->meta_keywords   = $data['meta_keywords'];
             $category->status      = $status;
             
             $category->save();

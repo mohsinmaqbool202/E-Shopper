@@ -388,7 +388,13 @@ class ProductsController extends Controller
             $productsAll = Product::where('status', 1)->where('category_id', $categoryDetails->id)->paginate(15);
           }
 
-      return view('products.listing', compact('categoryDetails', 'categories', 'productsAll', 'banners'));
+          //seo meta tags
+          $meta_title       =  $categoryDetails->meta_title;
+          $meta_description =  $categoryDetails->meta_description;
+          $meta_keywords    =  $categoryDetails->meta_keywords;
+
+
+      return view('products.listing', compact('categoryDetails', 'categories', 'productsAll', 'banners', 'meta_title','meta_description','meta_keywords'));
     }
 
      //search product
@@ -430,7 +436,12 @@ class ProductsController extends Controller
        //Get Categories and sub-categories
       $categories = Category::with('categories')->where('parent_id', 0)->get();
 
-      return view('products.detail', compact('productDetail', 'categories','productAltImages', 'product_stock', 'relatedProducts'));
+      //seo meta tags
+      $meta_title       =  $productDetail->product_name." - E-Shop";
+      $meta_description =  $productDetail->description;
+      $meta_keywords    =  $productDetail->product_name;
+
+      return view('products.detail', compact('productDetail', 'categories','productAltImages', 'product_stock', 'relatedProducts', 'meta_title','meta_description','meta_keywords'));
     }
 
     public function getProductPrice(Request $request)//getting product price using ajax
@@ -491,8 +502,12 @@ class ProductsController extends Controller
     {   
       $session_id = Session::get('session_id');
       $userCart = Cart::where('session_id', $session_id)->get();
+      //seo meta tags
+      $meta_title = "Shopping cart - E-Shop Website";
+      $meta_description = "View Shopping Cart of E-Shop Website";
+      $meta_keywords    = "shopping cart, e-shop website";
 
-      return view('products.cart', compact('userCart'));
+      return view('products.cart', compact('userCart','meta_title','meta_description','meta_keywords'));
     }
 
     public function deleteCartProduct($id)

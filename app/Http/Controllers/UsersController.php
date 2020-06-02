@@ -16,7 +16,12 @@ class UsersController extends Controller
 {
   public function userLoginRegister()
   {
-      return view('users.login_register');
+    //seo meta tags
+    $meta_title = "Shopping cart - E-Shop Website";
+    $meta_description = "View Shopping Cart of E-Shop Website";
+    $meta_keywords    = "shopping cart, e-shop website";
+
+    return view('users.login_register');
   }
 
   //Register New User

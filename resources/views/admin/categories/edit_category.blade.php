@@ -4,7 +4,6 @@
 <div id="content">
   <div id="content-header">
     <div id="breadcrumb"> <a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#">Categories</a> <a href="#" class="current">Add Sub Categories</a> </div>
-    <h1>Add Sub Category Here</h1>
   </div>
   <div class="container-fluid"><hr>
     <div class="row-fluid">
@@ -47,13 +46,31 @@
                 </div>
               </div>
               <div class="control-group">
+                <label class="control-label">Meta Title</label>
+                <div class="controls">
+                  <input type="text" name="meta_title" id="meta_title" value="{{ $category->meta_title }}">
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Meta Description</label>
+                <div class="controls">
+                  <input type="text" name="meta_description" id="meta_description" value="{{ $category->meta_description }}">
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Meta Keywords</label>
+                <div class="controls">
+                  <input type="text" name="meta_keywords" id="meta_keywords" value="{{ $category->meta_keywords }}">
+                </div>
+              </div>
+              <div class="control-group">
                 <label class="control-label">Enable</label>
                 <div class="controls">
                   <input type="checkbox" name="status" id="status" @if($category->status ===1 )checked value = "1" @endif >
                 </div>
               </div>
               <div class="form-actions">
-                <input type="submit" value="Edit" class="btn btn-success">
+                <input type="submit" value="Save Changes" class="btn btn-success">
               </div>
             </form>
           </div>

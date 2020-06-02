@@ -96,21 +96,20 @@
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li><a href="{{ url('/') }}" class="active">Home</a></li>
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
-                                    	@foreach($mainCategories as $cat)
-	                                    	@if($cat->status == 1)
-	                                            <li><a href="{{ asset('/products/'.$cat->url) }}">{{ $cat->name }}</a></li>
-	                                        @endif   
-                                        @endforeach   
-                                    </ul>
-                                </li> 
+                  <ul role="menu" class="sub-menu">
+                  	@foreach($mainCategories as $cat)
+                    	@if($cat->status == 1)
+                        <li><a href="{{ asset('/products/'.$cat->url) }}">{{ $cat->name }}</a></li>
+                      @endif   
+                    @endforeach   
+                  </ul>
+                </li> 
 								<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
-                                    <ul role="menu" class="sub-menu">
-                                        <li><a href="blog.html">Blog List</a></li>
-										<li><a href="blog-single.html">Blog Single</a></li>
-                                    </ul>
-                                </li> 
-								<li><a href="404.html">404</a></li>
+                  <ul role="menu" class="sub-menu">
+                    <li><a href="blog.html">Blog List</a></li>
+								  	<li><a href="blog-single.html">Blog Single</a></li>
+                  </ul>
+                </li> 
 								<li><a href="{{url('/contact-us')}}">Contact</a></li>
 							</ul>
 						</div>

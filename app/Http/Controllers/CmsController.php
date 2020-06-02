@@ -51,6 +51,9 @@ class CmsController extends Controller
             $page->title = $data['title'];
             $page->url =   $data['url'];
             $page->description  = $data['description'];
+            $page->meta_title  = $data['meta_title'];
+            $page->meta_description  = $data['meta_description'];
+            $page->meta_keywords  = $data['meta_keywords'];
             $page->status   = $data['status'];
             $page->save();
 
@@ -74,12 +77,17 @@ class CmsController extends Controller
     {
         $cmsPage = CmsPage::where('url', $url)->first();
 
+        //seo meta tags
+        $meta_title = $cmsPage->meta_title;
+        $meta_description =  $cmsPage->meta_description;
+        $meta_keywords    =  $cmsPage->meta_keywords;
+
         //Get CAtegoried and sun-categories
         $categories = Category::with('categories')->where('parent_id', 0)->get();
 
         //get all banners
         $banners  = Banner::where('status', 1)->get();
-        return view('pages.cms_page', compact('cmsPage', 'categories', 'banners'));
+        return view('pages.cms_page', compact('cmsPage', 'categories', 'banners','meta_title','meta_description','meta_keywords'));
     }
 
     public static function fetchPages()
@@ -128,6 +136,12 @@ class CmsController extends Controller
       $categories = Category::with('categories')->where('parent_id', 0)->get();
       //get all banners
       $banners  = Banner::where('status', 1)->get();
-      return view('pages.contact', compact('categories', 'banners'));
+
+      //meta tags
+        $meta_title = "Contact Us - E-Shop Sample Website";
+        $meta_description = "Contact us for any queries related to our products.";
+        $meta_keywords = "contact us, queries";
+
+      return view('pages.contact', compact('categories', 'banners','meta_title','meta_description','meta_keywords'));
     }
 }
