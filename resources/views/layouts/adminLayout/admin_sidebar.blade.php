@@ -36,6 +36,12 @@
         <li><a href="{{ url('/admin/view-users') }}">View Users</a></li>
       </ul>
     </li>
+    <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Admins/Sub-Admins</span> <span class="label label-important">2</span></a>
+      <ul>
+        <li><a href="{{ url('/admin/add-admin') }}">Add Admin/Sub-Admin</a></li>
+        <li><a href="{{ url('/admin/view-admins') }}">View Admin/Sub-Admins</a></li>
+      </ul>
+    </li>
     <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>CMS Pages</span> <span class="label label-important">2</span></a>
       <ul>
         <li><a href="{{ url('/admin/add-cms-page') }}">Add CMS Page</a></li>

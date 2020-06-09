@@ -327,6 +327,12 @@ function selectPaymentMethod()
 	{
 		alert('Please select payment method.');
 		return false;
-	}
-	
+	}	
+}
+
+function checkPincode()
+{
+	var pincode = $('#chkPincode').val();
+	alert(pincode);
+	return false;
 }

@@ -41,14 +41,14 @@ class AdminController extends Controller
 
     public function checkPassword(Request $request)
     {
-        $data = $request->all();
-        $adminCount = Admin::where(['username'=> Session::get('adminSession'),'password'=>md5($data['current_pwd'])])->count();
-        if($adminCount == 1)
-        {
-            echo "true"; die;
-        }else{
-            echo "false"; die;
-        }
+      $data = $request->all();
+      $adminCount = Admin::where(['username'=> Session::get('adminSession'),'password'=>md5($data['current_pwd'])])->count();
+      if($adminCount == 1)
+      {
+          echo "true"; die;
+      }else{
+          echo "false"; die;
+      }
     }
 
     public function settings()
@@ -83,5 +83,32 @@ class AdminController extends Controller
     {
         Session::flush();
         return redirect('/admin')->with('flash_message_success', 'Logged Out Successfully.');
+    }
+
+    public function viewAdmins()
+    {
+      $admins = Admin::all();
+      return view('admin.admins.view_admins', compact('admins'));
+    }
+
+    public function addAdmin(Request $request)
+    {
+      if($request->isMethod('post'))
+      {
+        $data = $request->all();
+        $adminCount = Admin::where('username', $data['username'])->count();
+        if($adminCount > 0){
+          return redirect()->back()->with('flash_message_error', 'Username already exist.Please choose another username!');
+        }
+        else{
+          $data['password'] = md5($data['password']);
+          Admin::create($data);
+
+          return redirect('/admin/view-admins')->with('flash_message_success', 'New Admin Added.');
+        }
+      }
+
+      //get request
+      return view('admin.admins.add_admin');
     }
 }

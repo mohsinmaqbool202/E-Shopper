@@ -76,6 +76,10 @@
 									</span>
 									<p><b>Availability:</b><span id="Availability">@if($product_stock) In Stock @else Out Of Stock @endif</span></p>
 									<p><b>Condition:</b> New</p>
+									<p><b>Delivery</b>
+										<input type="text" name="pincode" id="chkPincode" placeholder="Check Pincode" required>
+										<button type="button" onclick="return checkPincode();">Go</button>
+									</p>
 									<a href=""><img src="images/product-details/share.png" class="share img-responsive"  alt="" /></a>
 								</div><!--/product-information-->
 							</form>  
