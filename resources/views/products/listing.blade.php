@@ -51,7 +51,8 @@
 						  {{ $search_product }}
 						@else
 						  {{ $categoryDetails->name }}
-						@endif  
+						@endif 
+						 ({{count($productsAll)}})
 					</h2>
 					@foreach($productsAll as $product)
 					<div class="col-sm-4">

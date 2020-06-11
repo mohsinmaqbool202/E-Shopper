@@ -79,6 +79,9 @@ Route::get('/page/{url}', 'CmsController@cmsPage');
 //contact us
 Route::match(['get', 'post'], '/contact-us', 'CmsController@contact');
 
+//check pincode
+Route::get('/check-pincode', 'ProductsController@checkPincode');
+
 Route::group(['middleware' => ['frontlogin']], function(){
 
    //user account page

@@ -52,7 +52,7 @@ class UsersController extends Controller
         return redirect()->back()->with('flash_message_error', 'An Email is sent to your account, please confirm your email to activate your account');
         
         //redirect the user to cart page after registering
-        if(Auth::attempt(['email'=>$data['email'],'password' => $data['password'], 'admin' => '0']))
+        if(Auth::attempt(['email'=>$data['email'],'password' => $data['password']]))
         {
           Session::put('frontSession', $data["email"]); 
 
@@ -110,7 +110,7 @@ class UsersController extends Controller
             return back()->with('flash_message_error', 'Your account is not active ! please confirm your email to activate your account.');
            }
 
-         if(Auth::attempt(['email'=>$data['email'],'password' => $data['password'], 'admin' => '0',  'status' => '1'])){
+         if(Auth::attempt(['email'=>$data['email'],'password' => $data['password'],'status' => '1'])){
 
            Session::put('frontSession', $data["email"]); 
 

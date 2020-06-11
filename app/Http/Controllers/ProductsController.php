@@ -20,6 +20,7 @@ use App\User;
 use App\DeliveryAddress;
 use App\Order;
 use App\OrderProduct;
+use DB;
 
 class ProductsController extends Controller
 {
@@ -464,7 +465,7 @@ class ProductsController extends Controller
       $sizeArr = explode("-", $request->size);
       $request["size"]  = $sizeArr[1];
       
-      //Check if Requested Quuantity is available in stock or not
+      //Check if Requested Quantity is available in stock or not
       $checkStock = ProductAttribute::where('product_id',$sizeArr[0])->where('size',$sizeArr[1])->first();
       if($request->quantity > $checkStock->stock){
         return back()->with('flash_message_error', 'Sorry! Required quantity is not available.');
@@ -651,6 +652,13 @@ class ProductsController extends Controller
 
                 $new_address->save();  
             }
+
+             //check pincode
+            $pincodeCount = DB::table('pincodes')->where('pincode', $request->shipping_pincode)->count();
+            if($pincodeCount == 0){
+              return redirect()->back()->with('flash_message_error', 'Your location/pincode is not available for delivery, Please choose valid pincode');
+            }
+
             return redirect('/order-review');
         }
 
@@ -665,6 +673,13 @@ class ProductsController extends Controller
         //check if shipping address already exist
         $shipping_address = DeliveryAddress::where('user_id', $user->id)->first();
 
+        //check pincode
+        $pincodeCount = DB::table('pincodes')->where('pincode', $shipping_address->pincode)->count();
+        if($pincodeCount == 0){
+          return redirect()->back()->with('flash_message_error', 'Your location is not available for delivery, Please choose another location');
+        }
+
+
         //cart items
         $session_id = Session::get('session_id');
         $userCart = Cart::where('session_id', $session_id)->get();
@@ -678,6 +693,12 @@ class ProductsController extends Controller
         {
           $data = $request->all();
           $user = Auth::user();
+
+          //check pincode
+          $pincodeCount = DB::table('pincodes')->where('pincode', $user->deliveryAddress->pincode)->count();
+          if($pincodeCount == 0){
+            return redirect()->back()->with('flash_message_error', 'Your location is not available for delivery, Please choose another location');
+          }
 
           //saving order detail
           $order = new Order;
@@ -738,8 +759,6 @@ class ProductsController extends Controller
             //redirect user to paypal page after saving order -remains to do
             return redirect('/paypal');
            }
-
-
         }
     }
 
@@ -820,5 +839,22 @@ class ProductsController extends Controller
     {
       $orderDetail = Order::with('orders')->where('id', $order_id)->first();
       return view('admin.orders.order_invoice', compact('orderDetail'));
+    }
+
+    public function checkPincode(Request $request)
+    {
+       if($request->ajax())
+       {
+         $data = $request->all();
+         $checkCount = DB::table('pincodes')->where('pincode', $data['pincode'])->count();
+         
+         if($checkCount > 0){
+           echo "true";
+         }
+         else
+         {
+           echo "false";
+         }
+       }
     }
 }

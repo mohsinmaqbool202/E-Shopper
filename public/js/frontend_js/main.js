@@ -256,8 +256,6 @@ $(document).ready(function(){
 			}
 		});
 	});
-
-
 });
 
 $(function(){
@@ -333,6 +331,29 @@ function selectPaymentMethod()
 function checkPincode()
 {
 	var pincode = $('#chkPincode').val();
-	alert(pincode);
-	return false;
+	if(pincode == ""){
+		alert('Please Enter Pincode');
+		return false;
+	}
+
+	//ajax call
+	$.ajax({
+		method:"Get",
+		data:{pincode:pincode},
+		url:"/check-pincode",
+		success:function(resp){
+			if(resp == 'true'){
+             $('#pincodeResponse').html("<b> This pincode is available for delivery. </b>");
+             $('#pincodeResponse').css("color", "green");
+            }
+            else
+            {
+             $('#pincodeResponse').html("<b> This pincode is not available for delivery. </b>");
+             $('#pincodeResponse').css("color", "red");
+            }
+		},
+		error:function(){
+			alert('Error Occured');
+		}
+	});
 }

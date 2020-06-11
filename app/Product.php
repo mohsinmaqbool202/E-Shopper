@@ -1,6 +1,10 @@
 <?php
 
 namespace App;
+use App\Cart;
+use Session;
+use Auth;
+use App\Product;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,5 +26,25 @@ class Product extends Model
      public function alternateImages()
     {
     	return $this->hasMany('App\ProductImage');
+    }
+
+    public static function cartCount()
+    {
+        if(Auth::check()){
+            $user_email = Auth::user()->email;
+            $cartCount = Cart::where('user_email', $user_email)->sum('quantity');
+        }
+        else{
+            $session_id = Session::get('session_id');
+            $cartCount = Cart::where('session_id', $session_id)->sum('quantity');
+        }
+
+        return $cartCount;
+    }
+
+    public static function productCount($cat_id)
+    {
+        $productCount = Product::where(['category_id'=>$cat_id, 'status'=>1])->count();
+        return $productCount;
     }
 }

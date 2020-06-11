@@ -4,12 +4,18 @@
 <section id="form" style="margin-top: 20px;"><!--form-->
 	<div class="container">
 		@if ($errors->any())
-	    <div class="alert alert-danger">
-        <ul>
-          <li>Please fill all the fields.</li>
-        </ul>
-	    </div>
-	  @endif
+		    <div class="alert alert-danger">
+		        <ul>
+		          <li>Please fill all the fields.</li>
+		        </ul>
+		    </div>
+	    @endif
+	    @if(Session::has('flash_message_error'))  
+            <div class="alert alert-danger alert-block">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <strong>{{ session::get('flash_message_error') }}</strong>
+            </div>
+        @endif 
 	  	<form action="{{ url('/checkout') }}" method="post">
 	  		{{csrf_field()}}
 				<div class="row">
