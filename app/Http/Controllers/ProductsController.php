@@ -80,6 +80,16 @@ class ProductsController extends Controller
     			}
     		}
 
+        //add video
+        if($request->hasFile('video'))
+        {
+          $video_temp = Input::file('video');
+          $video_name = $video_temp->getClientOriginalName();
+          $video_path = 'videos/';
+          $video_temp->move($video_path,$video_name);
+          $product->video = $video_name;
+        }
+
     		$product->save();
     		return redirect('/admin/view-products')->with('flash_message_success', 'Product Added.');
     	}
@@ -109,10 +119,10 @@ class ProductsController extends Controller
     //Edit Product Function
     public function editProduct(Request $request, $id)
     {
-      $data = $request->all();
       //For Post Request
       if($request->isMethod('post'))
       {
+          $data = $request->all();
           //Storing Product Image
           if($request->hasFile('image'))
           {
@@ -135,6 +145,17 @@ class ProductsController extends Controller
               $filename = $request->current_image;
           }
 
+          //add video
+          if($request->hasFile('video'))
+          {
+            $video_temp = Input::file('video');
+            $video_name = $video_temp->getClientOriginalName();
+            $video_path = 'videos/';
+            $video_temp->move($video_path,$video_name);
+          }
+          else{
+            $video_name = $data['current_video'];
+          }
           if(empty($data["status"])){
               $status = 0;
           }
@@ -149,7 +170,7 @@ class ProductsController extends Controller
               $feature_item = 1;
           }
 
-          Product::where('id', $id)->update(['category_id'=> $data['category_id'],'product_name'=> $data['product_name'],'product_code'=> $data['product_code'],'product_color'=> $data['product_color'],'description'=> $data['description'],'care'=> $data['care'],'price'=> $data['price'], 'image'=> $filename, 'status'=> $status, 'feature_item'=> $feature_item ]);
+          Product::where('id', $id)->update(['category_id'=> $data['category_id'],'product_name'=> $data['product_name'],'product_code'=> $data['product_code'],'product_color'=> $data['product_color'],'description'=> $data['description'],'care'=> $data['care'],'price'=> $data['price'], 'image'=> $filename, 'status'=> $status, 'video'=>$video_name, 'feature_item'=> $feature_item ]);
          return redirect('/admin/view-products')->with('flash_message_success', 'Product Updated Successfully.');
       }
 
@@ -205,6 +226,19 @@ class ProductsController extends Controller
        //Delete img from products table 
       Product::where('id', $id)->update(['image'=> '']);
       return back();
+    }
+
+    public function deleteProductVideo($id)
+    {
+
+      $video = Product::select('video')->where('id',$id)->first();
+      $video_path = 'videos/';
+      if(file_exists($video_path.$video->video)){
+          unlink($video_path.$video->video);
+        }
+
+      Product::where('id', $id)->update(['video'=> '']);
+      return redirect()->back()->with('flash_message_success', 'Video has been deleted.');
     }
 
     //Delete Product Function

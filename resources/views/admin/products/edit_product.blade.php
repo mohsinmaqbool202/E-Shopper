@@ -4,8 +4,13 @@
 <div id="content">
   <div id="content-header">
     <div id="breadcrumb"> <a href="index.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#">Product</a> <a href="#" class="current">Edit Product </a> </div>
-    <h1>Edit Product Here</h1>
   </div>
+   @if(Session::has('flash_message_success'))  
+    <div class="alert alert-success alert-block">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <strong>{{ session::get('flash_message_success') }}</strong>
+    </div>
+   @endif 
   <div class="container-fluid"><hr>
     <div class="row-fluid">
       <div class="span12">
@@ -66,7 +71,18 @@
                   <input type="file" name="image" id="image">
                   @if(!empty($product->image))
                   <input type="hidden" name="current_image" value="{{ $product->image }}">
-                  <img src="{{ asset('/images/backend_images/products/small/'.$product->image) }}" style="width: 40px;"> | <a href="{{ url('/admin/delete-product-image', $product->id) }}">Delete</a>
+                  <img src="{{ asset('/images/backend_images/products/small/'.$product->image) }}" style="width: 40px;"> | <a href="{{ url('/admin/delete-product-image/'.$product->id) }}">Delete</a>
+                  @endif
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Video</label>
+                <div class="controls">
+                  <input type="file" name="video" id="video">
+                  @if(!empty($product->video))
+                  <input type="hidden" name="current_video" value="{{ $product->video }}">
+                  <a target="_blank" href="{{url('videos/'.$product->video)}}">View</a>
+                  <a href="{{ url('/admin/delete-product-video/'.$product->id)}}"> | Delete</a>
                   @endif
                 </div>
               </div>

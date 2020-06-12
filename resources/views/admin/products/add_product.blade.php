@@ -67,6 +67,12 @@
                 </div>
               </div>
               <div class="control-group">
+                <label class="control-label">Add Video</label>
+                <div class="controls">
+                  <input type="file" name="video" id="video">
+                </div>
+              </div>
+              <div class="control-group">
                 <label class="control-label">Enable Product</label>
                 <div class="controls">
                   <input type="checkbox" name="status" id="status" value="1">

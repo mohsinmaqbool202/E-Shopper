@@ -93,6 +93,9 @@
 								<li class="active"><a href="#description" data-toggle="tab">Description</a></li>
 								<li><a href="#care" data-toggle="tab">Material & Care</a></li>
 								<li><a href="#delivery" data-toggle="tab">Delivery</a></li>
+								@if(!empty($productDetail->video))
+								<li><a href="#video" data-toggle="tab">Product Video</a></li>
+								@endif
 							</ul>
 						</div>
 						<div class="tab-content">
@@ -116,7 +119,15 @@
 							   	   </p>
 							   </div>
 							</div>
-							
+
+							<div class="tab-pane fade" id="video" >
+								<div class="col-md-12">
+							   	   <video width="320" height="240" controls>
+									  <source src="{{url('videos/'.$productDetail->video)}}" type="video/mp4">
+									</video>
+							   </div>
+							</div>
+							 
 						</div>
 					</div><!--/category-tab-->
 					
