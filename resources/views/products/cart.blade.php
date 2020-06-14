@@ -1,6 +1,8 @@
+<?php
+	use App\Product;
+?>
 @extends('layouts.frontLayout.front_design')
 @section('content')
-
 <section id="cart_items">
 		<div class="container">
 			<div class="breadcrumbs">
@@ -96,11 +98,25 @@
 				<div class="total_area">
 					<ul>
 						@if(!empty(Session::get('CouponAmount')))
+						<?php 
+						 $total_amount = $total_amount - Session::get('CouponAmount');
+						  $currencyRate = Product::getCurrencies($total_amount); 
+						?>
 						<li>Sub Total <span>PKR {{$total_amount}}</span></li>
 						<li>Coupon Discount<span>PKR {{Session::get('CouponAmount')}}</span></li>
-						<li>Grand Total <span>PKR {{$total_amount - Session::get('CouponAmount')}}</span></li>
+						<li>Grand Total <span class="btn-secondary" data-toggle="tooltip" data-html="true" 
+						title="Yuan {{$currencyRate['Yuan_Rate']}}<br>
+							   EUR  {{$currencyRate['EUR_Rate']}}<br>
+							   USD  {{$currencyRate['USD_Rate']}}">PKR {{$total_amount - Session::get('CouponAmount')}}</span></li>
 						@else
-						<li>Grand Total <span>PKR {{$total_amount}}</span></li>
+						<?php 
+						  $currencyRate = Product::getCurrencies($total_amount);
+						?>
+						<li>Grand Total <span class="btn-secondary" data-toggle="tooltip" data-html="true" 
+						title="Yuan {{$currencyRate['Yuan_Rate']}}<br>
+							   EUR  {{$currencyRate['EUR_Rate']}}<br>
+							   USD  {{$currencyRate['USD_Rate']}}">
+						 PKR {{$total_amount}}</span></li>
 						@endif
 					</ul>
 						<a class="btn btn-default update" href="{{url('/')}}">Update</a>

@@ -1,3 +1,6 @@
+<?php
+	use App\Product;
+?>
 @extends('layouts.frontLayout.front_design')
 @section('content')
 
@@ -142,8 +145,16 @@
 											@endif									
 										</tr>
 										<tr>
+											<?php
+												$total_amount = $total_amount - Session::get('CouponAmount');
+						            $currencyRate = Product::getCurrencies($total_amount); 
+											?>
 											<td>Grand Total</td>
-											<td><span>PKR {{$total_amount - Session::get('CouponAmount')}}</span></td>
+											<td><span class="btn-secondary" data-toggle="tooltip" data-html="true" 
+					                    	title="Yuan {{$currencyRate['Yuan_Rate']}}<br>
+							                         EUR  {{$currencyRate['EUR_Rate']}}<br>
+							                         USD  {{$currencyRate['USD_Rate']}}">
+							              PKR {{$total_amount}}</span></td>
 										</tr>
 									</table>
 								</td>

@@ -43,15 +43,17 @@ $(document).ready(function(){
 			data:{idSize:idSize},
 			success:function(resp){
 				var arr = resp.split('#');
-				$('#getPrice').html("PKR" +arr[0]);
-				$('#product_price').val(arr[0]);
+				var arr1 = arr[0].split('-');
+
+				$('#getPrice').html("PKR " +arr1[0] +"<h2>Yuan "+arr1[1]+"<br>EUR "+arr1[2]+"<br>USD "+arr1[3]+"</h2>");
+				$('#product_price').val(arr1[0]);
 				
 				if(arr[1] == 0){
 					$('#cartButton').hide();
 					$('#Availability').text('Out Of Stock');
 				}else{
 					$('#cartButton').show();
-					$('#Availability').text('In Stock '+arr[1]+ ' 	Items');
+					$('#Availability').text('In Stock '+arr[1]+ 'Items');
 				}
 			},
 			error:function(){

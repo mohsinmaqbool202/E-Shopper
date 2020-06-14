@@ -47,5 +47,11 @@
     <script src="{{ asset( 'js/frontend_js/main.js ') }}"></script>
     <script src="{{ asset( 'js/frontend_js/jquery.validate.js ') }}"></script>
     <script src="{{ asset( 'js/frontend_js/passtrength.js ') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
 </body>
 </html>

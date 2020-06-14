@@ -445,8 +445,11 @@ class ProductsController extends Controller
         $banners = Banner::where('status', 1)->get();
 
         $search_product = $data['product'];
-
-        $productsAll = Product::where('product_name','like','%'.$search_product.'%')->orWhere('product_code', $search_product)->where('status',1)->get();
+        
+        $productsAll = Product::where(function($query) use($search_product){
+          $query->where('product_name','like','%'.$search_product.'%')
+          ->orWhere('product_code','like','%'.$search_product.'%');
+        })->where('status',1)->paginate(15);
 
          return view('products.listing', compact('search_product', 'categories', 'productsAll', 'banners'));
       }
@@ -485,7 +488,9 @@ class ProductsController extends Controller
       $proArr = explode("-", $data["idSize"]);
       
       $proAttr = ProductAttribute::where('product_id', $proArr[0])->where('size', $proArr[1])->first();
-      echo $proAttr->price;
+
+      $currentRates = Product::getCurrencies($proAttr->price);
+      echo $proAttr->price.'-'.$currentRates['Yuan_Rate'].'-'.$currentRates['EUR_Rate'].'-'.$currentRates['USD_Rate'];
       echo "#";
       echo $proAttr->stock; die;
     }

@@ -1,3 +1,7 @@
+<?php
+use App\Product;
+$currenyArr = Product::getCurrencies($productDetail->price);
+?>
 @extends('layouts.frontLayout.front_design')
 @section('content')
 
@@ -64,7 +68,12 @@
 									</p>
 									<img src="images/product-details/rating.png" alt="" />
 									<span>
-										<span id="getPrice">PKR {{ $productDetail->price  }}</span>
+										<span id="getPrice">
+											PKR {{ $productDetail->price  }}
+											<h2>Yuan {{$currenyArr['Yuan_Rate']}}<br>
+										    	EUR  {{$currenyArr['EUR_Rate']}}<br>
+										        USD  {{$currenyArr['USD_Rate']}}</h2>
+										</span>
 										<label>Quantity:</label>
 										<input type="text" name="quantity" value="1" />
 										@if($product_stock)

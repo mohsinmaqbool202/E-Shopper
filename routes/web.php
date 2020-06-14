@@ -171,6 +171,12 @@ Route::group(['middleware' => ['adminlogin']], function(){
    Route::get('/admin/delete-cms-page/{id}', 'CmsController@deleteCmsPages');
    Route::match(['get','post'],'/admin/edit-cms-page/{id}', 'CmsController@editCmsPage');
 
+   //currency routes
+   Route::match(['get','post'],'/admin/add-currency', 'CurrencyController@addCurrency');
+   Route::get('/admin/view-currencies', 'CurrencyController@viewCurrencies');
+   Route::match(['get','post'],'/admin/edit-currency/{id}', 'CurrencyController@editCurrency');
+   Route::get('/admin/delete-currency/{id}', 'CurrencyController@deleteCurrency');
+
 });
 
 

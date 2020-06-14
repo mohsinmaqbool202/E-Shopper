@@ -47,4 +47,28 @@ class Product extends Model
         $productCount = Product::where(['category_id'=>$cat_id, 'status'=>1])->count();
         return $productCount;
     }
+
+    public static function getCurrencies($price)
+    {
+        $currencies = Currency::all();
+        foreach($currencies as $curr)
+        {
+            if($curr->currency_code == "USD")
+            {
+                $USD_Rate =round($price/$curr->exchange_rate,2);
+            }
+            else if($curr->currency_code == "Yuan")
+            {
+                $Yuan_Rate =round($price/$curr->exchange_rate,2);
+
+            }
+            else if($curr->currency_code == "EUR")
+            {
+                $EUR_Rate =round($price/$curr->exchange_rate,2);
+            }
+        }
+        
+        $currenyArr = ['USD_Rate'=>$USD_Rate, 'Yuan_Rate'=>$Yuan_Rate, 'EUR_Rate'=>$EUR_Rate];
+            return $currenyArr;
+    }
 }
