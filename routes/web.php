@@ -29,6 +29,9 @@ Route::get('/', 'IndexController@index');
 //Listing Products on category base Routes
 Route::get('/products/{url}', 'ProductsController@products');
 
+//Color filter Route
+Route::match(['get','post'], 'products/filter', 'ProductsController@filter');
+
 //Product detail page
 Route::get('product/{id}', 'ProductsController@product');
 //get product attribute price

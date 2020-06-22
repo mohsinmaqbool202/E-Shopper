@@ -429,7 +429,12 @@ class ProductsController extends Controller
           $meta_keywords    =  $categoryDetails->meta_keywords;
 
 
-      return view('products.listing', compact('categoryDetails', 'categories', 'productsAll', 'banners', 'meta_title','meta_description','meta_keywords'));
+      return view('products.listing', compact('categoryDetails', 'categories', 'productsAll', 'banners', 'meta_title','meta_description','meta_keywords', 'url'));
+    }
+
+    public function filter(Request $request)
+    {
+      dd($request->all());
     }
 
      //search product
