@@ -49,6 +49,28 @@
                 </div>
               </div>
               <div class="control-group">
+                <label class="control-label">Sleeve</label>
+                <div class="controls">
+                  <select name="sleeve" style="width: 220px;">
+                    <option >Select Sleeve</option>
+                    @foreach($sleeveArr as $sleev)
+                     <option value="{{$sleev}}">{{$sleev}}</option>
+                    @endforeach
+                  </select>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Pattern</label>
+                <div class="controls">
+                  <select name="pattern" style="width: 220px;">
+                    <option >Select Pattern</option>
+                    @foreach($patternArr as $pattern)
+                     <option value="{{$pattern}}">{{$pattern}}</option>
+                    @endforeach
+                  </select>
+                </div>
+              </div>
+              <div class="control-group">
                 <label class="control-label">Description</label>
                 <div class="controls">
                   <textarea name="description" id="description"></textarea>

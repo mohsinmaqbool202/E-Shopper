@@ -58,6 +58,8 @@ $currenyArr = Product::getCurrencies($productDetail->price);
 									<img src="images/product-details/new.jpg" class="newarrival" alt="" />
 									<h2>{{ $productDetail->product_name }}</h2>
 									<p>Code: {{ $productDetail->product_code }}</p>
+									<p>Sleeve: {{ $productDetail->sleeve }}</p>
+									<p>Pattern: {{ $productDetail->pattern }}</p>
 									<p>
 										<select id="selSize" name="size" style="width: 150px;" required>
 											<option value="">Select Size</option>

@@ -30,7 +30,7 @@ class IndexController extends Controller
         $meta_title = "E-Shop Sample Website";
         $meta_description = "Online Shopping Site for Men, Women and Kids";
         $meta_keywords = "eshop website, online shopping, men clothing";
-
+        $url = '';
     	return view('index', compact('products', 'categories', 'banners','meta_title','meta_description', 'meta_keywords'));
     }
 }

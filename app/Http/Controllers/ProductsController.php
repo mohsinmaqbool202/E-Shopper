@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 use Image;
 use App\Category;
 use App\Product;
@@ -52,6 +53,8 @@ class ProductsController extends Controller
     		$product->product_code   = $request->product_code; 
     		$product->product_color  = $request->product_color; 
     		$product->price          = $request->price; 
+        $product->sleeve         = $request->sleeve; 
+        $product->pattern        = $request->pattern; 
     		$product->description    = $request->description; 
         $product->care           = $request->care;
         $product->status         = $status;
@@ -94,7 +97,7 @@ class ProductsController extends Controller
     		return redirect('/admin/view-products')->with('flash_message_success', 'Product Added.');
     	}
 
-        //Categories Dropdown Start
+      //Categories Dropdown Start
     	$main_categories = Category::where('parent_id', 0)->get();
     	$categories_dropdown  =  "<option selected disabled>Select</option>";
     		foreach($main_categories as $cat)
@@ -106,8 +109,11 @@ class ProductsController extends Controller
     			   $categories_dropdown .= "<option value='".$sub_cat->id."'>&nbsp;--&nbsp;". $sub_cat->name."</option>";
     			 }
     		}
-        // Categories dropdown ends    
-    	return view('admin.products.add_product', compact('categories_dropdown'));
+      // Categories dropdown ends 
+      $sleeveArr = ['Full Sleeve','Half Sleeve','Short Sleeve','Sleveless'];  
+      $patternArr = ['Checked','Plain','Printed','Self','Solid'];   
+
+    	return view('admin.products.add_product', compact('categories_dropdown','sleeveArr','patternArr'));
     }
     public function viewProducts()
     {
@@ -154,7 +160,12 @@ class ProductsController extends Controller
             $video_temp->move($video_path,$video_name);
           }
           else{
-            $video_name = $data['current_video'];
+            if(!empty($data['current_video']))
+            {
+             $video_name = $data['current_video'];
+            }else{
+               $video_name = '';
+            }
           }
           if(empty($data["status"])){
               $status = 0;
@@ -170,7 +181,7 @@ class ProductsController extends Controller
               $feature_item = 1;
           }
 
-          Product::where('id', $id)->update(['category_id'=> $data['category_id'],'product_name'=> $data['product_name'],'product_code'=> $data['product_code'],'product_color'=> $data['product_color'],'description'=> $data['description'],'care'=> $data['care'],'price'=> $data['price'], 'image'=> $filename, 'status'=> $status, 'video'=>$video_name, 'feature_item'=> $feature_item ]);
+          Product::where('id', $id)->update(['category_id'=> $data['category_id'],'product_name'=> $data['product_name'],'product_code'=> $data['product_code'],'product_color'=> $data['product_color'],'description'=> $data['description'],'care'=> $data['care'],'price'=> $data['price'],'sleeve'=> $data['sleeve'],'pattern'=> $data['pattern'], 'image'=> $filename, 'status'=> $status, 'video'=>$video_name, 'feature_item'=> $feature_item ]);
          return redirect('/admin/view-products')->with('flash_message_success', 'Product Updated Successfully.');
       }
 
@@ -198,9 +209,11 @@ class ProductsController extends Controller
                $categories_dropdown .= "<option value='".$sub_cat->id."' ".$selected." >&nbsp;--&nbsp;". $sub_cat->name."</option>";
              }
         }
-      // Categories dropdown ends    
+      // Categories dropdown ends
+      $sleeveArr = ['Full Sleeve','Half Sleeve','Short Sleeve','Sleveless'];
+      $patternArr = ['Checked','Plain','Printed','Self','Solid'];   
 
-      return view('admin.products.edit_product', compact('product', 'categories_dropdown'));
+      return view('admin.products.edit_product', compact('product', 'categories_dropdown','sleeveArr','patternArr'));
     }
 
     public function deleteProductImage($id)
@@ -415,13 +428,47 @@ class ProductsController extends Controller
             foreach($subCategories as $subcat){
                 $cat_ids[] .= $subcat->id;
             }
-            $productsAll = Product::where('status', 1)->whereIn('category_id', $cat_ids)->paginate(15);
+            $productsAll = Product::where('status', 1)->whereIn('category_id', $cat_ids);
           }
           else
           {
             //if url is of sub cat
-            $productsAll = Product::where('status', 1)->where('category_id', $categoryDetails->id)->paginate(15);
+            $productsAll = Product::where('status', 1)->where('category_id', $categoryDetails->id);
           }
+
+          if(!empty($_GET['color']))
+          {
+            $colorArray = explode('-', $_GET['color']);
+            $productsAll =  $productsAll->whereIn('product_color', $colorArray);
+          }
+
+          if(!empty($_GET['sleeve']))
+          {
+            $sleeveArray = explode('-', $_GET['sleeve']);
+            $productsAll =  $productsAll->whereIn('sleeve', $sleeveArray);
+          }
+
+          if(!empty($_GET['pattern']))
+          {
+            $patternArray = explode('-', $_GET['pattern']);
+            $productsAll =  $productsAll->whereIn('pattern', $patternArray);
+          }
+
+          if(!empty($_GET['size']))
+          {
+            $sizeArray = explode('-', $_GET['size']);
+            $productsAll =  $productsAll->join('product_attributes','products.id','=','product_attributes.product_id')
+            ->select('products.*','product_attributes.product_id')
+            ->groupBy('product_attributes.product_id')
+            ->whereIn('product_attributes.size', $sizeArray);
+          }
+
+          $productsAll = $productsAll->paginate(15);
+
+          $colors = Product::select('product_color')->groupBy('product_color')->get();
+          $sleeves = Product::select('sleeve')->where('sleeve','!=','')->groupBy('sleeve')->get();
+          $patterns = Product::select('pattern')->where('pattern','!=','')->groupBy('pattern')->get();
+          $sizes = ProductAttribute::select('size')->groupBy('size')->get();
 
           //seo meta tags
           $meta_title       =  $categoryDetails->meta_title;
@@ -429,12 +476,79 @@ class ProductsController extends Controller
           $meta_keywords    =  $categoryDetails->meta_keywords;
 
 
-      return view('products.listing', compact('categoryDetails', 'categories', 'productsAll', 'banners', 'meta_title','meta_description','meta_keywords', 'url'));
+      return view('products.listing', compact('categoryDetails', 'categories', 'productsAll', 'banners', 'meta_title','meta_description','meta_keywords', 'url','colors','sleeves','patterns','sizes'));
     }
 
     public function filter(Request $request)
     {
-      dd($request->all());
+
+      $data = $request->all();
+      $colorUrl = '';
+      if(!empty($data['colorFilter']))
+      {
+        foreach($data['colorFilter'] as $color)
+        {
+          if(empty($colorUrl))
+          {
+            $colorUrl = "&color=".$color;
+          }
+          else
+          {
+            $colorUrl .= "-".$color;
+          }
+        }
+      }
+
+      $sleeveUrl = '';
+      if(!empty($data['sleeveFilter']))
+      {
+        foreach($data['sleeveFilter'] as $sleeve)
+        {
+          if(empty($sleeveUrl))
+          {
+            $sleeveUrl = "&sleeve=".$sleeve;
+          }
+          else
+          {
+            $sleeveUrl .= "-".$sleeve;
+          }
+        }
+      }
+
+      $patternUrl = '';
+      if(!empty($data['patternFilter']))
+      {
+        foreach($data['patternFilter'] as $pattern)
+        {
+          if(empty($patternUrl))
+          {
+            $patternUrl = "&pattern=".$pattern;
+          }
+          else
+          {
+            $patternUrl .= "-".$pattern;
+          }
+        }
+      }
+
+      $sizernUrl = '';
+      if(!empty($data['sizeFilter']))
+      {
+        foreach($data['sizeFilter'] as $size)
+        {
+          if(empty($sizernUrl))
+          {
+            $sizernUrl = "&size=".$size;
+          }
+          else
+          {
+            $sizernUrl .= "-".$size;
+          }
+        }
+      }
+
+      $finalUrl = "products/".$data['url']."?".$colorUrl.$sleeveUrl.$patternUrl.$sizernUrl;
+      return redirect::to($finalUrl);
     }
 
      //search product
