@@ -429,11 +429,14 @@ class ProductsController extends Controller
                 $cat_ids[] .= $subcat->id;
             }
             $productsAll = Product::where('status', 1)->whereIn('category_id', $cat_ids);
+            $breadcrumb = "<a href='/'>Home</a> > <a href='".$categoryDetails->url."'>".$categoryDetails->name."</a>";
           }
           else
           {
             //if url is of sub cat
             $productsAll = Product::where('status', 1)->where('category_id', $categoryDetails->id);
+            $mainCat = Category::where('id',$categoryDetails->parent_id)->first();
+            $breadcrumb = "<a href='/'>Home</a> > <a href='".$mainCat->url."'>".$mainCat->name."</a> > <a href='".$categoryDetails->url."'>".$categoryDetails->name."</a>" ;
           }
 
           if(!empty($_GET['color']))
@@ -476,7 +479,7 @@ class ProductsController extends Controller
           $meta_keywords    =  $categoryDetails->meta_keywords;
 
 
-      return view('products.listing', compact('categoryDetails', 'categories', 'productsAll', 'banners', 'meta_title','meta_description','meta_keywords', 'url','colors','sleeves','patterns','sizes'));
+      return view('products.listing', compact('categoryDetails', 'categories', 'productsAll', 'banners', 'meta_title','meta_description','meta_keywords', 'url','colors','sleeves','patterns','sizes','breadcrumb'));
     }
 
     public function filter(Request $request)
@@ -577,8 +580,7 @@ class ProductsController extends Controller
     public function product($id)
     {
       $productDetail = Product::with('attributes')->where('id', $id)->first();
-
-      //check if product is enable or not
+      // check if product is enable or not
       if($productDetail->status == 0)
       {
        abort(404);
@@ -592,13 +594,24 @@ class ProductsController extends Controller
 
        //Get Categories and sub-categories
       $categories = Category::with('categories')->where('parent_id', 0)->get();
+      //for breadcrumb
+      $categoryDetails = Category::where('id',$productDetail->category_id)->first();
+      if( $categoryDetails->parent_id == 0)
+      {
+        $breadcrumb = "<a href='/'>Home</a> > <a href='".$categoryDetails->url."'>".$categoryDetails->name."</a>";
+      }
+      else
+      {
+        $mainCat = Category::where('id',$categoryDetails->parent_id)->first();
+        $breadcrumb = "<a href='/'>Home</a> > <a href='/products/".$mainCat->url."'>".$mainCat->name."</a> > <a href='/products/".$categoryDetails->url."'>".$categoryDetails->name."</a> >".$productDetail->product_name;
+      }
 
       //seo meta tags
       $meta_title       =  $productDetail->product_name." - E-Shop";
       $meta_description =  $productDetail->description;
       $meta_keywords    =  $productDetail->product_name;
 
-      return view('products.detail', compact('productDetail', 'categories','productAltImages', 'product_stock', 'relatedProducts', 'meta_title','meta_description','meta_keywords'));
+      return view('products.detail', compact('productDetail', 'categories','productAltImages', 'product_stock', 'relatedProducts', 'meta_title','meta_description','meta_keywords','breadcrumb'));
     }
 
     public function getProductPrice(Request $request)//getting product price using ajax

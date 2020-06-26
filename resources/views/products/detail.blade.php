@@ -17,8 +17,9 @@ $currenyArr = Product::getCurrencies($productDetail->price);
 				<div class="col-sm-3">
 					@include('layouts.frontLayout.front_sidebar')
 				</div>
-				
 				<div class="col-sm-9 padding-right">
+					<div align="left"><?php  echo $breadcrumb; ?></div>
+					<div>&nbsp;</div>
 					<div class="product-details"><!--product-details-->
 						<div class="col-sm-5">
 							<div class="view-product">
@@ -29,22 +30,19 @@ $currenyArr = Product::getCurrencies($productDetail->price);
 								  </div>   
 							</div>
 							<div id="similar-product" class="carousel slide" data-ride="carousel">
-								
-								  <!-- Wrapper for slides -->
-								    <div class="carousel-inner">
-										<div class="item active thumbnails">
-											<a href="{{ asset( 'images/backend_images/products/large/'.$productDetail->image)}}" data-standard="{{ asset( 'images/backend_images/products/small/'.$productDetail->image)}}">
-								        <img style="width:90px;" class="changeImage" src="{{ asset( 'images/backend_images/products/small/'.$productDetail->image)}}" alt="" />
-								      </a>  
-										@foreach($productAltImages as $image)
-			                <a href="{{ asset('images/backend_images/products/large/'.$image->image) }}" data-standard="{{ asset('images/backend_images/products/small/'.$image->image) }}">
-										    <img class="changeImage" src="{{ asset('images/backend_images/products/small/'.$image->image) }}" style="width: 90px; cursor: pointer;">
-										  </a>  
-										  @endforeach  
-										</div>
+							  <div class="carousel-inner">
+									<div class="item active thumbnails">
+										<a href="{{ asset( 'images/backend_images/products/large/'.$productDetail->image)}}" data-standard="{{ asset( 'images/backend_images/products/small/'.$productDetail->image)}}">
+							        <img style="width:90px;" class="changeImage" src="{{ asset( 'images/backend_images/products/small/'.$productDetail->image)}}" alt="" />
+							      </a>  
+									@foreach($productAltImages as $image)
+		                <a href="{{ asset('images/backend_images/products/large/'.$image->image) }}" data-standard="{{ asset('images/backend_images/products/small/'.$image->image) }}">
+									    <img class="changeImage" src="{{ asset('images/backend_images/products/small/'.$image->image) }}" style="width: 90px; cursor: pointer;">
+									  </a>  
+									@endforeach  
 									</div>
-`							</div>
-
+								</div>
+							</div>
 						</div>
 						<div class="col-sm-7">
 							<form name="addtocartForm" id="addtocartForm" action="{{ url('add-cart') }}" method="post">
@@ -176,7 +174,6 @@ $currenyArr = Product::getCurrencies($productDetail->price);
 							  </a>			
 						</div>
 					</div><!--/recommended_items-->
-					
 				</div>
 			</div>
 		</div>
