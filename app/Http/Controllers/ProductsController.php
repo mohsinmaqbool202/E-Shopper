@@ -890,6 +890,11 @@ class ProductsController extends Controller
             $order_product->user_id = $user->id;
             $order_product->cart_id = $cart->id;
             $order_product->save();
+
+            //update product stock
+            $old_stock = ProductAttribute::where('sku',$cart->product_code)->first();
+            $new_stock = $old_stock->stock - $cart->quantity;
+            ProductAttribute::where('id',$old_stock->id)->update(['stock'=>$new_stock]);
            }
 
            //removin session values
@@ -921,8 +926,6 @@ class ProductsController extends Controller
               $message->to($email)->subject('Order Placed - E-Shop Website');
              });
             /* code for order email ends */
-
-
             //redirect user to thanks page after saving order
             return redirect('/thanks');
            }
