@@ -53,6 +53,12 @@
                   <input type="text" name="price" id="price" value="{{ $product->price }}">
                 </div>
               </div>
+               <div class="control-group">
+                <label class="control-label">Weight</label>
+                <div class="controls">
+                  <input type="text" name="weight" id="weight" value="{{ $product->weight }}" placeholder="weight in grams">
+                </div>
+              </div>
               <div class="control-group">
                 <label class="control-label">Sleeve</label>
                 <div class="controls">

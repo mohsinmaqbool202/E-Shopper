@@ -53,6 +53,7 @@ class ProductsController extends Controller
     		$product->product_code   = $request->product_code; 
     		$product->product_color  = $request->product_color; 
     		$product->price          = $request->price; 
+        $product->weight         = $request->weight; 
         $product->sleeve         = $request->sleeve; 
         $product->pattern        = $request->pattern; 
     		$product->description    = $request->description; 
@@ -181,7 +182,7 @@ class ProductsController extends Controller
               $feature_item = 1;
           }
 
-          Product::where('id', $id)->update(['category_id'=> $data['category_id'],'product_name'=> $data['product_name'],'product_code'=> $data['product_code'],'product_color'=> $data['product_color'],'description'=> $data['description'],'care'=> $data['care'],'price'=> $data['price'],'sleeve'=> $data['sleeve'],'pattern'=> $data['pattern'], 'image'=> $filename, 'status'=> $status, 'video'=>$video_name, 'feature_item'=> $feature_item ]);
+          Product::where('id', $id)->update(['category_id'=> $data['category_id'],'product_name'=> $data['product_name'],'product_code'=> $data['product_code'],'product_color'=> $data['product_color'],'description'=> $data['description'],'care'=> $data['care'],'price'=> $data['price'],'weight'=> $data['weight'],'sleeve'=> $data['sleeve'],'pattern'=> $data['pattern'], 'image'=> $filename, 'status'=> $status, 'video'=>$video_name, 'feature_item'=> $feature_item ]);
          return redirect('/admin/view-products')->with('flash_message_success', 'Product Updated Successfully.');
       }
 
@@ -407,13 +408,14 @@ class ProductsController extends Controller
     }
 
     public function products($url)
-    {
-     //display 404 error if url doesnot exist
+    { 
+      //display 404 error if url doesnot exist
       $categoryCount = Category::where('url', $url)->where('status', 1)->count();
       if($categoryCount == 0)
       {
         abort(404);
       }
+
       //Get Categories and sub-categories
       $categories = Category::with('categories')->where('parent_id', 0)->get();
       //get banners
@@ -570,10 +572,14 @@ class ProductsController extends Controller
         
         $productsAll = Product::where(function($query) use($search_product){
           $query->where('product_name','like','%'.$search_product.'%')
-          ->orWhere('product_code','like','%'.$search_product.'%');
+          ->orWhere('product_code','like','%'.$search_product.'%')
+          ->orWhere('description','like','%'.$search_product.'%')
+          ->orWhere('product_color','like','%'.$search_product.'%');
         })->where('status',1)->paginate(15);
 
-         return view('products.listing', compact('search_product', 'categories', 'productsAll', 'banners'));
+        $breadcrumb = "<a href='/'>Home</a> > " .$search_product ;
+
+         return view('products.listing', compact('search_product', 'categories', 'productsAll', 'banners','breadcrumb'));
       }
     }
 
@@ -840,6 +846,7 @@ class ProductsController extends Controller
     {
         $user = Auth::user();
         $countries = Country::all();
+        $total_weight = 0;
 
         //check if shipping address already exist
         $shipping_address = DeliveryAddress::where('user_id', $user->id)->first();
@@ -854,8 +861,15 @@ class ProductsController extends Controller
         //cart items
         $session_id = Session::get('session_id');
         $userCart = Cart::where('session_id', $session_id)->get();
+        foreach($userCart as $cartProduct)
+        {
+           $total_weight +=  $cartProduct->product->weight;
+        }
 
-        return view('products.order_review', compact('user', 'countries', 'shipping_address', 'userCart'));
+        //Shipping Charges
+        $shipping_charges = Product::getShippinhCharges($total_weight, $shipping_address->country_id);
+
+        return view('products.order_review', compact('user', 'countries', 'shipping_address', 'userCart','shipping_charges'));
     }
 
     public function placeOrder(Request $request)
@@ -864,6 +878,43 @@ class ProductsController extends Controller
         {
           $data = $request->all();
           $user = Auth::user();
+          $session_id = Session::get('session_id');
+
+          //prevent user from ordering out of stock products
+          $userCart = Cart::where('session_id', $session_id)->get();
+          foreach($userCart as $cart){
+            $product_stock = Product::getProductStock($cart->product_id, $cart->size);
+            if($product_stock == 0 && $product_stock != null){
+              Product::deleteProductFromCart($cart->product_code, $session_id, $product_id = '');
+              return redirect('/cart')->with('flash_message_error', 'Some of the product is out of stock as some other customer has perchased it before you, please update your cart with some other product!');
+            }
+            if($cart->quantity > $product_stock && $product_stock != null){
+               return redirect('/cart')->with('flash_message_error', 'Your demanded quantity is more than product stock, please update your cart!');
+            }
+
+            // prevent user from ordering disabled products
+            $product_status = Product::getProductStatus($cart->product_id);
+            if($product_status == 0){
+              Product::deleteProductFromCart($cart->product_code,$session_id,$cart->product_id);
+              return redirect('/cart')->with('flash_message_error', 'Disabled product removed from cart, please update your cart again!');
+            }
+
+            //prevent deleted product attributes to be ordered
+            $attribute_count = Product::getAttributeCount($cart->product_id,$cart->product_code);
+            if($attribute_count == 0)
+            {
+              Product::deleteProductFromCart($cart->product_code,$session_id,$cart->product_id);
+              return redirect('/cart')->with('flash_message_error', 'One of the product  is not available, please update your cart again!');
+            }
+
+            //prevent disabled category to be ordered
+            $category_status = Product::find($cart->product_id)->category->status;
+            if($category_status == 0)
+            {
+              Product::deleteProductFromCart($cart->product_code,$session_id,$cart->product_id);
+              return redirect('/cart')->with('flash_message_error', 'One of the product category is disabled, please try again!');
+            }
+          }
 
           //check pincode
           $pincodeCount = DB::table('pincodes')->where('pincode', $user->deliveryAddress->pincode)->count();
@@ -873,27 +924,30 @@ class ProductsController extends Controller
 
           //saving order detail
           $order = new Order;
-          $order->user_id = $user->id;
-          $order->shipping_charges = 0;
-          $order->coupon_code = $request->coupon_code;
-          $order->coupon_amount = $request->coupon_amount;
-          $order->payment_method = $request->payment_method;
-          $order->grand_total = $request->grand_total;
+          $order->user_id          = $user->id;
+          $order->shipping_charges = $request->shipping_charges;
+          $order->coupon_code      = $request->coupon_code;
+          $order->coupon_amount    = $request->coupon_amount;
+          $order->payment_method   = $request->payment_method;
+          $order->grand_total      = $request->grand_total;
           $order->save();
 
           //saving order_product data
           $cart_data = Cart::where('session_id', Session::get('session_id'))->get();
            
            foreach($cart_data as $cart){
-            $order_product = new OrderProduct;
+            $order_product           = new OrderProduct;
             $order_product->order_id = $order->id;
-            $order_product->user_id = $user->id;
-            $order_product->cart_id = $cart->id;
+            $order_product->user_id  = $user->id;
+            $order_product->cart_id  = $cart->id;
             $order_product->save();
 
             //update product stock
             $old_stock = ProductAttribute::where('sku',$cart->product_code)->first();
             $new_stock = $old_stock->stock - $cart->quantity;
+            if($new_stock < 0){
+              $new_stock = 0;
+            }
             ProductAttribute::where('id',$old_stock->id)->update(['stock'=>$new_stock]);
            }
 
@@ -984,7 +1038,6 @@ class ProductsController extends Controller
     static public function orderStatus($id)
     {
         $status = Order::find($id)->order_status;
-        
         switch ($status) {
             case 0:
                 return "New";

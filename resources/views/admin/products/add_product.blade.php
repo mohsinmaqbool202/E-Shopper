@@ -49,6 +49,12 @@
                 </div>
               </div>
               <div class="control-group">
+                <label class="control-label">Weight</label>
+                <div class="controls">
+                  <input type="text" name="weight" id="weight" placeholder="weight in grams">
+                </div>
+              </div>
+              <div class="control-group">
                 <label class="control-label">Sleeve</label>
                 <div class="controls">
                   <select name="sleeve" style="width: 220px;">

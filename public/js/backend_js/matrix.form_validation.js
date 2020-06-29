@@ -145,6 +145,10 @@ $(document).ready(function(){
 				required:true,
 				number:true
 			},
+			weight:{
+				required:true,
+				number:true
+			},
 			image:{
 				required:true,
 			}
@@ -179,6 +183,10 @@ $(document).ready(function(){
 				required:true,
 				number:true
 			},
+			weight:{
+				required:true,
+				number:true
+			}
 		},
 		errorClass: "help-inline",
 		errorElement: "span",

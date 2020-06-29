@@ -134,7 +134,7 @@
 										</tr>
 										<tr>
 											<td>Shipping Cost(+)</td>
-											<td>PKR 0</td>
+											<td>PKR {{$shipping_charges}}</td>
 										</tr>
 										<tr class="shipping-cost">
 											<td>Discount(-)</td>
@@ -146,7 +146,7 @@
 										</tr>
 										<tr>
 											<?php
-												$total_amount = $total_amount - Session::get('CouponAmount');
+												$total_amount = $total_amount - Session::get('CouponAmount') + $shipping_charges;
 						            $currencyRate = Product::getCurrencies($total_amount); 
 											?>
 											<td>Grand Total</td>
@@ -167,7 +167,7 @@
 				<input type="hidden" name="grand_total" value="{{ $total_amount }}">
 				<input type="hidden" name="coupon_code" value="{{ Session::get('CouponCode') }}">
 				<input type="hidden" name="coupon_amount" value="{{ Session::get('CouponAmount') }}">
-
+				<input type="hidden" name="shipping_charges" value="{{$shipping_charges}}">
 				<div class="payment-options">
 					<span>
 						<label><strong>Select Payment Method:</strong></label>

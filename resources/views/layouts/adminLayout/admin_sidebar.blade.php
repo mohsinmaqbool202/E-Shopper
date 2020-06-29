@@ -54,6 +54,12 @@
         <li><a href="{{ url('/admin/view-currencies') }}">View Currencies</a></li>
       </ul>
     </li>
+    <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Shipping</span> <span class="label label-important">2</span></a>
+      <ul>
+        <li><a href="{{ url('/admin/add-shipping') }}">Add Shipping Charges</a></li>
+        <li><a href="{{ url('/admin/view-shipping') }}">View Shipping Charges</a></li>
+      </ul>
+    </li>
   </ul>
 </div>
 <!--sidebar-menu-->

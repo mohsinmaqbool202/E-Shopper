@@ -5,6 +5,7 @@ use App\Cart;
 use Session;
 use Auth;
 use App\Product;
+use App\ProductAttribute;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -70,5 +71,69 @@ class Product extends Model
         
         $currenyArr = ['USD_Rate'=>$USD_Rate, 'Yuan_Rate'=>$Yuan_Rate, 'EUR_Rate'=>$EUR_Rate];
             return $currenyArr;
+    }
+
+    public static function getProductStock($p_id, $p_size){
+        $product_stock = ProductAttribute::select('stock')->where(['product_id'=>$p_id, 'size'=>$p_size])->first();
+        if($product_stock != null){
+         return $product_stock->stock;
+        } 
+        return null;
+    }
+
+    public static function getProductStatus($p_id)
+    {
+        $product_status = Product::select('status')->where('id',$p_id)->first();
+        return $product_status->status;
+    }
+
+    public static function deleteProductFromCart($product_code, $session_id, $product_id)
+    {
+        if(empty($product_id)){
+          Cart::where(['product_code'=>$product_code, 'session_id'=>$session_id])->delete();
+        }
+        else{
+         Cart::where(['product_id'=>$product_id, 'session_id'=>$session_id])->delete();
+        }
+    }
+
+    public static function getAttributeCount($product_id,$product_code)
+    {
+        $attribute_count = ProductAttribute::where(['product_id'=>$product_id,'sku'=>$product_code])->count();
+        return $attribute_count;
+    }
+
+    public static function getShippinhCharges($weight, $country_id)
+    {
+        $shipping_charges = ShippingCharge::where('country_id', $country_id)->first();
+        if($weight > 0)
+        {
+            if($weight>0 && $weight<=500)
+            {
+                $total_charges = $shipping_charges->shipping_charges0_500g;
+            }
+            elseif($weight>501 && $weight<=1000)
+            {
+                $total_charges = $shipping_charges->shipping_charges501_1000g;
+            }
+            elseif($weight>1001 && $weight<=2000)
+            {
+                $total_charges = $shipping_charges->shipping_charges1001_2000g;
+            }
+            elseif($weight>2001 && $weight<=5000)
+            {
+                $total_charges = $shipping_charges->shipping_charges2001_5000g;
+            }
+            else
+            {
+                $total_charges = 0;
+            }
+        }
+        else
+        {
+            $total_charges = 0;
+        }
+
+        return $total_charges;
     }
 }

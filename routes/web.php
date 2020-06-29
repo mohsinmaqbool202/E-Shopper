@@ -180,6 +180,12 @@ Route::group(['middleware' => ['adminlogin']], function(){
    Route::match(['get','post'],'/admin/edit-currency/{id}', 'CurrencyController@editCurrency');
    Route::get('/admin/delete-currency/{id}', 'CurrencyController@deleteCurrency');
 
+   //Shipping charges routes
+   Route::match(['get','post'],'/admin/add-shipping','ShippingController@addShipping');
+   Route::get('/admin/view-shipping','ShippingController@viewShipping');
+   Route::match(['get','post'],'/admin/edit-shipping/{id}','ShippingController@editShipping');
+   Route::get('/admin/delete-shipping/{id}','ShippingController@deleteShipping');
+
 });
 
 
