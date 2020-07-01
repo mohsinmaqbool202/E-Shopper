@@ -101,14 +101,62 @@ class AdminController extends Controller
           return redirect()->back()->with('flash_message_error', 'Username already exist.Please choose another username!');
         }
         else{
-          $data['password'] = md5($data['password']);
-          Admin::create($data);
-
-          return redirect('/admin/view-admins')->with('flash_message_success', 'New Admin Added.');
+          if($data['type'] == 'Admin'){
+            $data['type']              = $data['type'];
+            $data['password']          = md5($data['password']);
+            $data['categories_access'] = 1;
+            $data['products_access']   = 1;
+            $data['orders_access']     = 1;
+            $data['users_access']      = 1;
+            Admin::create($data);
+            return redirect('/admin/view-admins')->with('flash_message_success', 'New Admin Added.');
+          }
+          elseif($data['type'] == 'Sub-Admin')
+          {
+            $data['type']              = $data['type'];
+            $data['password']          = md5($data['password']);
+            Admin::create($data);
+            return redirect('/admin/view-admins')->with('flash_message_success', 'New Sub-Admin Added.');
+          }  
         }
       }
 
       //get request
       return view('admin.admins.add_admin');
+    }
+
+    public function editAdmin(Request $request, $id)
+    {
+      if($request->isMethod('post')){
+        $data = $request->all();
+        if($data['type'] == 'Sub-Admin'){
+          
+          if(empty($data['categories_access'])){
+            $data['categories_access'] = 0;
+          }
+          if(empty($data['products_access'])){
+            $data['products_access'] = 0;
+          }
+          if(empty($data['orders_access'])){
+            $data['orders_access'] = 0;
+          }
+          if(empty($data['users_access'])){
+            $data['users_access'] = 0;
+          }
+          if(empty($data['status'])){
+            $data['status'] = 0;
+          }
+          $sub_admin = Admin::find($id);
+          $sub_admin->categories_access = $data['categories_access'];
+          $sub_admin->products_access   = $data['products_access'];
+          $sub_admin->orders_access     = $data['orders_access'];
+          $sub_admin->users_access      = $data['users_access'];
+          $sub_admin->status            = $data['status'];
+          $sub_admin->save();
+          return redirect('/admin/view-admins')->with('flash_message_success', 'Sub-Admin Updated Added.');
+        }
+      }
+      $admin = Admin::find($id);
+      return view('admin.admins.edit_admin', compact('admin'));
     }
 }

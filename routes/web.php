@@ -160,13 +160,16 @@ Route::group(['middleware' => ['adminlogin']], function(){
 
    //update order status
    Route::post('/admin/update-order-status', 'ProductsController@updateOrderStatus');
-   Route::match(['get', 'post'], '/admin/add-admin', 'AdminController@addAdmin');
 
    //View all users
    Route::get('/admin/view-users','UsersController@viewUsers');
 
    //view admins/sub-admins
    Route::get('/admin/view-admins', 'AdminController@viewAdmins');
+   Route::match(['get', 'post'], '/admin/add-admin', 'AdminController@addAdmin');
+   Route::match(['get', 'post'], '/admin/edit-admin/{id}', 'AdminController@editAdmin');
+
+
 
    //cms pages
    Route::match(['get','post'],'/admin/add-cms-page', 'CmsController@addCmsPage');

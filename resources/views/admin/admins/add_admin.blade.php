@@ -22,6 +22,16 @@
             <form class="form-horizontal" method="post" action="{{ url('/admin/add-admin') }}" name="add_admin" id="add_admin" novalidate="novalidate">
               {{ csrf_field() }}
               <div class="control-group">
+                <label class="control-label">Type</label>
+                <div class="controls">
+                  <select name="type" id="type" style="width: 220px;">
+                    <option>---Select Type---</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Sub-Admin">Sub-Admin</option>
+                  </select>
+                </div>
+              </div>
+              <div class="control-group">
                 <label class="control-label">UserName</label>
                 <div class="controls">
                   <input type="text" name="username" id="username">
@@ -31,6 +41,15 @@
                 <label class="control-label">Password</label>
                 <div class="controls">
                   <input type="password" name="password" id="password">
+                </div>
+              </div>
+              <div class="control-group" id="access">
+                <label class="control-label">Access</label>
+                <div class="controls">
+                  <input type="checkbox" name="categories_access" id="categories_access" value="1" style="margin-top: -3px;">&nbsp;Category&nbsp;
+                  <input type="checkbox" name="products_access"   id="products_access" value="1" style="margin-top: -3px;">&nbsp;Products&nbsp;
+                  <input type="checkbox" name="orders_access"     id="orders_access" value="1" style="margin-top: -3px;">&nbsp;Orders&nbsp;
+                  <input type="checkbox" name="users_access"      id="users_access" value="1" style="margin-top: -3px;">&nbsp;Users&nbsp;
                 </div>
               </div>
               <div class="control-group">

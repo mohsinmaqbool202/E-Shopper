@@ -28,6 +28,8 @@ use \App\Http\Controllers\ProductsController;
                 <tr>
                   <th>ID</th>
                   <th>Name</th>
+                  <th>Type</th>
+                  <th>Access</th>
                   <th>Status</th>
                   <th>Created on</th>
                   <th>Action</th>
@@ -38,6 +40,33 @@ use \App\Http\Controllers\ProductsController;
                <tr class="gradeX">
                   <td style="text-align: center;">{{ $admin->id }}</td>
                   <td style="text-align: center;">{{ $admin->username}}</td>
+                  <td style="text-align: center;">{{ $admin->type}}</td>
+
+                  <?php
+                    if($admin->type == 'Admin')
+                    {
+                      $access = 'All';
+                    }else{
+                      $access = '';
+                      if($admin->categories_access == 1)
+                      {
+                        $access .= 'Category';
+                      }
+                      if($admin->products_access == 1)
+                      {
+                        $access .= ',Products';
+                      }
+                      if($admin->orders_access == 1)
+                      {
+                        $access .= ',Orders';
+                      }
+                      if($admin->users_access == 1)
+                      {
+                        $access .= ',Users';
+                      }
+                    }
+                  ?>
+                  <td>{{ $access }}</td>
                   <td style="text-align: center;">
                      @if($admin->status == 1)
                         <span class="badge badge-success">Active</span>
@@ -46,7 +75,11 @@ use \App\Http\Controllers\ProductsController;
                      @endif
                   </td>
                   <td style="text-align: center;">{{$admin->created_at->format('d-m-Y')}}</td>
-                  <td></td>
+                  <td>
+                    
+                    <a href="{{url('/admin/edit-admin/'.$admin->id)}}" class="btn btn-primary btn-mini">Edit</a>
+                  
+                  </td>
                </tr>
                 @endforeach
               </tbody>

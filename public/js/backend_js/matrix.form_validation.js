@@ -1,5 +1,44 @@
 $(document).ready(function(){
-	
+
+	//add-admin+sub-admin
+	$('#access').hide();
+	$('#type').change(function(){
+		var type = $('#type').val();
+		if(type == 'Admin'){
+			$('#access').hide();
+		}
+		else
+		{
+			$('#access').show();
+		}
+	});
+	//asmin/subAdmin form validations
+	$("#add_admin").validate({
+		rules:{
+			type:{
+				required:true,
+				type: true
+			},
+			username:{
+				required:true,
+				username: true
+			},
+			password:{
+				required:true,
+				password: true
+			}
+		},
+		errorClass: "help-inline",
+		errorElement: "span",
+		highlight:function(element, errorClass, validClass) {
+			$(element).parents('.control-group').addClass('error');
+		},
+		unhighlight: function(element, errorClass, validClass) {
+			$(element).parents('.control-group').removeClass('error');
+			$(element).parents('.control-group').addClass('success');
+		}
+	});
+
 	//Password Reset Related Code
 	$('#current_pwd').keyup(function(){
 		var current_pwd = $('#current_pwd').val();
@@ -256,28 +295,28 @@ $(document).ready(function(){
 	});
 
 	$(document).ready(function(){
-    var maxField = 10; //Input fields increment limitation
-    var addButton = $('.add_button'); //Add button selector
-    var wrapper = $('.field_wrapper'); //Input field wrapper
-    var fieldHTML = '<div style="margin-left:180px;"><input type="text" name="sku[]" id="sku" placeholder="SKU" style="width: 120px;margin-top:5px;"/><input type="text" name="size[]" id="size" placeholder="Size" style="width: 120px; margin-left:3px;margin-top:5px;"/><input type="text" name="price[]" id="price" placeholder="Price" style="width: 120px; margin-left:3px;margin-top:5px;"/><input type="text" name="stock[]" id="stock" placeholder="Stock" style="width: 120px;margin-left:3px;margin-top:5px;"/><a href="javascript:void(0);" class="remove_button"> Remove</a></div>'; //New input field html 
-    var x = 1; //Initial field counter is 1
+	    var maxField = 10; //Input fields increment limitation
+	    var addButton = $('.add_button'); //Add button selector
+	    var wrapper = $('.field_wrapper'); //Input field wrapper
+	    var fieldHTML = '<div style="margin-left:180px;"><input type="text" name="sku[]" id="sku" placeholder="SKU" style="width: 120px;margin-top:5px;"/><input type="text" name="size[]" id="size" placeholder="Size" style="width: 120px; margin-left:3px;margin-top:5px;"/><input type="text" name="price[]" id="price" placeholder="Price" style="width: 120px; margin-left:3px;margin-top:5px;"/><input type="text" name="stock[]" id="stock" placeholder="Stock" style="width: 120px;margin-left:3px;margin-top:5px;"/><a href="javascript:void(0);" class="remove_button"> Remove</a></div>'; //New input field html 
+	    var x = 1; //Initial field counter is 1
     
-    //Once add button is clicked
-    $(addButton).click(function(){
-        //Check maximum number of input fields
-        if(x < maxField){ 
-            x++; //Increment field counter
-            $(wrapper).append(fieldHTML); //Add field html
-        }
-    });
+	    //Once add button is clicked
+	    $(addButton).click(function(){
+	        //Check maximum number of input fields
+	        if(x < maxField){ 
+	            x++; //Increment field counter
+	            $(wrapper).append(fieldHTML); //Add field html
+	        }
+	    });
     
-    //Once remove button is clicked
-    $(wrapper).on('click', '.remove_button', function(e){
-        e.preventDefault();
-        $(this).parent('div').remove(); //Remove field html
-        x--; //Decrement field counter
-    });
-});
+	    //Once remove button is clicked
+	    $(wrapper).on('click', '.remove_button', function(e){
+	        e.preventDefault();
+	        $(this).parent('div').remove(); //Remove field html
+	        x--; //Decrement field counter
+	    });
+	});
 
 	
 });
