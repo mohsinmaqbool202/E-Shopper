@@ -76,9 +76,9 @@ use \App\Http\Controllers\ProductsController;
                   </td>
                   <td style="text-align: center;">{{$admin->created_at->format('d-m-Y')}}</td>
                   <td>
-                    
-                    <a href="{{url('/admin/edit-admin/'.$admin->id)}}" class="btn btn-primary btn-mini">Edit</a>
-                  
+                    @if($admin->type == 'Sub-Admin')
+                    <a href="{{url('/admin/edit-admin/'.$admin->id)}}" class="btn btn-primary btn-mini" >Edit</a>
+                    @endif
                   </td>
                </tr>
                 @endforeach

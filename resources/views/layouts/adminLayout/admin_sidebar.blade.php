@@ -2,38 +2,47 @@
 <div id="sidebar"><a href="{{ route('admin.dashboard') }}" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
   <ul>
     <li class="active"><a href="{{ route('admin.dashboard') }}"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>
+    @if(Session::get('admin_info')['categories_access'] == 1)
     <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Categories</span> <span class="label label-important">2</span></a>
       <ul>
         <li><a href="{{ url('/admin/add-category') }}">Add Category</a></li>
         <li><a href="{{ url('/admin/view-category') }}">View Category</a></li>
       </ul>
     </li>
+    @endif
+    @if(Session::get('admin_info')['products_access'] == 1)
     <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Products</span> <span class="label label-important">2</span></a>
       <ul>
         <li><a href="{{ url('/admin/add-product') }}">Add Product</a></li>
         <li><a href="{{ url('/admin/view-products') }}">View Products</a></li>
       </ul>
     </li>
+    @endif
+    @if(Session::get('admin_info')['orders_access'] == 1)
+    <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Orders</span> <span class="label label-important">1</span></a>
+      <ul>
+        <li><a href="{{ url('/admin/view-orders') }}">View Orders</a></li>
+      </ul>
+    </li>
+    @endif
+    @if(Session::get('admin_info')['users_access'] == 1)
+    <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Users</span> <span class="label label-important">1</span></a>
+      <ul>
+        <li><a href="{{ url('/admin/view-users') }}">View Users</a></li>
+      </ul>
+    </li>
+    @endif
+    @if(Session::get('admin_info')['type'] == 'Admin')
     <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Coupons</span> <span class="label label-important">2</span></a>
       <ul>
         <li><a href="{{ url('/admin/add-coupon') }}">Add Coupon</a></li>
         <li><a href="{{ url('/admin/view-coupons') }}">View Coupon</a></li>
       </ul>
     </li>
-    <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Orders</span> <span class="label label-important">1</span></a>
-      <ul>
-        <li><a href="{{ url('/admin/view-orders') }}">View Orders</a></li>
-      </ul>
-    </li>
     <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Banners</span> <span class="label label-important">2</span></a>
       <ul>
         <li><a href="{{ url('/admin/add-banner') }}">Add Banner</a></li>
         <li><a href="{{ url('/admin/view-banners') }}">View Banners</a></li>
-      </ul>
-    </li>
-    <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Users</span> <span class="label label-important">1</span></a>
-      <ul>
-        <li><a href="{{ url('/admin/view-users') }}">View Users</a></li>
       </ul>
     </li>
     <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Admins/Sub-Admins</span> <span class="label label-important">2</span></a>
@@ -60,6 +69,7 @@
         <li><a href="{{ url('/admin/view-shipping') }}">View Shipping Charges</a></li>
       </ul>
     </li>
+    @endif
   </ul>
 </div>
 <!--sidebar-menu-->

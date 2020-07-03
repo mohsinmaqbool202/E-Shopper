@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Category;
+use Session;
 
 class CategoryController extends Controller
 {
@@ -46,7 +47,12 @@ class CategoryController extends Controller
     }
 
     public function editCategory(Request $request, $id)
-    {
+    {   
+        if(Session::get('admin_info')['categories_access'] == 0)
+        {
+            return redirect('admin/dashboard')->with('flash_message_error','You have no access for this module');
+        }
+        
         if($request->isMethod('post'))
         {
             $data = $request->all();
@@ -78,7 +84,12 @@ class CategoryController extends Controller
 
 
     public function deleteCategory($id)
-    {
+    {   
+        if(Session::get('admin_info')['categories_access'] == 0)
+        {
+            return redirect('admin/dashboard')->with('flash_message_error','You have no access for this module');
+        }
+
         Category::where('id', $id)->delete();
         return redirect('/admin/view-category')->with('flash_message_success', "Sub Category Deleted.");
     }

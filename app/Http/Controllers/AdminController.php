@@ -104,10 +104,12 @@ class AdminController extends Controller
           if($data['type'] == 'Admin'){
             $data['type']              = $data['type'];
             $data['password']          = md5($data['password']);
-            $data['categories_access'] = 1;
-            $data['products_access']   = 1;
-            $data['orders_access']     = 1;
-            $data['users_access']      = 1;
+            $data['categories_view_access'] = 1;
+            $data['categories_edit_access'] = 1;
+            $data['categories_full_access'] = 1;
+            $data['products_access']        = 1;
+            $data['orders_access']          = 1;
+            $data['users_access']           = 1;
             Admin::create($data);
             return redirect('/admin/view-admins')->with('flash_message_success', 'New Admin Added.');
           }

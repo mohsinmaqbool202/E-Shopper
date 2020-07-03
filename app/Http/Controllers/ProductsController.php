@@ -119,13 +119,17 @@ class ProductsController extends Controller
     public function viewProducts()
     {
     	$products = Product::orderBy('id','desc')->get();
-        
     	return view('admin.products.view_products', compact('products'));
     }
 
     //Edit Product Function
     public function editProduct(Request $request, $id)
     {
+      if(Session::get('admin_info')['products_access'] == 0)
+      {
+          return redirect('admin/dashboard')->with('flash_message_error','You have no access for this module');
+      }
+
       //For Post Request
       if($request->isMethod('post'))
       {
@@ -218,7 +222,11 @@ class ProductsController extends Controller
     }
 
     public function deleteProductImage($id)
-    {    
+    {   
+      if(Session::get('admin_info')['products_access'] == 0)
+      {
+          return redirect('admin/dashboard')->with('flash_message_error','You have no access for this module');
+      } 
       //Delete Product image from folders
        $productImage = Product::where('id', $id)->first();
       //product images path
@@ -244,6 +252,10 @@ class ProductsController extends Controller
 
     public function deleteProductVideo($id)
     {
+      if(Session::get('admin_info')['products_access'] == 0)
+      {
+          return redirect('admin/dashboard')->with('flash_message_error','You have no access for this module');
+      }
 
       $video = Product::select('video')->where('id',$id)->first();
       $video_path = 'videos/';
@@ -258,6 +270,11 @@ class ProductsController extends Controller
     //Delete Product Function
     public function deleteProduct($id)
     {
+      if(Session::get('admin_info')['products_access'] == 0)
+      {
+          return redirect('admin/dashboard')->with('flash_message_error','You have no access for this module');
+      }
+
       //Delete Product image from folders
        $productImage = Product::where('id', $id)->first();
       //product images path
@@ -284,47 +301,57 @@ class ProductsController extends Controller
     //Product Attributes Related Functions
     public function addAttributes(Request $request, $id)
     {
-        if($request->isMethod('post'))
-        {
+      if(Session::get('admin_info')['products_access'] == 0)
+      {
+          return redirect('admin/dashboard')->with('flash_message_error','You have no access for this module');
+      }
 
-            $data = $request->all();
-            foreach($data['sku'] as $key=> $val)
-            {
-                if(!empty($val)){
+      if($request->isMethod('post'))
+      {
 
-                    //prevent duplicate sku
-                    $attrCountSku = ProductAttribute::where('sku', $val)->count();
-                    if($attrCountSku > 0){
-                        return redirect('/admin/add-attributes/'.$id)->with('flash_message_error', 'SKU already exist. Please add other SKU');
-                    }
+          $data = $request->all();
+          foreach($data['sku'] as $key=> $val)
+          {
+              if(!empty($val)){
 
-                    //prevent duplicate size for same product
-                    $attrCountSize = ProductAttribute::where('product_id', $id)->where('size',$data['size'][$key])->count();
-                    if($attrCountSize > 0){
-                        return redirect('/admin/add-attributes/'.$id)->with('flash_message_error', $data['size'][$key].' size already exists for this product. Please add other size.');
-                    }
+                  //prevent duplicate sku
+                  $attrCountSku = ProductAttribute::where('sku', $val)->count();
+                  if($attrCountSku > 0){
+                      return redirect('/admin/add-attributes/'.$id)->with('flash_message_error', 'SKU already exist. Please add other SKU');
+                  }
 
-
-                    $attribute = new ProductAttribute;
-                    $attribute->product_id  = $data['product_id'];
-                    $attribute->sku   = $val;
-                    $attribute->size  = $data['size'][$key];
-                    $attribute->price  = $data['price'][$key];
-                    $attribute->stock  = $data['stock'][$key];
-                    $attribute->save();
-                }
-            }
-        return redirect('/admin/add-attributes/'.$id)->with('flash_message_success', 'Product Attributes Added.');
-        }
+                  //prevent duplicate size for same product
+                  $attrCountSize = ProductAttribute::where('product_id', $id)->where('size',$data['size'][$key])->count();
+                  if($attrCountSize > 0){
+                      return redirect('/admin/add-attributes/'.$id)->with('flash_message_error', $data['size'][$key].' size already exists for this product. Please add other size.');
+                  }
 
 
-        $productDetails = Product::with('attributes')->where('id', $id)->get();
-        return view('admin.products.add_attributes', compact('productDetails'));
+                  $attribute = new ProductAttribute;
+                  $attribute->product_id  = $data['product_id'];
+                  $attribute->sku   = $val;
+                  $attribute->size  = $data['size'][$key];
+                  $attribute->price  = $data['price'][$key];
+                  $attribute->stock  = $data['stock'][$key];
+                  $attribute->save();
+              }
+          }
+      return redirect('/admin/add-attributes/'.$id)->with('flash_message_success', 'Product Attributes Added.');
+      }
+
+
+      $productDetails = Product::with('attributes')->where('id', $id)->get();
+      return view('admin.products.add_attributes', compact('productDetails'));
     }
 
     //Edit product attributes function
     public function editAttributes(Request $request, $id)
     {
+      if(Session::get('admin_info')['products_access'] == 0)
+      {
+          return redirect('admin/dashboard')->with('flash_message_error','You have no access for this module');
+      }
+
       if($request->isMethod('post'))
       {
         $data = $request->all();
@@ -339,6 +366,11 @@ class ProductsController extends Controller
     //Add Alternate Images for product
     public function addImages(Request $request, $id)
     {
+      if(Session::get('admin_info')['products_access'] == 0)
+      {
+          return redirect('admin/dashboard')->with('flash_message_error','You have no access for this module');
+      }
+
       $productDetails = Product::where('id', $id)->get();
 
       if($request->isMethod('post'))
@@ -376,7 +408,12 @@ class ProductsController extends Controller
 
     //Delete Alternate Imges
      public function deleteAltImage($id)
-    {    
+    {
+      if(Session::get('admin_info')['products_access'] == 0)
+      {
+          return redirect('admin/dashboard')->with('flash_message_error','You have no access for this module');
+      }  
+
       //Delete Product image from folders
        $productImage = ProductImage::where('id', $id)->first();
       //product images path
@@ -403,6 +440,11 @@ class ProductsController extends Controller
     //Delete product Attribute
     public function deleteAttribute($id)
     {
+      if(Session::get('admin_info')['products_access'] == 0)
+      {
+          return redirect('admin/dashboard')->with('flash_message_error','You have no access for this module');
+      }
+      
       ProductAttribute::where('id', $id)->delete();
       return back()->with('flash_message_success', 'Product Attributes Deleted.');
     }
@@ -1021,18 +1063,28 @@ class ProductsController extends Controller
     }
 
     public function viewOrderDetail($order_id)
-    {
-        $orderDetail = Order::with('orders')->where('id', $order_id)->first();
-        return view('admin.orders.order_detail', compact('orderDetail'));
+    { 
+       if(Session::get('admin_info')['orders_access'] == 0)
+      {
+          return redirect('admin/dashboard')->with('flash_message_error','You have no access for this module');
+      }
+
+      $orderDetail = Order::with('orders')->where('id', $order_id)->first();
+      return view('admin.orders.order_detail', compact('orderDetail'));
     }
 
     public function updateOrderStatus(Request $request)
     {
-       if($request->isMethod('post')){
-        Order::where('id', $request->order_id)->update(['order_status'=> $request->order_status]);
+       if(Session::get('admin_info')['orders_access'] == 0)
+      {
+          return redirect('admin/dashboard')->with('flash_message_error','You have no access for this module');
+      }
 
-        return back()->with('flash_message_success', 'Order status has been updated.');
-       }
+      if($request->isMethod('post')){
+      Order::where('id', $request->order_id)->update(['order_status'=> $request->order_status]);
+
+      return back()->with('flash_message_success', 'Order status has been updated.');
+      }
     }
 
     static public function orderStatus($id)
@@ -1064,6 +1116,11 @@ class ProductsController extends Controller
     //order invoice
     public function viewOrderInvoice($order_id)
     {
+      if(Session::get('admin_info')['orders_access'] == 0)
+      {
+          return redirect('admin/dashboard')->with('flash_message_error','You have no access for this module');
+      }
+
       $orderDetail = Order::with('orders')->where('id', $order_id)->first();
       return view('admin.orders.order_invoice', compact('orderDetail'));
     }

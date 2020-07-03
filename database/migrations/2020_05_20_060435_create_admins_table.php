@@ -17,6 +17,11 @@ class CreateAdminsTable extends Migration
             $table->increments('id');
             $table->string('username');
             $table->string('password');
+            $table->enum('type', ['Admin','Sub-Admin']);
+            $table->tinyInteger('categories_access')->default(0);
+            $table->tinyInteger('products_access')->default(0);
+            $table->tinyInteger('orders_access')->default(0);
+            $table->tinyInteger('users_access')->default(0);
             $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
