@@ -18,7 +18,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedInteger('user_id');
             $table->string('shipping_charges')->default(0);
             $table->string('coupon_code')->nullable();
-            $table->float('coupon_amount')->default(0);
+            $table->float('coupon_amount')->nullable();
             $table->string('payment_method');
             $table->float('grand_total');
             $table->tinyInteger('order_status')->default(0);

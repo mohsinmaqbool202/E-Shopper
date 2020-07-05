@@ -39,7 +39,6 @@ class UsersController extends Controller
       {
         //create new user
         $request["password"] = bcrypt($request->password);
-        $request["admin"]    = '0';
         User::create($request->all());
 
         //Send Confirmation Email

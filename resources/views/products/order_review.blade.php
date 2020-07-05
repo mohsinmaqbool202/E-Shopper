@@ -104,7 +104,10 @@
 								  <p>{{$cart->product_code}} | {{$cart->size}}</p>
 							  </td>
 								<td class="cart_price">
-									<p>PKR:{{$cart->product_price}}</p>
+									<?php
+									  $price = Product::getProductPrice($cart->product_id,$cart->product_code);
+								  ?>
+								<p>PKR:{{$price}}</p>
 								</td>
 								<td class="cart_quantity">
 									<div class="cart_quantity_button">
@@ -116,13 +119,13 @@
 									</div>
 								</td>
 								<td class="cart_total">
-									<p class="cart_total_price">PKR:{{$cart->product_price * $cart->quantity  }}</p>
+									<p class="cart_total_price">PKR:{{$price * $cart->quantity  }}</p>
 								</td>
 								<td class="cart_delete">
 									<a class="cart_quantity_delete" href="{{ url('/cart/delete-product/'.$cart->id) }}"><i class="fa fa-times"></i></a>
 								</td>
 							</tr>
-							@php $total_amount += ($cart->product_price * $cart->quantity); @endphp
+							@php $total_amount += ($price * $cart->quantity); @endphp
 						@endforeach
 							<tr>
 								<td colspan="4">&nbsp;</td>

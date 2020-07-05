@@ -70,9 +70,11 @@ $currenyArr = Product::getCurrencies($productDetail->price);
 									<span>
 										<span id="getPrice">
 											PKR {{ $productDetail->price  }}
-											<h2>Yuan {{$currenyArr['Yuan_Rate']}}<br>
-										    	EUR  {{$currenyArr['EUR_Rate']}}<br>
-										        USD  {{$currenyArr['USD_Rate']}}</h2>
+											<h2>
+											  Yuan {{$currenyArr['Yuan_Rate']}}<br>
+									    	EUR  {{$currenyArr['EUR_Rate']}}<br>
+									      USD  {{$currenyArr['USD_Rate']}}
+										  </h2>
 										</span>
 										<label>Quantity:</label>
 										<input type="text" name="quantity" value="1" />

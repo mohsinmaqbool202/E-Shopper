@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddStatusToUsersTable extends Migration
+class AddCountryIdToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,10 @@ class AddStatusToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->tinyInteger('status')->after('admin')->default(0);
+            $table->integer('country_id')->unsigned()->after('id')->nullable();
+
+            $table->foreign('country_id')->references('id')->on('countries');
+
         });
     }
 
@@ -26,7 +29,7 @@ class AddStatusToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->dropForeign(['country_id']);
         });
     }
 }

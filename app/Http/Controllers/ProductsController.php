@@ -910,6 +910,7 @@ class ProductsController extends Controller
 
         //Shipping Charges
         $shipping_charges = Product::getShippinhCharges($total_weight, $shipping_address->country_id);
+        Session::put('shipping_charges',$shipping_charges);
 
         return view('products.order_review', compact('user', 'countries', 'shipping_address', 'userCart','shipping_charges'));
     }
@@ -964,14 +965,15 @@ class ProductsController extends Controller
             return redirect()->back()->with('flash_message_error', 'Your location is not available for delivery, Please choose another location');
           }
 
-          //saving order detail
+          $request['grand_total'] = Product::getGrandTotal();
+
           $order = new Order;
           $order->user_id          = $user->id;
           $order->shipping_charges = $request->shipping_charges;
           $order->coupon_code      = $request->coupon_code;
           $order->coupon_amount    = $request->coupon_amount;
           $order->payment_method   = $request->payment_method;
-          $order->grand_total      = $request->grand_total;
+          $order->grand_total      = $request['grand_total'];
           $order->save();
 
           //saving order_product data
@@ -1000,6 +1002,7 @@ class ProductsController extends Controller
            Session::forget('session_id');
            Session::forget('CouponAmount');
            Session::forget('CouponCode');
+           Session::forget('shipping_charges');
 
            Session::put('order_id', $order->id);
            Session::put('grand_total', $request->grand_total);

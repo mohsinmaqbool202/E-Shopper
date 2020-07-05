@@ -47,7 +47,10 @@
 								<p>{{$cart->product_code}} | {{$cart->size}}</p>
 							</td>
 							<td class="cart_price">
-								<p>PKR:{{$cart->product_price}}</p>
+								<?php
+									$price = Product::getProductPrice($cart->product_id,$cart->product_code);
+								?>
+								<p>PKR:{{$price}}</p>
 							</td>
 							<td class="cart_quantity">
 								<div class="cart_quantity_button">
