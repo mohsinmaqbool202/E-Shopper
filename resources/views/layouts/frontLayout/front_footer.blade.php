@@ -99,7 +99,7 @@
 					</div>
 					<div class="col-sm-2">
 						<div class="single-widget">
-							<h2>Quock Shop</h2>
+							<h2>Quick Shop</h2>
 							<ul class="nav nav-pills nav-stacked">
 								@foreach($pages['quickShopPages'] as $page)
 								<li><a href="{{ url('page/'.$page->url) }}">{{$page->title}}</a></li>
@@ -130,10 +130,13 @@
 					<div class="col-sm-3 col-sm-offset-1">
 						<div class="single-widget">
 							<h2>About Shopper</h2>
-							<form action="#" class="searchform">
-								<input type="text" placeholder="Your email address" />
+							<form action="javascript:void(0);" class="searchform" method="post">
+								{{csrf_field()}}
+
+								<input type="text" name="email" id="email" placeholder="Your email address" required/>
 								<button type="submit" class="btn btn-default"><i class="fa fa-arrow-circle-o-right"></i></button>
 								<p>Get the most recent updates from <br />our site and be updated your self...</p>
+
 							</form>
 						</div>
 					</div>

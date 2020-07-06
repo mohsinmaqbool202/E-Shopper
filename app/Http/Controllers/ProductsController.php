@@ -964,8 +964,9 @@ class ProductsController extends Controller
           if($pincodeCount == 0){
             return redirect()->back()->with('flash_message_error', 'Your location is not available for delivery, Please choose another location');
           }
-
+          
           $request['grand_total'] = Product::getGrandTotal();
+          Session::put('grand_total', $request['grand_total']);
 
           $order = new Order;
           $order->user_id          = $user->id;
@@ -1008,7 +1009,6 @@ class ProductsController extends Controller
            Session::put('grand_total', $request->grand_total);
 
            if($data['payment_method'] == 'COD'){
-
             /* code for order email start */
              $orderDetail = Order::with('orders')->where('id', $order->id)->first();
 

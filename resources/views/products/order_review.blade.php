@@ -179,7 +179,7 @@
 						<label><input type="radio" name="payment_method" id="COD" value="COD"><strong> COD</strong></label>
 					</span>
 					<span>
-						<label><input type="radio" name="payment_method	" id="Paypal" value="Paypal"><strong> Paypal</strong></label>
+						<label><input type="radio" name="payment_method" id="Paypal" value="Paypal"><strong> PayPal</strong></label>
 					</span>
 					<span >
 						<input type="submit" class="btn btn-default check_out" value="Place Order" style="margin-top: -5px;" onclick="return selectPaymentMethod();">
