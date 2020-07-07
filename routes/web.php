@@ -85,6 +85,9 @@ Route::match(['get', 'post'], '/contact-us', 'CmsController@contact');
 //check pincode
 Route::get('/check-pincode', 'ProductsController@checkPincode');
 
+//newsletter subscriber
+Route::post('/newsletter-subscribe', 'NewsletterController@addSubscriber');
+
 Route::group(['middleware' => ['frontlogin']], function(){
 
    //user account page
@@ -131,6 +134,8 @@ Route::group(['middleware' => ['adminlogin']], function(){
    Route::get('/admin/delete-product-image/{id}', 'ProductsController@deleteProductImage');
    Route::get('/admin/delete-product-video/{id}', 'ProductsController@deleteProductVideo');
    Route::get('/admin/delete-product/{id}', 'ProductsController@deleteProduct');
+   Route::get('/admin/export-products', 'ProductsController@exportProducts');
+
 
    //Product Attributes + Images Routes
    Route::match(['get', 'post'], '/admin/add-attributes/{id}', 'ProductsController@addAttributes');
@@ -161,6 +166,8 @@ Route::group(['middleware' => ['adminlogin']], function(){
 
    //View all users
    Route::get('/admin/view-users','UsersController@viewUsers');
+   Route::get('/admin/export-users', 'UsersController@exportUsers');
+
 
    //view admins/sub-admins
    Route::get('/admin/view-admins', 'AdminController@viewAdmins');
@@ -186,6 +193,12 @@ Route::group(['middleware' => ['adminlogin']], function(){
    Route::get('/admin/view-shipping','ShippingController@viewShipping');
    Route::match(['get','post'],'/admin/edit-shipping/{id}','ShippingController@editShipping');
    Route::get('/admin/delete-shipping/{id}','ShippingController@deleteShipping');
+
+   //Newsletter Subscriber
+   Route::get('/admin/view-subscribers', 'NewsletterController@viewSubscribers');
+   Route::get('/admin/update-subscriber-status/{id}/{status}', 'NewsletterController@updateSubscriberStatus');
+   Route::get('/admin/delete-subscriber/{id}', 'NewsletterController@deleteSubscriber');
+   Route::get('/admin/export-newsletter-emails', 'NewsletterController@exportSubscribersEmails');
 
 });
 

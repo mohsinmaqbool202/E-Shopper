@@ -8,8 +8,10 @@ use \App\Http\Controllers\ProductsController;
   <div id="content-header">
     <div id="breadcrumb"> <a href="{{ url('admin/dashboard') }}" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a> <a href="#">Users</a> <a href="#" class="current">List</a> </div>
   </div>
+  <div style="margin-top: 10px; margin-right: 10px;">
+    <a href="{{ url('/admin/export-users') }}" class="btn btn-info pull-right">Export</a>
+  </div>  
   <div class="container-fluid">
-    <hr>
     <div class="row-fluid">
       <div class="span12">
         <div class="widget-box">

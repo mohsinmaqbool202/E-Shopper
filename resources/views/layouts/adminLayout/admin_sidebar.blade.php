@@ -69,6 +69,11 @@
         <li><a href="{{ url('/admin/view-shipping') }}">View Shipping Charges</a></li>
       </ul>
     </li>
+    <li class="submenu"> <a href="#"><i class="icon icon-th-list"></i> <span>Subscribers</span> <span class="label label-important">1</span></a>
+      <ul>
+        <li><a href="{{ url('/admin/view-subscribers') }}">View Subscribers</a></li>
+      </ul>
+    </li>
     @endif
   </ul>
 </div>

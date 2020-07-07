@@ -19,6 +19,7 @@
 	<link href="{{ asset( 'css/frontend_css/responsive.css') }}" rel="stylesheet">
     <link href="{{ asset( 'css/frontend_css/easyzoom.css') }}" rel="stylesheet">
     <link href="{{ asset( 'css/frontend_css/passtrength.css') }}" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
 
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
@@ -37,7 +38,9 @@
 	@include('layouts.frontLayout.front_header')
 	@yield('content')
 	@include('layouts.frontLayout.front_footer')
-  
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="{{ asset( 'js/frontend_js/jquery.js ') }}"></script>
 	<script src="{{ asset( 'js/frontend_js/bootstrap.min.js ') }}"></script>
 	<script src="{{ asset( 'js/frontend_js/jquery.scrollUp.min.js ') }}"></script>
@@ -53,5 +56,10 @@
           $('[data-toggle="tooltip"]').tooltip()
         })
     </script>
+
+    <!-- Extra js from child page -->
+    @yield("extraScript")
+    <!-- END JAVASCRIPT -->
+    
 </body>
 </html>

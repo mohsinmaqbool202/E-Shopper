@@ -10,7 +10,8 @@
         "intervention/image": "^2.5",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "^1.0",
-        "webpatser/laravel-countries": "dev-master"
+        "webpatser/laravel-countries": "dev-master",
+        "maatwebsite/excel": "^2.1.0"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

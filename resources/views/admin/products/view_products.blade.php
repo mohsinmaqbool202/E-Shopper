@@ -17,8 +17,10 @@
         </div>
       @endif 
   </div>
+  <div style="margin-top: 10px; margin-right: 10px;">
+    <a href="{{ url('/admin/export-products') }}" class="btn btn-info pull-right">Export</a>
+  </div> 
   <div class="container-fluid">
-    <hr>
     <div class="row-fluid">
       <div class="span12">
         <div class="widget-box">

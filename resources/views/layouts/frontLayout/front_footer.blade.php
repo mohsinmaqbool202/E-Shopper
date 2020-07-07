@@ -130,12 +130,14 @@
 					<div class="col-sm-3 col-sm-offset-1">
 						<div class="single-widget">
 							<h2>About Shopper</h2>
-							<form action="javascript:void(0);" class="searchform" method="post">
+							<form action="{{ url('/newsletter-subscribe') }}" class="searchform" method="post" novalidate>
 								{{csrf_field()}}
 
-								<input type="text" name="email" id="email" placeholder="Your email address" required/>
+								<input id="email" type="email" name="email" placeholder="Enter Your Email" required>
+                
 								<button type="submit" class="btn btn-default"><i class="fa fa-arrow-circle-o-right"></i></button>
-								<p>Get the most recent updates from <br />our site and be updated your self...</p>
+                <span style="color:red;" role="alert"> {{ $errors->first('email') }} </span>
+								<p style="color:blue;">Get the most recent updates from <br />our site and be updated your self...</p>
 
 							</form>
 						</div>
@@ -154,3 +156,22 @@
 			</div>
 		</div>	
 </footer><!--/Footer-->
+
+@section('extraScript')
+<script>
+	@if(Session::has('message'))
+		var type="{{Session::get('alert type')}}"
+		switch(type)
+		{
+      case 'success':
+          toastr.success("{{ Session::get('message') }}");
+          break;
+      case 'error':
+        toastr.error("{{ Session::get('message') }}");
+        break;
+		}
+	@endif
+</script>
+@endsection
+
+

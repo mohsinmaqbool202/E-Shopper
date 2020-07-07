@@ -10,6 +10,7 @@ use Session;
 use App\Country;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class UsersController extends Controller
@@ -250,5 +251,16 @@ class UsersController extends Controller
   {
     $users = User::all();
     return view('admin.users.view_users', compact('users'));
+  }
+
+  public function exportUsers()
+  {
+    $users = User::where('status',1)->get();
+
+    return Excel::create('Users'.rand(), function($excel) use($users){
+        $excel->sheet('mySheet',function($sheet) use($users){
+          $sheet->fromArray($users);
+        });
+      })->download('xlsx');
   }
 }

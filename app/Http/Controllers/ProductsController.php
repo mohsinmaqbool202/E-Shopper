@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
+use Maatwebsite\Excel\Facades\Excel;
 use Image;
 use App\Category;
 use App\Product;
@@ -1143,5 +1144,31 @@ class ProductsController extends Controller
            echo "false";
          }
        }
+    }
+
+    public function exportProducts()
+    {
+      $products = Product::select('product_name', 'product_code','product_color','price')
+                          ->where('status',1)->get()->toArray();
+
+      return Excel::create('Products'.rand(), function($excel) use($products){
+        $excel->sheet('mySheet',function($sheet) use($products){
+          $sheet->cell('A1', function($cell) {$cell->setValue('Product Name');   });
+          $sheet->cell('B1', function($cell) {$cell->setValue('Code');   });
+          $sheet->cell('C1', function($cell) {$cell->setValue('Color');   });
+          $sheet->cell('D1', function($cell) {$cell->setValue('Price');   });
+            
+          if (!empty($products)) {
+              foreach ($products as $key => $value) {
+                  $i= $key+2;
+                  $sheet->cell('A'.$i, $value['product_name']); 
+                  $sheet->cell('B'.$i, $value['product_code']); 
+                  $sheet->cell('C'.$i, $value['product_color']);
+                  $sheet->cell('D'.$i, $value['price']); 
+              }
+          }
+
+        });
+      })->download('xlsx');
     }
 }
