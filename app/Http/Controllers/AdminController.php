@@ -8,6 +8,7 @@ use Session;
 use App\User;
 use App\Admin;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -160,5 +161,39 @@ class AdminController extends Controller
       }
       $admin = Admin::find($id);
       return view('admin.admins.edit_admin', compact('admin'));
+    }
+
+
+    public function charts()
+    {
+      for($i = 12; $i>=1; $i--)
+        {
+          if($i == 12){
+              $date = Carbon::now();
+              $months[$i] = $date->format('n');
+              $years[$i] = $date->format('Y');
+              $month_year[$i] = $date->format('Y-M');
+
+              //month wise students
+              $users[$i] = User::whereMonth('created_at',$months[$i])->whereYear('created_at',$years[$i])->count();
+              
+          }
+          else
+          {
+            $date = $date->subMonth();
+            $months[$i] = $date->format('n');
+            $years[$i] = $date->format('Y');
+            $month_year[$i] = $date->format('Y-M');
+
+            //month wise students
+            $users[$i] = User::whereMonth('created_at',$months[$i])->whereYear('created_at',$years[$i])->count();
+             
+          }
+        }
+
+      $output['users']       = $users;
+      $output['month_year']  = $month_year;
+
+      return $output;
     }
 }

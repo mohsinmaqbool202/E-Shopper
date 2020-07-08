@@ -20,10 +20,10 @@
 					<div class="col-sm-6">
 						<div class="social-icons pull-right">
 							<ul class="nav navbar-nav">
-								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-								<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-								<li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+								<li><a href="https://www.facebook.com/mohsin.mughal.50999" target="_blank"><i class="fa fa-facebook"></i></a></li>
+								<li><a href="https://twitter.com/MohsinM89334194"><i class="fa fa-twitter"></i></a></li>
+								<li><a href="https://www.linkedin.com/in/mohsin-maqbool-bb2428187/"><i class="fa fa-linkedin"></i></a></li>
+								<li><a href="https://www.instagram.com/mohsin4540/"><i class="fa fa-dribbble"></i></a></li>
 								<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
 							</ul>
 						</div>
@@ -38,29 +38,6 @@
 					<div class="col-sm-4">
 						<div class="logo pull-left">
 							<a href="{{ url('/') }}"><img src="{{ asset('images/frontend_images/home/logo.png') }}" alt="" /></a>
-						</div>
-						<div class="btn-group pull-right">
-							<div class="btn-group">
-								<button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-									USA
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu">
-									<li><a href="#">Canada</a></li>
-									<li><a href="#">UK</a></li>
-								</ul>
-							</div>
-							
-							<div class="btn-group">
-								<button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-									DOLLAR
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu">
-									<li><a href="#">Canadian Dollar</a></li>
-									<li><a href="#">Pound</a></li>
-								</ul>
-							</div>
 						</div>
 					</div>
 					<div class="col-sm-8">
@@ -98,20 +75,14 @@
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li><a href="{{ url('/') }}" class="active">Home</a></li>
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
-                  <ul role="menu" class="sub-menu">
-                  	@foreach($mainCategories as $cat)
-                    	@if($cat->status == 1)
-                        <li><a href="{{ asset('/products/'.$cat->url) }}">{{ $cat->name }}</a></li>
-                      @endif   
-                    @endforeach   
-                  </ul>
-                </li> 
-								<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
-                  <ul role="menu" class="sub-menu">
-                    <li><a href="blog.html">Blog List</a></li>
-								  	<li><a href="blog-single.html">Blog Single</a></li>
-                  </ul>
-                </li> 
+				                  <ul role="menu" class="sub-menu">
+				                  	@foreach($mainCategories as $cat)
+				                    	@if($cat->status == 1)
+				                        <li><a href="{{ asset('/products/'.$cat->url) }}">{{ $cat->name }}</a></li>
+				                      @endif   
+				                    @endforeach   
+				                  </ul>
+				                </li> 
 								<li><a href="{{url('/contact-us')}}">Contact</a></li>
 							</ul>
 						</div>

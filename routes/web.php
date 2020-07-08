@@ -208,6 +208,9 @@ Route::group(['middleware' => ['adminlogin']], function(){
    Route::get('/admin/delete-subscriber/{id}', 'NewsletterController@deleteSubscriber');
    Route::get('/admin/export-newsletter-emails', 'NewsletterController@exportSubscribersEmails');
 
+   //charts
+   Route::get('/charts', 'AdminController@charts');      
+
 });
 
 

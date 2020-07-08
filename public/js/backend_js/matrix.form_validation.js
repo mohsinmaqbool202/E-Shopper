@@ -317,6 +317,69 @@ $(document).ready(function(){
 	        x--; //Decrement field counter
 	    });
 	});
+});
 
-	
+
+var year_months      = new Array();
+var users         = new Array();
+
+//for charts
+$(document).ready(function(){
+
+	var url = "/charts";
+
+	$.get(url, function(resp){
+		
+		$.each( resp.users, function( key, value ) {
+		       users.push(value);
+            });
+
+		$.each( resp.month_year, function( key, value ) {
+		       year_months.push(value);
+            });
+
+
+		//drawing charts for users
+        var user_chart = document.getElementById("user_chart").getContext('2d');
+
+        var myChart = new Chart(user_chart, {
+              type: 'bar',
+              data: {
+                      labels:year_months,
+                      datasets:[{
+                                  label: 'New Users',
+                                  data: users,
+                                  type:'line',
+                                  backgroundColor:"rgba(255,99,71)",
+                                  borderColor: "rgba(255,99,71)",
+                                  borderWidth: 2,
+                                  fill:false,
+                                }]
+                    },
+                    options:{
+                      scales: {
+                        yAxes: [{
+                          ticks:{
+                            beginAtZero:true,
+                            steps: 10,
+                            stepValue: 5,
+                            max: 800
+
+                          }
+                        }],
+                        xAxes: [{
+                        ticks: {
+                            autoSkip: false,
+                            maxRotation: 0,
+                            minRotation: 0
+                          }
+                        }]
+                      },
+                      legend: {
+                        display:false
+                      }
+                    }
+        });
+
+	});//end $.get
 });
