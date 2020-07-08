@@ -36,7 +36,7 @@
               <div class="control-group">
                 <label class="control-label">Description</label>
                 <div class="controls">
-                  <textarea name="description" id="description"></textarea>
+                  <textarea name="description" id="description" rows="8" class="textarea_editor span8" placeholder="Enter Text..."></textarea>
                 </div>
               </div>
               <div class="control-group">

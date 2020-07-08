@@ -27,8 +27,8 @@ use \App\Http\Controllers\ProductsController;
                   <th>Ordered Products</th>
                   <th>Order Amount</th>
                   <th>Order Status</th>
-                  <th>Payment Method</th>
-                  <th width="15%"></th>
+                  <th width="5%">Payment Method</th>
+                  <th width="25%"></th>
                 </tr>
               </thead>
               <tbody>
@@ -48,7 +48,10 @@ use \App\Http\Controllers\ProductsController;
                   <td>{{$order->payment_method}}</td>
                   <td>
                     <a href="{{ url('/admin/view-order/'.$order->id) }}" class="btn btn-success btn-mini" title="View Detail">View Detail</a> 
-                    <a href="{{ url('/admin/view-order-invoice/'.$order->id) }}" class="btn btn-primary btn-mini" title="View Detail">View Invoice</a> 
+                    @if($order->order_status == 3 || $order->order_status == 4)
+                      <a href="{{ url('/admin/view-order-invoice/'.$order->id) }}" class="btn btn-warning btn-mini" title="View Detail">View Invoice</a> 
+                      <a href="{{ url('/admin/view-pdf-invoice/'.$order->id) }}" class="btn btn-primary btn-mini" title="View Detail">View PDF Invoice</a>
+                    @endif 
                   </td>
                </tr>
                 @endforeach

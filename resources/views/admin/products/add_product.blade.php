@@ -79,13 +79,13 @@
               <div class="control-group">
                 <label class="control-label">Description</label>
                 <div class="controls">
-                  <textarea name="description" id="description"></textarea>
+                  <textarea name="description" id="description" rows="8" class="textarea_editor span8"></textarea>
                 </div>
               </div>
               <div class="control-group">
                 <label class="control-label">Material & Care</label>
                 <div class="controls">
-                  <textarea name="care" id="care"></textarea>
+                  <textarea name="care" id="care" rows="8" class="textarea_editor_2 span8"></textarea>
                 </div>
               </div>
               <div class="control-group">

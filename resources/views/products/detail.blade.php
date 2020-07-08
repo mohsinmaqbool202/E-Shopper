@@ -112,13 +112,13 @@ $currenyArr = Product::getCurrencies($productDetail->price);
 						<div class="tab-content">
 							<div class="tab-pane fade active in" id="description" >
 							   <div class="col-md-12">
-							   	   <p>{{ $productDetail->description  }}</p>
+							   	   <p><?php echo nl2br($productDetail->description);  ?></p>
 							   </div>		
 							</div>
 							
 							<div class="tab-pane fade" id="care" >
 								<div class="col-md-12">
-							   	   <p>{{ $productDetail->care  }}</p>
+							   	   <p><?php echo nl2br($productDetail->care);  ?></p>
 							   </div>
 							</div>
 							
