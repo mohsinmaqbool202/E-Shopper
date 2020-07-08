@@ -12,8 +12,8 @@
 					<div class="col-sm-6">
 						<div class="contactinfo">
 							<ul class="nav nav-pills">
-								<li><a href="#"><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-								<li><a href="#"><i class="fa fa-envelope"></i> info@domain.com</a></li>
+								<li><a href="#"><i class="fa fa-phone"></i> +92 302 3831605</a></li>
+								<li><a href="#"><i class="fa fa-envelope"></i> mohsinmaqbool451@gmail.com</a></li>
 							</ul>
 						</div>
 					</div>
@@ -66,7 +66,7 @@
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
+								<li><a href="{{url('/wish-list')}}"><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="{{url('/orders')}}"><i class="fa fa-crosshairs"></i> Orders</a></li>
 								<li><a href="{{ url('/cart') }}"><i class="fa fa-shopping-cart"></i> Cart ({{$cartCount}})</a></li>
 								@if(empty(Auth::check()))

@@ -31,14 +31,8 @@ class Product extends Model
 
     public static function cartCount()
     {
-        if(Auth::check()){
-            $user_email = Auth::user()->email;
-            $cartCount = Cart::where('user_email', $user_email)->sum('quantity');
-        }
-        else{
-            $session_id = Session::get('session_id');
-            $cartCount = Cart::where('session_id', $session_id)->sum('quantity');
-        }
+        $session_id = Session::get('session_id');
+        $cartCount = Cart::where('session_id', $session_id)->sum('quantity');
 
         return $cartCount;
     }

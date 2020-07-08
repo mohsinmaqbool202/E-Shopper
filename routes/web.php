@@ -88,6 +88,7 @@ Route::get('/check-pincode', 'ProductsController@checkPincode');
 //newsletter subscriber
 Route::post('/newsletter-subscribe', 'NewsletterController@addSubscriber');
 
+
 Route::group(['middleware' => ['frontlogin']], function(){
 
    //user account page
@@ -109,6 +110,11 @@ Route::group(['middleware' => ['frontlogin']], function(){
    Route::get('/orders', 'ProductsController@userOrders');
     //View user orders detail
    Route::get('/order/{id}', 'ProductsController@userOrderDetail');
+
+   //wishllist route
+   Route::get('/add-to-wishlist', 'ProductsController@addToWishList');
+   Route::get('/wish-list', 'ProductsController@viewWishList');
+   Route::get('/delete-wish/{id}', 'ProductsController@deleteWishList');
 
 });
 

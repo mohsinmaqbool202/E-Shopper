@@ -65,8 +65,14 @@
 								</div>
 								<div class="choose">
 									<ul class="nav nav-pills nav-justified">
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
+										<li>
+											<form action="javascript::void(0);" style="padding-left: 85px;" class="wishlist_form">
+
+											<input type="hidden" name="user_email" value="{{auth::check()}}">
+											<input type="hidden" name="product_id" value="{{$product->id}}">
+											<a href="javascript::void(0);" class="addToWishList"><i class="fa fa-plus-square"></i>Add to wishlist</a>
+										    </form>
+										</li>
 									</ul>
 								</div>
 							</div>
@@ -78,4 +84,4 @@
 		</div>
 	</div>
 </section>
-@endsection
+@endsection	

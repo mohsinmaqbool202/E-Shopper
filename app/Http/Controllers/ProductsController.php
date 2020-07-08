@@ -25,6 +25,7 @@ use App\OrderProduct;
 use DB;
 use PDF;
 use App;
+use App\WishList;
 
 class ProductsController extends Controller
 {
@@ -719,6 +720,42 @@ class ProductsController extends Controller
       }
 
       return redirect('/cart')->with('flash_message_success', 'Product added to cart.');
+    }
+
+    public function addToWishList(Request $request)
+    {
+       $productCount = WishList::where('product_id', $request->product_id)->count();
+       if($productCount > 0){
+        echo 'false'; die;
+       }
+       
+       $request['user_email']  = Auth::user()->email;
+       WishList::create($request->all());
+       echo 'true'; die;
+    }
+
+    public function viewWishList()
+    {
+      $user_email = Auth::user()->email;
+      $wishLists = WishList::where('user_email', $user_email)->get();
+
+      $meta_title = "Wish List - E-Shop Website";
+      $meta_description = "View Wish List of E-Shop Website";
+      $meta_keywords    = "wish list, e-shop website";
+
+      return view('products.wish_list',compact('wishLists', 'meta_title','meta_description','meta_keywords'));
+    }
+
+    public function deleteWishList($id)
+    {
+        $wish = WishList::where('id', $id)->count();
+        if($wish == 0)
+        {
+          abort(404);
+        }
+
+        WishList::where('id',$id)->delete();
+        return back()->with('flash_message_success', 'Product has been removed from your wishlist');
     }
 
     public function cart()

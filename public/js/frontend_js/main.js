@@ -53,7 +53,7 @@ $(document).ready(function(){
 					$('#Availability').text('Out Of Stock');
 				}else{
 					$('#cartButton').show();
-					$('#Availability').text('In Stock '+arr[1]+ 'Items');
+					$('#Availability').text('In Stock '+arr[1]+ ' Items');
 				}
 			},
 			error:function(){
@@ -257,6 +257,37 @@ $(document).ready(function(){
 				alert("error");
 			}
 		});
+	});
+});
+
+$(document).ready(function(){
+	$(".addToWishList").click(function(){
+		var form_data = $(this).closest(".wishlist_form").serializeArray();
+		var user_email = form_data[0].value;
+		var product_id = form_data[1].value
+
+        if(form_data[0].value == '')
+        {
+        	toastr.error('Please Log in First!','Error');
+        	return false;
+        }	
+
+        $.ajax({
+			type:'get',
+			url:'/add-to-wishlist',
+			data:{user_email:user_email, product_id:product_id},
+			success:function(resp){
+				if(resp == 'false'){
+					toastr.info("Product is already in your wishlist.", "info");
+				}else{
+				   toastr.success("Product added to your wishlist.", "Success");
+				}
+			},
+			error:function(){
+				alert("Error Occured");
+			}
+		});
+
 	});
 });
 
