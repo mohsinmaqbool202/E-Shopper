@@ -114,7 +114,7 @@ class PaymentController extends Controller
 
         $notification = array(
 	    		'error'    => 'Unknown error occurred. Try again',
-	    		'alert type' => 'erroe'
+	    		'alert type' => 'error'
 	    	);
         return Redirect::to('/paypal')->with($notification);
 
@@ -147,6 +147,9 @@ class PaymentController extends Controller
 
         if ($result->getState() == 'approved') {
 
+        	Session::forget('grand_total');
+        	Session::forget('order_id');
+        	
             $notification = array(
 	    		'message'    => 'Payment transfered successfully',
 	    		'alert type' => 'success'

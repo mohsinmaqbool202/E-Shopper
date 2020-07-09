@@ -19,6 +19,7 @@
 			<p>Your order number is {{ Session::get('order_id') }} and total payable amount is {{ Session::get('grand_total') }}</p>
 			<p>Please make payment by clicking on below Payment Button.</p>
 
+			@if(Session::has('grand_total'))
 			<form action="{{url('/paypal')}}" method="post">
 				{{csrf_field()}}
 			   <div class="form-group" style="width: 230px;">
@@ -26,6 +27,7 @@
 			   <input type="submit" value="Pay with Paypal" class="btn btn-primary btn-mini">
 			   </div>  
 			</form>
+			@endif
 
 		</div>
 	</div>
