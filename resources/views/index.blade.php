@@ -85,3 +85,17 @@
 	</div>
 </section>
 @endsection	
+
+@section('extraScript')
+<script>
+	@if(Session::has('message'))
+		var type="{{Session::get('alert type')}}";
+		switch(type)
+		{
+	      case 'success':
+	          toastr.success("{{ Session::get('message', 'Success') }}");
+	          break;
+		}
+	@endif
+</script>
+@endsection
