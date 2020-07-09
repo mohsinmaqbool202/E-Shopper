@@ -1,3 +1,6 @@
+<?php
+use Milon\Barcode\DNS1D;
+?>
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -7,7 +10,10 @@
     <div class="row">
         <div class="col-xs-12">
     		<div class="invoice-title">
-    			<h2>Invoice</h2><h3 class="pull-right">Order # {{$orderDetail->id}}</h3>
+    			<h2>Invoice</h2><h3 class="pull-right">
+             Order # {{$orderDetail->id}}
+            <span style="float: right; margin-left: 6px;"><?php  echo DNS1D::getBarcodeHTML($orderDetail->id, 'C39'); ?></span>
+           </h3>
     		</div>
     		<hr>
     		<div class="row">

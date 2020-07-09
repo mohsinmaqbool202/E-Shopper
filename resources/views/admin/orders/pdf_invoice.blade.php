@@ -1,3 +1,7 @@
+<?php
+use Milon\Barcode\DNS1D;
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +16,7 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="invoice-title">
-            <h2>Invoice</h2><h3 class="pull-right">Order # {{$orderDetail->id}}</h3>
+            <h2>Invoice</h2><h3>Order # <span ><?php  echo DNS1D::getBarcodeHTML($orderDetail->id, 'C39'); ?></span></h3>
         </div>
         <hr>
         <div class="row">

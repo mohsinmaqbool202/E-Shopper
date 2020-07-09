@@ -9,6 +9,7 @@ use App\User;
 use App\Admin;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use App\Order;
 
 class AdminController extends Controller
 {
@@ -176,6 +177,15 @@ class AdminController extends Controller
 
               //month wise students
               $users[$i] = User::whereMonth('created_at',$months[$i])->whereYear('created_at',$years[$i])->count();
+
+              //month wise orders
+              $orders[$i] = Order::whereMonth('created_at',$months[$i])->whereYear('created_at',$years[$i])->count();
+
+              //delivered orders
+              $orders_delivered[$i] = Order::where('order_status',4)->whereMonth('created_at',$months[$i])->whereYear('created_at',$years[$i])->count(); 
+
+              //cancelled orders
+              $orders_cancelled[$i] = Order::where('order_status',4)->whereMonth('created_at',$months[$i])->whereYear('created_at',$years[$i])->count();
               
           }
           else
@@ -187,12 +197,24 @@ class AdminController extends Controller
 
             //month wise students
             $users[$i] = User::whereMonth('created_at',$months[$i])->whereYear('created_at',$years[$i])->count();
+
+            //month wise orders
+            $orders[$i] = Order::whereMonth('created_at',$months[$i])->whereYear('created_at',$years[$i])->count();
+
+            //delivered orders
+            $orders_delivered[$i] = Order::where('order_status',4)->whereMonth('created_at',$months[$i])->whereYear('created_at',$years[$i])->count();
+
+            //cancelled orders
+            $orders_cancelled[$i] = Order::where('order_status',4)->whereMonth('created_at',$months[$i])->whereYear('created_at',$years[$i])->count();  
              
           }
         }
 
-      $output['users']       = $users;
-      $output['month_year']  = $month_year;
+      $output['users']             = $users;
+      $output['orders']            = $orders;
+      $output['orders_delivered']  = $orders_delivered;
+      $output['orders_cancelled']  = $orders_cancelled;
+      $output['month_year']        = $month_year;
 
       return $output;
     }

@@ -162,6 +162,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Webpatser\Countries\CountriesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Milon\Barcode\BarcodeServiceProvider::class,
 
 
 

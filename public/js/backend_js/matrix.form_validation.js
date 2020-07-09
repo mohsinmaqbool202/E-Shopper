@@ -321,7 +321,12 @@ $(document).ready(function(){
 
 
 var year_months      = new Array();
-var users         = new Array();
+var users            = new Array();
+var orders           = new Array();
+var orders_delivered = new Array();
+var orders_cancelled = new Array();
+
+
 
 //for charts
 $(document).ready(function(){
@@ -330,25 +335,36 @@ $(document).ready(function(){
 
 	$.get(url, function(resp){
 		
-		$.each( resp.users, function( key, value ) {
+		$.each( resp.users, function( key, value ) { 
+
 		       users.push(value);
-            });
+		       orders.push(resp.orders[key]);
+		       orders_delivered.push(resp.orders_delivered[key]);
+		       orders_cancelled.push(resp.orders_cancelled[key]);
+		       year_months.push(resp.month_year[key]);
 
-		$.each( resp.month_year, function( key, value ) {
-		       year_months.push(value);
             });
-
 
 		//drawing charts for users
         var user_chart = document.getElementById("user_chart").getContext('2d');
+        var orders_chart = document.getElementById("orders_chart").getContext('2d');
 
+        //tooltip settings
+        tooltipsettings = {
+                  position:'nearest',
+                  mode: 'index',
+                  intersect: true,
+                  backgroundColor:'#000',
+                }
+
+        //users chart
         var myChart = new Chart(user_chart, {
               type: 'bar',
               data: {
                       labels:year_months,
                       datasets:[{
                                   label: 'New Users',
-                                  data: users,
+                                  data:[110,150,140,220,180,290,110,90,210,390,221,190] /*users*/,
                                   type:'line',
                                   backgroundColor:"rgba(255,99,71)",
                                   borderColor: "rgba(255,99,71)",
@@ -380,6 +396,67 @@ $(document).ready(function(){
                       }
                     }
         });
+
+        //orders chart
+        var myChart = new Chart(orders_chart, {
+              type: 'bar',
+              data: {
+                      labels:year_months,
+                      datasets:[{
+                                  label: 'New Orders',
+                                  data: [90,130,230,190,270,200,250,190,220,290,299,310]/*orders*/,
+                                  type:'line',
+                                  backgroundColor:"rgb(63, 127, 191)",
+                                  borderColor: "rgb(63, 127, 191)",
+                                  borderWidth: 2,
+                                  fill:false,
+                                },
+                                {
+                                  label: 'Delivered',
+                                  data: [90,110,205,190,260,190,240,180,220,280,290,300] /*orders_delivered*/,
+                                  type:'bar',
+                                  backgroundColor:"rgb(103, 191, 103)",
+                                  borderColor: "rgb(103, 191, 103)",
+                                  borderWidth: 2,
+                                  fill:false,
+                                },
+                                {
+                                  label: 'Cancelled',
+                                  data: [0,20,25,0,10,10,10,10,0,10,9,10] /*orders_cancelled*/,
+                                  type:'bar',
+                                  backgroundColor:"rgb(218, 144, 144)",
+                                  borderColor: "rgb(218, 144, 144)",
+                                  borderWidth: 2,
+                                  fill:false,
+                                }]
+                    },
+                    options:{
+                      tooltips:tooltipsettings,	
+                      scales: {
+                        yAxes: [{
+                          ticks:{
+                            beginAtZero:true,
+                            steps: 10,
+                            stepValue: 5,
+                            max: 800
+
+                          }
+                        }],
+                        xAxes: [{
+                        ticks: {
+                            autoSkip: false,
+                            maxRotation: 0,
+                            minRotation: 0
+                          }
+                        }]
+                      },
+                      legend: {
+                        display:false
+                      }
+                    }
+        });
+
+
 
 	});//end $.get
 });

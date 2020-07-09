@@ -41,7 +41,7 @@
     </div>
 <!--End-Action boxes-->    
 
-<!--Chart-box-->    
+<!--New Users Chart-->    
     <div class="row-fluid">
       <div class="widget-box">
         <div class="widget-title bg_lg"><span class="icon"><i class="icon-signal"></i></span>
@@ -56,7 +56,24 @@
         </div>
       </div>
     </div>
-<!--End-Chart-box--> 
+<!--End-New Users Chart--> 
+
+<!--New orders Chart-->    
+    <div class="row-fluid">
+      <div class="widget-box">
+        <div class="widget-title bg_lg"><span class="icon"><i class="icon-signal"></i></span>
+          <h5>Orders</h5>
+        </div>
+        <div class="widget-content" >
+          <div class="row-fluid">
+            <div class="span12">
+              <canvas id="orders_chart" style="width: 821px; height: 250px;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<!--End-orders Chart--> 
   </div>
 </div>
 <!--end-main-container-part-->
